@@ -1,0 +1,206 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String                @id @default(uuid())
+  email          String                @unique
+  name           String?
+  role           String                @default("CANDIDATE") // ADMIN, CANDIDATE
+  githubId       String?               @unique
+  githubUsername String?
+  avatarUrl      String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  assignments    CandidateAssignment[]
+  pullRequests   PullRequest[]
+  aiUsages       AIUsage[]
+  overrides      Evaluation[]          @relation("ManualOverrides")
+
+  @@index([githubUsername])
+  @@index([email])
+}
+
+model Assignment {
+  id                      String                @id @default(uuid())
+  slug                    String                @unique
+  title                   String
+  description             String
+  repoUrl                 String
+  baseBranch              String                @default("main")
+  difficulty              String                @default("INTERMEDIATE") // BEGINNER, INTERMEDIATE, ADVANCED
+  language                String
+  framework               String
+  estimatedTimeMinutes    Int                   @default(45)
+  instructions            String
+  publicTestInfo          String
+  hiddenTestSpec          String                // JSON string for SQLite
+  passingThresholdPercent Float                 @default(100.0)
+  isActive                Boolean               @default(true)
+  aiRequestLimit          Int                   @default(15)
+  aiTokenLimit            Int                   @default(10000)
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+
+  candidateAssignments   CandidateAssignment[]
+  pullRequests            PullRequest[]
+  aiUsages                AIUsage[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model CandidateAssignment {
+  id           String                    @id @default(uuid())
+  candidateId  String
+  assignmentId String
+  status       String                    @default("NOT_STARTED") // NOT_STARTED, IN_PROGRESS, COMPLETED, FAILED
+  startedAt    DateTime                  @default(now())
+  completedAt  DateTime?
+
+  candidate    User                      @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  assignment   Assignment                @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  submissions  Submission[]
+
+  @@unique([candidateId, assignmentId])
+  @@index([candidateId])
+  @@index([assignmentId])
+  @@index([status])
+}
+
+model PullRequest {
+  id           String           @id @default(uuid())
+  candidateId  String
+  assignmentId String
+  prNumber     Int
+  prUrl        String
+  repoFullName String
+  branchName   String
+  state        String           @default("OPEN") // OPEN, CLOSED, MERGED
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  candidate    User             @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  assignment   Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  submissions  Submission[]
+
+  @@unique([repoFullName, prNumber])
+  @@index([candidateId])
+  @@index([assignmentId])
+}
+
+model Submission {
+  id                    String              @id @default(uuid())
+  candidateAssignmentId String
+  pullRequestId         String?
+  commitSha             String              @unique
+  commitMessage         String?
+  submittedAt           DateTime            @default(now())
+
+  candidateAssignment   CandidateAssignment @relation(fields: [candidateAssignmentId], references: [id], onDelete: Cascade)
+  pullRequest           PullRequest?        @relation(fields: [pullRequestId], references: [id], onDelete: SetNull)
+  evaluation            Evaluation?
+
+  @@index([candidateAssignmentId])
+  @@index([commitSha])
+}
+
+model Evaluation {
+  id                   String           @id @default(uuid())
+  submissionId         String           @unique
+  status               String           @default("QUEUED") // QUEUED, RUNNING, COMPLETED, FAILED, MANUAL_OVERRIDE
+  totalTests           Int              @default(0)
+  passedTests          Int              @default(0)
+  failedTests          Int              @default(0)
+  scorePercent         Float            @default(0.0)
+  isPassed             Boolean          @default(false)
+  logs                 String?
+  executionTimeMs      Int              @default(0)
+  evaluatedAt          DateTime?
+  manualOverrideById   String?
+  manualOverrideReason String?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+
+  submission           Submission       @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  manualOverrideBy     User?            @relation("ManualOverrides", fields: [manualOverrideById], references: [id], onDelete: SetNull)
+  testResults          TestResult[]
+
+  @@index([submissionId])
+  @@index([status])
+  @@index([isPassed])
+}
+
+model TestResult {
+  id              String        @id @default(uuid())
+  evaluationId    String
+  testName        String
+  testSuite       String        @default("PUBLIC") // PUBLIC, HIDDEN
+  status          String        @default("PASSED") // PASSED, FAILED, SKIPPED
+  executionTimeMs Int           @default(0)
+  errorMessage    String?
+  isHidden        Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+
+  evaluation      Evaluation    @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  @@index([evaluationId])
+  @@index([testSuite])
+}
+
+model AIUsage {
+  id               String      @id @default(uuid())
+  candidateId      String
+  assignmentId     String?
+  promptTokens     Int         @default(0)
+  completionTokens Int         @default(0)
+  totalTokens      Int         @default(0)
+  query            String
+  responseSnippet  String?
+  createdAt        DateTime    @default(now())
+
+  candidate        User        @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  assignment       Assignment? @relation(fields: [assignmentId], references: [id], onDelete: SetNull)
+
+  @@index([candidateId])
+  @@index([candidateId, createdAt])
+}
+
+model AdminSettings {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+}
+
+model GitHubInstallation {
+  id             String   @id @default(uuid())
+  installationId String   @unique
+  accountLogin   String
+  accountType    String
+  createdAt      DateTime @default(now())
+
+  @@index([installationId])
+}
+
+model WebhookEvent {
+  id         String        @id @default(uuid())
+  deliveryId String        @unique
+  eventType  String
+  payload    String        // JSON string for SQLite
+  status     String        @default("PROCESSED") // PROCESSED, IGNORED, FAILED
+  error      String?
+  createdAt  DateTime      @default(now())
+
+  @@index([deliveryId])
+  @@index([eventType])
+}
