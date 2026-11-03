@@ -199,6 +199,21 @@ export default async function CandidateDashboardPage() {
         </div>
       </div>
 
+      {/* Local Sandbox Demo Indicator */}
+      <div className="rounded-xl border border-brand-purple/40 bg-purple-950/20 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center space-x-2 text-purple-200">
+          <Terminal className="h-4 w-4 text-brand-lime shrink-0" />
+          <span>
+            <strong className="text-white">Sandbox Mode:</strong> Running in local development & assessment mode. You can launch challenges, inspect code, and trigger evaluations without waiting for GitHub organization credentials.
+          </span>
+        </div>
+        <div className="flex items-center space-x-2 shrink-0">
+          <span className="rounded-full bg-lime-950 border border-brand-lime/40 px-2.5 py-0.5 text-[10px] text-brand-lime font-bold">
+            Sandbox Runner Online
+          </span>
+        </div>
+      </div>
+
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="rounded-xl border border-card-border bg-card p-4">

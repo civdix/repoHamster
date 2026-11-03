@@ -11,7 +11,9 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:seed": "node scripts/seed.mjs",
-    "test:runner": "node scripts/test-evaluation-runner.mjs"
+    "test:runner": "node scripts/test-evaluation-runner.mjs",
+    "test:catalogue": "node scripts/test-catalogue-and-runner.mjs",
+    "test": "npm run test:runner && npm run test:catalogue"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

@@ -190,6 +190,21 @@ export default async function AssignmentDetailPage({ params }: Props) {
         </div>
       </div>
 
+      {/* Sandbox Evaluation Runner Callout */}
+      <div className="rounded-xl border border-brand-purple/40 bg-purple-950/20 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center space-x-2 text-purple-200">
+          <Terminal className="h-4 w-4 text-brand-lime shrink-0" />
+          <span>
+            <strong className="text-white">Local Sandbox Evaluation:</strong> You can test and submit fixes locally. Clicking <span className="text-brand-purple-light font-semibold">"Submit PR or Trigger Test Evaluation"</span> runs your code against the isolated test runner.
+          </span>
+        </div>
+        <div className="flex items-center space-x-2 shrink-0">
+          <span className="rounded-full bg-lime-950 border border-brand-lime/40 px-2.5 py-0.5 text-[10px] text-brand-lime font-bold">
+            Sandbox Active
+          </span>
+        </div>
+      </div>
+
       {/* Grid: Instructions & Test Results */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Instructions & Specs (7 cols) */}

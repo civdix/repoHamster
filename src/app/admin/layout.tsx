@@ -11,6 +11,7 @@ import {
   Shield,
   FileSpreadsheet,
   ArrowLeft,
+  FolderGit2,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
@@ -76,11 +77,18 @@ export default async function AdminLayout({
           <span>Dashboard Overview</span>
         </Link>
         <Link
+          href="/admin/catalogue"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white hover:bg-card transition"
+        >
+          <FolderGit2 className="h-3.5 w-3.5 text-brand-lime" />
+          <span>Repository Catalogue (10)</span>
+        </Link>
+        <Link
           href="/admin/assignments"
           className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white hover:bg-card transition"
         >
           <Layers className="h-3.5 w-3.5 text-brand-purple" />
-          <span>Manage Repositories ({5})</span>
+          <span>Active Challenges</span>
         </Link>
         <Link
           href="/admin/settings"

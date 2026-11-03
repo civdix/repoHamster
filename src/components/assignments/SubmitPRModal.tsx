@@ -94,9 +94,13 @@ export function SubmitPRModal({ assignmentId, assignmentSlug, repoUrl }: SubmitP
             </div>
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-              <div className="rounded-xl border border-card-border bg-[#0a0d14] p-3 text-xs text-slate-400 font-mono">
-                <p>
-                  <strong className="text-brand-lime">Automated Webhooks:</strong> Opening a PR on GitHub triggers evaluation automatically. You can also trigger an immediate run below.
+              <div className="rounded-xl border border-brand-purple/40 bg-purple-950/20 p-3 text-xs text-purple-200/90 font-mono space-y-1">
+                <div className="flex items-center space-x-1.5 text-brand-lime font-bold">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <span>Sandbox Evaluation Runner Active</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  You can trigger an isolated test evaluation directly here. Our multi-language sandbox will execute the test harness and display verified public and hidden test results.
                 </p>
               </div>
 

@@ -76,6 +76,38 @@ model User {
   @@index([email])
 }
 
+model CatalogRepository {
+  id                  String       @id @default(uuid())
+  name                String       @unique
+  originalUrl         String       @unique
+  owner               String
+  repoName            String
+  defaultBranch       String       @default("main")
+  language            String
+  framework           String
+  category            String
+  difficulty          Difficulty   @default(INTERMEDIATE)
+  description         String
+  license             String       @default("NO_LICENSE")
+  isCommercialAllowed Boolean      @default(false)
+  sourceType          String       @default("COMPLETE_APP")
+  importStatus        String       @default("DISCOVERED")
+  evaluationReadiness String       @default("NEEDS_HARNESS")
+  testAvailability    String       @default("PUBLIC_ONLY")
+  localPath           String?
+  inspectionReport    Json
+  validationResult    Json?
+  lastInspectedAt     DateTime     @default(now())
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  assignments         Assignment[]
+
+  @@index([importStatus])
+  @@index([language])
+  @@index([category])
+}
+
 model Assignment {
   id                      String                @id @default(uuid())
   slug                    String                @unique
@@ -94,15 +126,18 @@ model Assignment {
   isActive                Boolean               @default(true)
   aiRequestLimit          Int                   @default(15)
   aiTokenLimit            Int                   @default(10000)
+  catalogRepositoryId     String?
   createdAt               DateTime              @default(now())
   updatedAt               DateTime              @updatedAt
 
+  catalogRepository       CatalogRepository?    @relation(fields: [catalogRepositoryId], references: [id], onDelete: SetNull)
   candidateAssignments   CandidateAssignment[]
   pullRequests            PullRequest[]
   aiUsages                AIUsage[]
 
   @@index([slug])
   @@index([isActive])
+  @@index([catalogRepositoryId])
 }
 
 model CandidateAssignment {
