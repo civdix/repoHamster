@@ -10,18 +10,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#090d16',
-        card: '#0f172a',
-        'card-border': '#1e293b',
-        'accent-cyan': '#06b6d4',
-        'accent-indigo': '#6366f1',
-        'accent-emerald': '#10b981',
-        'accent-amber': '#f59e0b',
-        'accent-rose': '#f43f5e',
+        // Deep charcoal background palette inspired by Linear, Raycast, Discord
+        background: '#0a0d14',
+        'background-secondary': '#0e121c',
+        card: '#131826',
+        'card-hover': '#181e30',
+        'card-border': '#21293f',
+        'card-border-subtle': '#192033',
+
+        // Brand Accents: Electric Lime & Vibrant Purple
+        brand: {
+          lime: '#a3e635',       // Electric lime primary
+          'lime-light': '#bef264',
+          'lime-dark': '#65a30d',
+          'lime-glow': 'rgba(163, 230, 53, 0.15)',
+
+          purple: '#a855f7',     // Vibrant purple secondary
+          'purple-light': '#c084fc',
+          'purple-dark': '#7e22ce',
+          'purple-glow': 'rgba(168, 85, 247, 0.15)',
+
+          orange: '#fb923c',     // Hamster cheek & accent
+        },
+
+        // Functional Status Colors
+        accent: {
+          success: '#a3e635',    // electric lime for pass
+          warning: '#fbbf24',    // amber
+          danger: '#f43f5e',     // rose
+          info: '#38bdf8',       // sky
+        },
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
+      boxShadow: {
+        'glow-lime': '0 0 25px -5px rgba(163, 230, 53, 0.25)',
+        'glow-purple': '0 0 25px -5px rgba(168, 85, 247, 0.25)',
+      },
+      animation: {
+        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        float: 'float 4s ease-in-out infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
       },
     },
   },

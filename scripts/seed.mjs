@@ -327,7 +327,7 @@ The financial reconciliation service audits debit and credit balances across int
 ];
 
 async function main() {
-  console.log('🌱 Starting DebugLab database seeding...');
+  console.log('🐹 Starting RepoHamster database seeding...');
 
   // 1. Seed System Settings
   const defaultSettings = [
@@ -335,7 +335,7 @@ async function main() {
     { key: 'ai_token_limit', value: '10000', description: 'Daily max token budget per candidate' },
     { key: 'ai_max_output_tokens', value: '600', description: 'Maximum tokens generated per AI response' },
     { key: 'passing_threshold_percent', value: '100', description: 'Required test pass percentage for completion' },
-    { key: 'github_app_slug', value: 'debuglab-bot', description: 'Registered GitHub App identifier' },
+    { key: 'github_app_slug', value: 'repohamster-bot', description: 'Registered GitHub App identifier' },
     { key: 'execution_timeout_sec', value: '30', description: 'Sandbox runner execution timeout in seconds' },
   ];
 
@@ -353,15 +353,15 @@ async function main() {
     where: { email: 'admin@debuglab.internal' },
     update: {
       role: 'ADMIN',
-      name: 'DebugLab Lead Architect',
-      githubUsername: 'debuglab-admin',
+      name: 'RepoHamster Lead Architect',
+      githubUsername: 'repohamster-admin',
       avatarUrl: 'https://avatars.githubusercontent.com/u/9919?v=4',
     },
     create: {
       email: 'admin@debuglab.internal',
-      name: 'DebugLab Lead Architect',
+      name: 'RepoHamster Lead Architect',
       role: 'ADMIN',
-      githubUsername: 'debuglab-admin',
+      githubUsername: 'repohamster-admin',
       avatarUrl: 'https://avatars.githubusercontent.com/u/9919?v=4',
     },
   });
@@ -519,16 +519,16 @@ async function main() {
           isPassed: true,
           executionTimeMs: 4210,
           evaluatedAt: new Date(Date.now() - 3600000 * 2),
-          logs: `[DEBUG_LAB_RUNNER] Checking out commit ${commitSha1.slice(0, 7)}
-[DEBUG_LAB_RUNNER] Running Public Tests (2/2 Passed)
+          logs: `[REPOHAMSTER_SANDBOX] Checking out commit ${commitSha1.slice(0, 7)}
+[REPOHAMSTER_SANDBOX] Running Public Tests (2/2 Passed)
   ✓ test_checkout_reservation_ok (142ms)
   ✓ test_sliding_rate_limiter_window (320ms)
-[DEBUG_LAB_RUNNER] Injecting Hidden Security & Concurrency Test Suite...
-[DEBUG_LAB_RUNNER] Running Hidden Tests (3/3 Passed)
+[REPOHAMSTER_SANDBOX] Injecting Hidden Security & Concurrency Test Suite...
+[REPOHAMSTER_SANDBOX] Running Hidden Tests (3/3 Passed)
   ✓ HIDDEN-TC-01: Concurrent 50-Request Race Condition Stress Test (1850ms)
   ✓ HIDDEN-TC-02: Sliding Window Boundary Timestamp Pruning Verification (940ms)
   ✓ HIDDEN-TC-03: Sub-Millisecond Burst Jitter Throttling (958ms)
-[DEBUG_LAB_RUNNER] Final Score: 100% (Passed). All mandatory criteria satisfied.`,
+[REPOHAMSTER_SANDBOX] Final Score: 100% (Passed). All mandatory criteria satisfied.`,
         },
       });
 
@@ -591,7 +591,7 @@ async function main() {
   }
 
   console.log(`✅ Seeded candidate accounts, submissions, evaluations, and AI logs.`);
-  console.log('🎉 Seeding successfully completed!');
+  console.log('🐹 RepoHamster Seeding successfully completed!');
 }
 
 main()

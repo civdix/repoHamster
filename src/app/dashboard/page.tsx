@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import {
-  Code,
+  Code2,
   CheckCircle2,
   Clock,
   AlertCircle,
@@ -16,7 +16,9 @@ import {
   Layers,
   Timer,
   Terminal,
+  Zap,
 } from 'lucide-react';
+import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 export const dynamic = 'force-dynamic';
 
@@ -140,7 +142,7 @@ export default async function CandidateDashboardPage() {
   const difficultyBadge = (diff: string) => {
     switch (diff) {
       case 'BEGINNER':
-        return 'border-emerald-800/40 bg-emerald-950/40 text-emerald-400';
+        return 'border-brand-lime/40 bg-lime-950/40 text-brand-lime';
       case 'INTERMEDIATE':
         return 'border-amber-800/40 bg-amber-950/40 text-amber-400';
       case 'ADVANCED':
@@ -150,31 +152,50 @@ export default async function CandidateDashboardPage() {
     }
   };
 
+  // Dynamic Hamster Greeting
+  let hamsterQuote = "Put on your coder headphones—we've got pesky bugs to nibble through!";
+  if (completedCount === totalAssignments && totalAssignments > 0) {
+    hamsterQuote = "Legendary work! Every single challenge is 100% green! RepoHamster salutes you!";
+  } else if (completedCount > 0) {
+    hamsterQuote = `Awesome pace! You've squashed ${completedCount} bug suites already! Keep shipping fixes!`;
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-      {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-card-border pb-6">
-        <div>
-          <div className="flex items-center space-x-3">
-            <h1 className="text-2xl font-bold tracking-tight text-white">
-              Welcome back, {candidate?.name || session.user.name || 'Candidate'}
-            </h1>
-            <span className="rounded-full border border-card-border bg-card px-2.5 py-0.5 text-xs font-mono text-slate-400">
-              @{candidate?.githubUsername || (session.user as any)?.githubUsername || 'github-user'}
-            </span>
-          </div>
-          <p className="mt-1 text-sm text-slate-400">
-            Select an assigned debugging repository, launch your GitHub Codespace, and submit your Pull Request for automated evaluation.
-          </p>
-        </div>
+      {/* Personalized Welcome Card with Hamster Mascot Greeting */}
+      <div className="relative rounded-2xl border border-card-border bg-gradient-to-r from-[#121624] via-card to-[#161228] p-6 sm:p-8 overflow-hidden">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+          <div className="flex items-center space-x-4">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-card border border-brand-lime/40 shadow-glow-lime">
+              <HamsterMascot
+                variant={completedCount > 0 ? 'celebrating' : 'avatar'}
+                size={completedCount > 0 ? 56 : 48}
+              />
+            </div>
 
-        <div className="flex items-center space-x-3">
-          <Link
-            href="/auth/signin"
-            className="rounded-lg border border-card-border bg-card px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
-          >
-            Switch Profile
-          </Link>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-white">
+                  Welcome back, {candidate?.name || session.user.name || 'Developer'}!
+                </h1>
+                <span className="rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-xs font-mono text-slate-400">
+                  @{candidate?.githubUsername || (session.user as any)?.githubUsername || 'github-user'}
+                </span>
+              </div>
+              <p className="mt-1.5 text-xs sm:text-sm text-brand-lime font-mono">
+                &ldquo;{hamsterQuote}&rdquo;
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3 self-end md:self-center">
+            <Link
+              href="/auth/signin"
+              className="rounded-xl border border-card-border bg-[#0a0d14] px-3.5 py-2 text-xs font-mono text-slate-300 hover:text-white hover:border-slate-700 transition"
+            >
+              Switch Profile
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -185,17 +206,17 @@ export default async function CandidateDashboardPage() {
             <span>Total Challenges</span>
             <Layers className="h-4 w-4 text-slate-500" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-white">{totalAssignments}</div>
-          <div className="mt-1 text-[11px] text-slate-500">{availableCount} remaining to solve</div>
+          <div className="mt-2 text-2xl font-bold text-white font-mono">{totalAssignments}</div>
+          <div className="mt-1 text-[11px] text-slate-500 font-mono">{availableCount} available to solve</div>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card p-4">
           <div className="flex items-center justify-between text-xs font-medium text-slate-400">
             <span>Completed</span>
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+            <CheckCircle2 className="h-4 w-4 text-brand-lime" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-emerald-400">{completedCount}</div>
-          <div className="mt-1 text-[11px] text-slate-500">Passing all verification tests</div>
+          <div className="mt-2 text-2xl font-bold text-brand-lime font-mono">{completedCount}</div>
+          <div className="mt-1 text-[11px] text-slate-500 font-mono">100% tests verified</div>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card p-4">
@@ -203,21 +224,21 @@ export default async function CandidateDashboardPage() {
             <span>In Progress</span>
             <Clock className="h-4 w-4 text-amber-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-amber-400">{inProgressCount}</div>
-          <div className="mt-1 text-[11px] text-slate-500">Active Codespaces/branches</div>
+          <div className="mt-2 text-2xl font-bold text-amber-400 font-mono">{inProgressCount}</div>
+          <div className="mt-1 text-[11px] text-slate-500 font-mono">Active Codespaces/branches</div>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card p-4">
           <div className="flex items-center justify-between text-xs font-medium text-slate-400">
-            <span>AI Assistance Quota</span>
-            <Sparkles className="h-4 w-4 text-accent-cyan" />
+            <span>AI Credits Remaining</span>
+            <Sparkles className="h-4 w-4 text-brand-purple" />
           </div>
           <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold text-white">{remainingRequests}</span>
+            <span className="text-2xl font-bold text-white font-mono">{remainingRequests}</span>
             <span className="text-xs text-slate-400">/ {dailyRequestLimit} queries left</span>
           </div>
-          <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-            <span>{remainingTokens.toLocaleString()} tokens remaining</span>
+          <div className="mt-1 text-[11px] text-slate-500 font-mono">
+            {remainingTokens.toLocaleString()} tokens budget
           </div>
         </div>
       </div>
@@ -226,9 +247,12 @@ export default async function CandidateDashboardPage() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-white">Debugging Assignments</h2>
+            <h2 className="text-lg font-bold text-white flex items-center space-x-2">
+              <Zap className="h-4 w-4 text-brand-lime" />
+              <span>Debugging Assignments</span>
+            </h2>
             <p className="text-xs text-slate-400">
-              Each repository contains production code with known defects. Pass all public and hidden test cases to complete.
+              Open your assigned repository in Codespaces, fix the bugs, and submit a PR for automated hidden test evaluation.
             </p>
           </div>
         </div>
@@ -242,7 +266,7 @@ export default async function CandidateDashboardPage() {
             return (
               <div
                 key={assignment.id}
-                className="group flex flex-col justify-between rounded-xl border border-card-border bg-card/90 p-5 shadow-sm transition hover:border-slate-700 hover:shadow-md"
+                className="group flex flex-col justify-between rounded-xl border border-card-border bg-card p-5 shadow-sm transition hover:border-slate-700 hover:bg-card-hover"
               >
                 <div>
                   {/* Top Badges */}
@@ -257,34 +281,34 @@ export default async function CandidateDashboardPage() {
 
                     {/* Status Badge */}
                     {status === 'COMPLETED' ? (
-                      <span className="inline-flex items-center rounded-full border border-emerald-800/40 bg-emerald-950/40 px-2 py-0.5 text-[11px] font-medium text-emerald-400">
+                      <span className="inline-flex items-center rounded-full border border-lime-800/40 bg-lime-950/40 px-2 py-0.5 text-[11px] font-mono text-brand-lime">
                         <CheckCircle2 className="mr-1 h-3 w-3" />
                         Completed
                       </span>
                     ) : status === 'IN_PROGRESS' ? (
-                      <span className="inline-flex items-center rounded-full border border-amber-800/40 bg-amber-950/40 px-2 py-0.5 text-[11px] font-medium text-amber-400">
+                      <span className="inline-flex items-center rounded-full border border-amber-800/40 bg-amber-950/40 px-2 py-0.5 text-[11px] font-mono text-amber-400">
                         <Clock className="mr-1 h-3 w-3" />
                         In Progress
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-full border border-slate-700 bg-slate-800 px-2 py-0.5 text-[11px] font-medium text-slate-400">
-                        Not Started
+                      <span className="inline-flex items-center rounded-full border border-slate-700 bg-slate-800 px-2 py-0.5 text-[11px] font-mono text-slate-400">
+                        Available
                       </span>
                     )}
                   </div>
 
                   {/* Title & Description */}
-                  <h3 className="font-semibold text-white text-base group-hover:text-accent-cyan transition line-clamp-1">
+                  <h3 className="font-bold text-white text-base group-hover:text-brand-lime transition line-clamp-1">
                     {assignment.title}
                   </h3>
-                  <p className="mt-1.5 text-xs text-slate-400 line-clamp-2">
+                  <p className="mt-1.5 text-xs text-slate-400 line-clamp-2 leading-relaxed">
                     {assignment.description}
                   </p>
 
                   {/* Meta Specs */}
                   <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-400 border-t border-card-border/80 pt-3">
                     <div className="flex items-center space-x-1.5">
-                      <Code className="h-3.5 w-3.5 text-slate-500" />
+                      <Code2 className="h-3.5 w-3.5 text-slate-500" />
                       <span className="truncate">{assignment.language} • {assignment.framework}</span>
                     </div>
                     <div className="flex items-center space-x-1.5 justify-end">
@@ -295,12 +319,12 @@ export default async function CandidateDashboardPage() {
 
                   {/* Test score summary if evaluated */}
                   {evaluation && (
-                    <div className="mt-3 rounded-lg border border-card-border bg-[#090d16] p-2 text-xs">
+                    <div className="mt-3 rounded-lg border border-card-border bg-[#0a0d14] p-2 text-xs">
                       <div className="flex items-center justify-between font-mono">
                         <span className="text-slate-400">Latest Run Score:</span>
                         <span
                           className={`font-semibold ${
-                            evaluation.isPassed ? 'text-emerald-400' : 'text-rose-400'
+                            evaluation.isPassed ? 'text-brand-lime' : 'text-rose-400'
                           }`}
                         >
                           {evaluation.scorePercent}% ({evaluation.passedTests}/{evaluation.totalTests} tests)
@@ -314,10 +338,10 @@ export default async function CandidateDashboardPage() {
                 <div className="mt-5 border-t border-card-border pt-4">
                   <Link
                     href={`/assignments/${assignment.slug}`}
-                    className={`flex w-full items-center justify-center space-x-2 rounded-lg px-4 py-2 text-xs font-semibold transition ${
+                    className={`flex w-full items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
                       status === 'COMPLETED'
-                        ? 'border border-card-border bg-slate-800 text-slate-200 hover:bg-slate-700'
-                        : 'bg-accent-cyan text-slate-950 hover:bg-cyan-400 shadow-md shadow-cyan-500/10'
+                        ? 'border border-card-border bg-card text-slate-200 hover:bg-slate-800'
+                        : 'bg-brand-lime text-slate-950 hover:bg-brand-lime-light shadow-glow-lime font-bold'
                     }`}
                   >
                     <span>
@@ -325,7 +349,7 @@ export default async function CandidateDashboardPage() {
                         ? 'Review Solution & Tests'
                         : status === 'IN_PROGRESS'
                         ? 'Resume in Codespaces'
-                        : 'Start Assignment'}
+                        : 'Start Challenge'}
                     </span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
@@ -340,19 +364,22 @@ export default async function CandidateDashboardPage() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-white">Your Recent Pull Requests & Evaluations</h2>
+            <h2 className="text-lg font-bold text-white flex items-center space-x-2">
+              <GitPullRequest className="h-4 w-4 text-brand-purple" />
+              <span>Recent Pull Requests & Evaluations</span>
+            </h2>
             <p className="text-xs text-slate-400">
-              Auditable log of commit SHAs evaluated by the isolated test worker engine.
+              Audit trail of commit SHAs evaluated by RepoHamster&apos;s isolated worker engine.
             </p>
           </div>
         </div>
 
         {recentSubmissions.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-card-border bg-card/40 p-8 text-center">
-            <GitPullRequest className="mx-auto h-8 w-8 text-slate-600 mb-2" />
-            <p className="text-sm font-medium text-slate-400">No submissions yet</p>
-            <p className="text-xs text-slate-500 mt-1">
-              Open an assignment, branch from main, and create a Pull Request to see automatic test results here.
+          <div className="rounded-2xl border border-dashed border-card-border bg-card/40 p-10 text-center space-y-3">
+            <HamsterMascot variant="empty" size={120} className="mx-auto" />
+            <p className="text-sm font-semibold text-white">No submissions recorded yet</p>
+            <p className="text-xs text-slate-400 max-w-md mx-auto">
+              RepoHamster is taking a quick nap! Open a challenge above, branch in Codespaces, and open a PR to wake him up with live test evaluations.
             </p>
           </div>
         ) : (
@@ -365,13 +392,13 @@ export default async function CandidateDashboardPage() {
                 return (
                   <div
                     key={sub.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-slate-900/50 transition gap-3"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-card-hover transition gap-3"
                   >
                     <div className="flex items-start space-x-3">
                       <div
                         className={`mt-1 h-6 w-6 rounded-full flex items-center justify-center shrink-0 ${
                           isPassed
-                            ? 'bg-emerald-950/60 border border-emerald-800/40 text-emerald-400'
+                            ? 'bg-lime-950/60 border border-lime-800/40 text-brand-lime'
                             : 'bg-rose-950/60 border border-rose-800/40 text-rose-400'
                         }`}
                       >
@@ -388,7 +415,7 @@ export default async function CandidateDashboardPage() {
                               href={sub.pullRequest.prUrl}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center text-xs font-mono text-accent-cyan hover:underline"
+                              className="inline-flex items-center text-xs font-mono text-brand-lime hover:underline"
                             >
                               PR #{sub.pullRequest.prNumber}
                               <ExternalLink className="ml-1 h-2.5 w-2.5" />
@@ -412,7 +439,7 @@ export default async function CandidateDashboardPage() {
                       <div className="text-right">
                         <div className="text-xs font-mono font-semibold">
                           {sub.evaluation ? (
-                            <span className={isPassed ? 'text-emerald-400' : 'text-rose-400'}>
+                            <span className={isPassed ? 'text-brand-lime' : 'text-rose-400'}>
                               {sub.evaluation.scorePercent}% ({sub.evaluation.passedTests}/{sub.evaluation.totalTests} tests)
                             </span>
                           ) : (
@@ -426,7 +453,7 @@ export default async function CandidateDashboardPage() {
 
                       <Link
                         href={`/assignments/${sub.candidateAssignment.assignment.slug}`}
-                        className="rounded-lg border border-card-border bg-[#090d16] p-2 text-slate-400 hover:text-white transition"
+                        className="rounded-lg border border-card-border bg-[#0a0d14] p-2 text-slate-400 hover:text-white transition"
                         title="View details"
                       >
                         <ChevronRight className="h-4 w-4" />

@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
     if (!assignment) {
       console.warn(`[WEBHOOK] No active assignment matches repo ${repoFullName}`);
       return NextResponse.json(
-        { message: `Repository ${repoFullName} is not a registered DebugLab challenge` },
+        { message: `Repository ${repoFullName} is not a registered RepoHamster challenge` },
         { status: 200 }
       );
     }

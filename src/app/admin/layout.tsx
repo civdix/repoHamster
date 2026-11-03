@@ -12,6 +12,7 @@ import {
   FileSpreadsheet,
   ArrowLeft,
 } from 'lucide-react';
+import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 export default async function AdminLayout({
   children,
@@ -29,13 +30,13 @@ export default async function AdminLayout({
       {/* Top Banner / Breadcrumb */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-card-border pb-4 gap-4">
         <div className="flex items-center space-x-3">
-          <div className="h-9 w-9 rounded-lg bg-purple-950/80 border border-purple-800/50 flex items-center justify-center text-purple-400">
-            <Shield className="h-5 w-5" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-card border border-brand-purple/50">
+            <HamsterMascot variant="avatar" size={30} />
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-white flex items-center space-x-2">
-              <span>DebugLab Administration</span>
-              <span className="rounded-full border border-purple-800/40 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono font-medium text-purple-300">
+              <span>RepoHamster Administration</span>
+              <span className="rounded-full border border-purple-800/40 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono font-medium text-brand-purple-light">
                 Staff Only
               </span>
             </h1>
@@ -50,14 +51,14 @@ export default async function AdminLayout({
             href="/api/admin/export?format=csv"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center space-x-1.5 rounded-lg border border-card-border bg-card px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition"
+            className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3 py-1.5 text-xs font-mono font-medium text-slate-300 hover:text-brand-lime transition"
           >
-            <FileSpreadsheet className="h-3.5 w-3.5 text-accent-emerald" />
+            <FileSpreadsheet className="h-3.5 w-3.5 text-brand-lime" />
             <span>Export CSV</span>
           </a>
           <Link
             href="/dashboard"
-            className="flex items-center space-x-1.5 rounded-lg border border-card-border bg-card px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition"
+            className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3 py-1.5 text-xs font-mono font-medium text-slate-300 hover:text-white transition"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Candidate View</span>
@@ -69,21 +70,21 @@ export default async function AdminLayout({
       <div className="flex items-center space-x-2 overflow-x-auto border-b border-card-border/60 pb-2">
         <Link
           href="/admin"
-          className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-900 border border-card-border bg-card"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-white hover:bg-card border border-card-border bg-card"
         >
-          <LayoutDashboard className="h-3.5 w-3.5 text-accent-cyan" />
+          <LayoutDashboard className="h-3.5 w-3.5 text-brand-lime" />
           <span>Dashboard Overview</span>
         </Link>
         <Link
           href="/admin/assignments"
-          className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white hover:bg-card transition"
         >
-          <Layers className="h-3.5 w-3.5 text-indigo-400" />
+          <Layers className="h-3.5 w-3.5 text-brand-purple" />
           <span>Manage Repositories ({5})</span>
         </Link>
         <Link
           href="/admin/settings"
-          className="flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white hover:bg-card transition"
         >
           <Settings className="h-3.5 w-3.5 text-slate-400" />
           <span>System & AI Settings</span>

@@ -103,19 +103,19 @@ export async function executeIsolatedEvaluation(options: RunTestOptions): Promis
   // Build sanitized, professional execution log
   const maskedSha = options.commitSha.slice(0, 7);
   const logLines = [
-    `[DEBUGLAB_SANDBOX] Initializing isolated execution worker (Driver: ${process.env.RUNNER_DRIVER || 'isolated-process'})`,
-    `[DEBUGLAB_SANDBOX] Checking out target commit ${maskedSha}... (Clean Git workspace)`,
-    `[DEBUGLAB_SANDBOX] Running 2 Public Test Cases:`,
+    `[REPOHAMSTER_SANDBOX] Initializing isolated execution worker (Driver: ${process.env.RUNNER_DRIVER || 'isolated-process'})`,
+    `[REPOHAMSTER_SANDBOX] Checking out target commit ${maskedSha}... (Clean Git workspace)`,
+    `[REPOHAMSTER_SANDBOX] Running 2 Public Test Cases:`,
     `  ✓ test_public_basic_functionality_and_health (${testResults[0].executionTimeMs}ms)`,
     `  ✓ test_public_standard_workflow_acceptance (${testResults[1].executionTimeMs}ms)`,
-    `[DEBUGLAB_SANDBOX] Injecting authoritative Hidden Security & Concurrency Test Suite...`,
+    `[REPOHAMSTER_SANDBOX] Injecting authoritative Hidden Security & Concurrency Test Suite...`,
     ...hiddenCases.map((hc, idx) => {
       const tr = testResults.find((t) => t.name === hc.name || t.name === hc.id);
       const isP = tr?.status === 'PASSED';
       return `  ${isP ? '✓' : '✗'} [HIDDEN-${idx + 1}] ${hc.name} (${tr?.executionTimeMs || 900}ms)`;
     }),
-    `[DEBUGLAB_SANDBOX] Aggregating results: ${passedTests}/${totalTests} tests passed (${scorePercent}%).`,
-    `[DEBUGLAB_SANDBOX] Status: ${isPassed ? 'PASSED (Passing threshold met)' : 'FAILED (Unsatisfied criteria)'}`,
+    `[REPOHAMSTER_SANDBOX] Aggregating results: ${passedTests}/${totalTests} tests passed (${scorePercent}%).`,
+    `[REPOHAMSTER_SANDBOX] Status: ${isPassed ? 'PASSED (Passing threshold met)' : 'FAILED (Unsatisfied criteria)'}`,
   ];
 
   return {

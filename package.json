@@ -1,6 +1,7 @@
 {
-  "name": "debuglab",
+  "name": "repohamster",
   "version": "1.0.0",
+  "description": "RepoHamster - Break Bugs. Ship Fixes. AI-Assisted Developer Debugging Assessment Platform",
   "private": true,
   "scripts": {
     "dev": "next dev",

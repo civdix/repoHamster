@@ -2,7 +2,7 @@ import Link from 'next/link';
 import prisma from '@/lib/db';
 import {
   Layers,
-  Code,
+  Code2,
   CheckCircle2,
   AlertCircle,
   ExternalLink,
@@ -49,14 +49,14 @@ export default async function AdminAssignmentsPage() {
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full border border-card-border bg-[#090d16] px-2.5 py-0.5 text-[10px] font-mono text-slate-300">
+                    <span className="rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-[10px] font-mono text-slate-300">
                       {assignment.language} • {assignment.framework}
                     </span>
                     <span className="rounded-full border border-amber-800/40 bg-amber-950/40 px-2 py-0.5 text-[10px] font-mono text-amber-400 font-semibold">
                       {assignment.difficulty}
                     </span>
                     {assignment.isActive ? (
-                      <span className="rounded-full border border-emerald-800/40 bg-emerald-950/40 px-2 py-0.5 text-[10px] font-mono text-emerald-400">
+                      <span className="rounded-full border border-lime-800/40 bg-lime-950/40 px-2 py-0.5 text-[10px] font-mono text-brand-lime">
                         ACTIVE
                       </span>
                     ) : (
@@ -67,7 +67,7 @@ export default async function AdminAssignmentsPage() {
                   </div>
 
                   <h3 className="font-bold text-white text-base">{assignment.title}</h3>
-                  <p className="text-xs text-slate-400 max-w-3xl">{assignment.description}</p>
+                  <p className="text-xs text-slate-400 max-w-3xl leading-relaxed">{assignment.description}</p>
                 </div>
 
                 <div className="flex items-center space-x-2 shrink-0">
@@ -76,7 +76,7 @@ export default async function AdminAssignmentsPage() {
                     href={assignment.repoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-lg border border-card-border bg-[#090d16] p-1.5 text-slate-400 hover:text-white transition"
+                    className="rounded-xl border border-card-border bg-[#0a0d14] p-2 text-slate-400 hover:text-white transition"
                     title="Open GitHub Repository"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -85,14 +85,14 @@ export default async function AdminAssignmentsPage() {
               </div>
 
               {/* Specs & Configuration Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 rounded-lg border border-card-border bg-[#090d16] p-3 text-xs font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 rounded-xl border border-card-border bg-[#0a0d14] p-3 text-xs font-mono">
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase">Repository</span>
                   <a
                     href={assignment.repoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-accent-cyan hover:underline truncate block"
+                    className="text-brand-lime hover:underline truncate block"
                   >
                     {assignment.repoUrl.replace('https://github.com/', '')}
                   </a>
@@ -107,7 +107,7 @@ export default async function AdminAssignmentsPage() {
 
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase">Passing Threshold</span>
-                  <span className="text-emerald-400 font-semibold">{assignment.passingThresholdPercent}%</span>
+                  <span className="text-brand-lime font-semibold">{assignment.passingThresholdPercent}%</span>
                 </div>
 
                 <div>

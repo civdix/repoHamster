@@ -15,6 +15,7 @@ import {
   Webhook,
 } from 'lucide-react';
 import { ManualOverrideModal } from '@/components/admin/ManualOverrideModal';
+import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 export const dynamic = 'force-dynamic';
 
@@ -86,18 +87,18 @@ export default async function AdminOverviewPage({
         <div className="rounded-xl border border-card-border bg-card p-4">
           <div className="flex items-center justify-between text-xs font-medium text-slate-400">
             <span>Registered Candidates</span>
-            <Users className="h-4 w-4 text-accent-cyan" />
+            <Users className="h-4 w-4 text-brand-lime" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-white">{totalCandidates}</div>
+          <div className="mt-2 text-2xl font-bold text-white font-mono">{totalCandidates}</div>
           <div className="mt-1 text-[11px] text-slate-500 font-mono">Persistent PostgreSQL</div>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card p-4">
           <div className="flex items-center justify-between text-xs font-medium text-slate-400">
             <span>Completed Challenges</span>
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+            <CheckCircle2 className="h-4 w-4 text-brand-lime" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-emerald-400">{completedAssignments}</div>
+          <div className="mt-2 text-2xl font-bold text-brand-lime font-mono">{completedAssignments}</div>
           <div className="mt-1 text-[11px] text-slate-500 font-mono">100% tests verified</div>
         </div>
 
@@ -106,25 +107,25 @@ export default async function AdminOverviewPage({
             <span>Failed Runs</span>
             <AlertCircle className="h-4 w-4 text-rose-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-rose-400">{failedEvaluations}</div>
+          <div className="mt-2 text-2xl font-bold text-rose-400 font-mono">{failedEvaluations}</div>
           <div className="mt-1 text-[11px] text-slate-500 font-mono">Awaiting revision</div>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card p-4">
           <div className="flex items-center justify-between text-xs font-medium text-slate-400">
             <span>Active Repositories</span>
-            <Layers className="h-4 w-4 text-indigo-400" />
+            <Layers className="h-4 w-4 text-brand-purple" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-white">{totalAssignments}</div>
-          <div className="mt-1 text-[11px] text-slate-500 font-mono">Managed assignments</div>
+          <div className="mt-2 text-2xl font-bold text-white font-mono">{totalAssignments}</div>
+          <div className="mt-1 text-[11px] text-slate-500 font-mono">Curated challenges</div>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card p-4 col-span-2 md:col-span-1">
           <div className="flex items-center justify-between text-xs font-medium text-slate-400">
-            <span>AI Token Consumption</span>
-            <Sparkles className="h-4 w-4 text-purple-400" />
+            <span>AI Credits Consumed</span>
+            <Sparkles className="h-4 w-4 text-brand-purple" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-purple-300">
+          <div className="mt-2 text-2xl font-bold text-purple-300 font-mono">
             {totalAiTokens.toLocaleString()}
           </div>
           <div className="mt-1 text-[11px] text-slate-500 font-mono">
@@ -134,20 +135,20 @@ export default async function AdminOverviewPage({
       </div>
 
       {/* GitHub Integration Status Bar */}
-      <div className="rounded-xl border border-card-border bg-[#0d1424] p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="rounded-xl border border-card-border bg-[#0d101a] p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="h-8 w-8 rounded-lg bg-emerald-950/60 border border-emerald-800/40 flex items-center justify-center text-emerald-400 shrink-0">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-950/60 border border-lime-800/40 text-brand-lime shrink-0">
             <Webhook className="h-4 w-4" />
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-white">GitHub Webhook & Codespaces Engine Active</h4>
+            <h4 className="text-xs font-bold text-white">GitHub Webhook & Codespaces Engine Active</h4>
             <p className="text-[11px] text-slate-400 font-mono">
-              Payload URL: <code className="text-accent-cyan">/api/webhooks/github</code> • HMAC SHA-256 Enabled
+              Payload URL: <code className="text-brand-lime">/api/webhooks/github</code> • HMAC SHA-256 Enabled
             </p>
           </div>
         </div>
         <div className="flex items-center space-x-2 text-[11px] font-mono">
-          <span className="inline-flex items-center rounded-full bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 text-emerald-400">
+          <span className="inline-flex items-center rounded-full bg-lime-950/60 border border-lime-800/40 px-2.5 py-0.5 text-brand-lime">
             ● Ready for Incoming PRs
           </span>
         </div>
@@ -170,14 +171,14 @@ export default async function AdminOverviewPage({
               name="q"
               defaultValue={query}
               placeholder="Search by name, email, or GitHub..."
-              className="w-full rounded-lg border border-card-border bg-card pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-accent-cyan focus:outline-none"
+              className="w-full rounded-xl border border-card-border bg-card pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
             />
           </form>
         </div>
 
         <div className="rounded-xl border border-card-border bg-card overflow-hidden">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-card-border bg-[#090d16] text-[11px] font-mono text-slate-400 uppercase">
+            <thead className="border-b border-card-border bg-[#0a0d14] text-[11px] font-mono text-slate-400 uppercase">
               <tr>
                 <th className="px-4 py-3">Candidate</th>
                 <th className="px-4 py-3">Verified Email</th>
@@ -193,7 +194,7 @@ export default async function AdminOverviewPage({
                 const aiQueriesCount = candidate.aiUsages.length;
 
                 return (
-                  <tr key={candidate.id} className="hover:bg-slate-900/50 transition">
+                  <tr key={candidate.id} className="hover:bg-card-hover transition">
                     <td className="px-4 py-3.5">
                       <div className="flex items-center space-x-3">
                         <img
@@ -213,7 +214,7 @@ export default async function AdminOverviewPage({
                     </td>
 
                     <td className="px-4 py-3.5 text-center">
-                      <span className="inline-flex items-center rounded-full border border-card-border bg-[#090d16] px-2.5 py-0.5 font-mono font-medium text-emerald-400">
+                      <span className="inline-flex items-center rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 font-mono font-medium text-brand-lime">
                         {completed} / {totalAssignments}
                       </span>
                     </td>
@@ -225,7 +226,7 @@ export default async function AdminOverviewPage({
                     <td className="px-4 py-3.5 text-right">
                       <Link
                         href={`/admin/candidates/${candidate.id}`}
-                        className="inline-flex items-center space-x-1 rounded-lg border border-card-border bg-[#090d16] px-3 py-1.5 font-medium text-slate-200 hover:text-accent-cyan hover:border-accent-cyan/40 transition"
+                        className="inline-flex items-center space-x-1 rounded-lg border border-card-border bg-[#0a0d14] px-3 py-1.5 font-mono text-slate-200 hover:text-brand-lime hover:border-brand-lime/40 transition"
                       >
                         <span>Inspect</span>
                         <ChevronRight className="h-3.5 w-3.5" />
@@ -250,7 +251,7 @@ export default async function AdminOverviewPage({
 
         <div className="rounded-xl border border-card-border bg-card overflow-hidden">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-card-border bg-[#090d16] text-[11px] font-mono text-slate-400 uppercase">
+            <thead className="border-b border-card-border bg-[#0a0d14] text-[11px] font-mono text-slate-400 uppercase">
               <tr>
                 <th className="px-4 py-3">Commit & PR</th>
                 <th className="px-4 py-3">Candidate</th>
@@ -268,7 +269,7 @@ export default async function AdminOverviewPage({
                 const assignment = sub.candidateAssignment.assignment;
 
                 return (
-                  <tr key={sub.id} className="hover:bg-slate-900/50 transition">
+                  <tr key={sub.id} className="hover:bg-card-hover transition">
                     <td className="px-4 py-3.5">
                       <div className="flex items-center space-x-2">
                         <span className="font-mono text-slate-200 font-semibold">{sub.commitSha.slice(0, 7)}</span>
@@ -277,7 +278,7 @@ export default async function AdminOverviewPage({
                             href={sub.pullRequest.prUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center text-[11px] font-mono text-accent-cyan hover:underline"
+                            className="inline-flex items-center text-[11px] font-mono text-brand-lime hover:underline"
                           >
                             PR #{sub.pullRequest.prNumber}
                             <ExternalLink className="ml-1 h-2.5 w-2.5" />
@@ -300,7 +301,7 @@ export default async function AdminOverviewPage({
 
                     <td className="px-4 py-3.5 text-center font-mono">
                       {evalData ? (
-                        <span className={isPassed ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                        <span className={isPassed ? 'text-brand-lime font-semibold' : 'text-rose-400 font-semibold'}>
                           {evalData.scorePercent}% ({evalData.passedTests}/{evalData.totalTests})
                         </span>
                       ) : (
@@ -310,11 +311,11 @@ export default async function AdminOverviewPage({
 
                     <td className="px-4 py-3.5 text-center">
                       {evalData?.status === 'MANUAL_OVERRIDE' ? (
-                        <span className="inline-flex items-center rounded-full border border-purple-800/40 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono text-purple-300">
+                        <span className="inline-flex items-center rounded-full border border-purple-800/40 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono text-brand-purple-light">
                           OVERRIDDEN
                         </span>
                       ) : isPassed ? (
-                        <span className="inline-flex items-center rounded-full border border-emerald-800/40 bg-emerald-950/40 px-2.5 py-0.5 text-[10px] font-mono text-emerald-400">
+                        <span className="inline-flex items-center rounded-full border border-lime-800/40 bg-lime-950/40 px-2.5 py-0.5 text-[10px] font-mono text-brand-lime">
                           PASSED
                         </span>
                       ) : (

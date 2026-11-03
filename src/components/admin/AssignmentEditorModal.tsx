@@ -66,7 +66,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
       {isNew ? (
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center space-x-1.5 rounded-lg bg-accent-cyan px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-cyan-400 transition"
+          className="flex items-center space-x-1.5 rounded-xl bg-brand-lime px-3.5 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add New Repository</span>
@@ -74,7 +74,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="rounded-lg border border-card-border bg-[#090d16] p-1.5 text-slate-400 hover:text-white transition"
+          className="rounded-xl border border-card-border bg-[#0a0d14] p-2 text-slate-400 hover:text-white transition"
           title="Edit Assignment"
         >
           <Edit3 className="h-3.5 w-3.5" />
@@ -82,11 +82,11 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
       )}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-card-border bg-[#0d1424] p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-card-border bg-[#0d101a] p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-card-border pb-4">
               <div className="flex items-center space-x-2">
-                <Layers className="h-5 w-5 text-accent-cyan" />
+                <Layers className="h-5 w-5 text-brand-lime" />
                 <h3 className="font-bold text-white text-base">
                   {isNew ? 'Connect New Debugging Repository' : 'Edit Assignment Configuration'}
                 </h3>
@@ -110,7 +110,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
 
@@ -123,7 +123,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                     required
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
               </div>
@@ -138,7 +138,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                   placeholder="https://github.com/organization/repo-name"
                   value={formData.repoUrl}
                   onChange={(e) => setFormData({ ...formData, repoUrl: e.target.value })}
-                  className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-accent-cyan focus:outline-none"
+                  className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
                 />
               </div>
 
@@ -150,7 +150,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                     required
                     value={formData.language}
                     onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
 
@@ -161,7 +161,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                     required
                     value={formData.framework}
                     onChange={(e) => setFormData({ ...formData, framework: e.target.value })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
 
@@ -170,7 +170,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                   <select
                     value={formData.difficulty}
                     onChange={(e) => setFormData({ ...formData, difficulty: e.target.value as any })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   >
                     <option value="BEGINNER">BEGINNER</option>
                     <option value="INTERMEDIATE">INTERMEDIATE</option>
@@ -179,38 +179,38 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-3 font-mono">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Estimated Time (mins)</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">Est. Time (mins)</label>
                   <input
                     type="number"
                     min="10"
                     value={formData.estimatedTimeMinutes}
                     onChange={(e) => setFormData({ ...formData, estimatedTimeMinutes: parseInt(e.target.value, 10) || 45 })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Passing Threshold (%)</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">Threshold (%)</label>
                   <input
                     type="number"
                     min="1"
                     max="100"
                     value={formData.passingThresholdPercent}
                     onChange={(e) => setFormData({ ...formData, passingThresholdPercent: parseFloat(e.target.value) || 100 })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">AI Request Limit</label>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">AI Limit</label>
                   <input
                     type="number"
                     min="0"
                     value={formData.aiRequestLimit}
                     onChange={(e) => setFormData({ ...formData, aiRequestLimit: parseInt(e.target.value, 10) || 15 })}
-                    className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-accent-cyan focus:outline-none"
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                   />
                 </div>
               </div>
@@ -224,7 +224,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                   required
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-lg border border-card-border bg-card p-2 text-xs text-white focus:border-accent-cyan focus:outline-none"
+                  className="w-full rounded-xl border border-card-border bg-card p-2 text-xs text-white focus:border-brand-lime focus:outline-none"
                 />
               </div>
 
@@ -237,7 +237,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                   required
                   value={formData.instructions}
                   onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
-                  className="w-full rounded-lg border border-card-border bg-card p-2 text-xs font-mono text-white focus:border-accent-cyan focus:outline-none"
+                  className="w-full rounded-xl border border-card-border bg-card p-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
                 />
               </div>
 
@@ -247,7 +247,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                   id="isActive"
                   checked={formData.isActive}
                   onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                  className="rounded border-card-border bg-card text-accent-cyan"
+                  className="rounded border-card-border bg-card text-brand-lime"
                 />
                 <label htmlFor="isActive" className="text-xs text-slate-300">
                   Active & Available to Candidates
@@ -255,7 +255,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
               </div>
 
               {error && (
-                <div className="rounded-lg border border-rose-800/50 bg-rose-950/30 p-2.5 text-xs text-rose-300">
+                <div className="rounded-xl border border-rose-800/50 bg-rose-950/30 p-2.5 text-xs text-rose-300">
                   {error}
                 </div>
               )}
@@ -264,14 +264,14 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-card-border bg-card px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+                  className="rounded-xl border border-card-border bg-card px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center space-x-1.5 rounded-lg bg-accent-cyan px-4 py-1.5 text-xs font-semibold text-slate-950 hover:bg-cyan-400 transition disabled:opacity-50"
+                  className="flex items-center space-x-1.5 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition disabled:opacity-50 shadow-glow-lime"
                 >
                   {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
                   <span>Save Assignment</span>
