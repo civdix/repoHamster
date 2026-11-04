@@ -72,7 +72,7 @@ export default async function HomePage() {
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
-            Your Code Has Bugs.{' '}
+            The Code Has Bugs.{' '}
             <span className="bg-gradient-to-r from-brand-lime via-emerald-300 to-brand-purple bg-clip-text text-transparent">
               Let&apos;s Find Them.
             </span>
