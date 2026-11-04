@@ -3,6 +3,8 @@ import crypto from 'crypto';
 import prisma from '@/lib/db';
 import { evaluateSubmission } from '@/lib/evaluation/engine';
 
+export const dynamic = 'force-dynamic';
+
 function verifySignature(payload: string, signatureHeader: string | null, secret: string): boolean {
   if (!signatureHeader || !secret) {
     return false;

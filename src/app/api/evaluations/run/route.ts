@@ -5,6 +5,8 @@ import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { evaluateSubmission } from '@/lib/evaluation/engine';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
