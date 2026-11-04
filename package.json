@@ -13,7 +13,8 @@
     "db:seed": "node scripts/seed.mjs",
     "test:runner": "node scripts/test-evaluation-runner.mjs",
     "test:catalogue": "node scripts/test-catalogue-and-runner.mjs",
-    "test": "npm run test:runner && npm run test:catalogue"
+    "test:ai": "node scripts/test-ai-factory.mjs",
+    "test": "npm run test:runner && npm run test:catalogue && npm run test:ai"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

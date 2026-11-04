@@ -81,18 +81,25 @@ GITHUB_APP_ID=""
 GITHUB_APP_PRIVATE_KEY=""
 
 # ==============================================================================
-# 5. AI ASSISTANT CONFIGURATION
+# 5. AI ASSISTANT CONFIGURATION (Factory Architecture)
 # ==============================================================================
-# Options: 'mock' (default), 'gemini' (recommended free tier), or 'openai'
-AI_PROVIDER="mock"
+# Options: 'groq' (recommended ultra-fast LPU), 'gemini', 'openai', or 'mock'
+AI_PROVIDER="groq"
 
-# If using Google Gemini (Free tier from Google AI Studio):
-# Get key: https://aistudio.google.com/app/apikey
+# Groq (Ultra-Fast Llama 3.3 70B & Llama 3.1 8B):
+# Free API key at: https://console.groq.com/keys
+GROQ_API_KEY=""
+GROQ_MODEL="llama-3.3-70b-versatile"
+
+# Google Gemini:
+# Free API key at: https://aistudio.google.com/app/apikey
 GEMINI_API_KEY=""
+GEMINI_MODEL="gemini-1.5-flash"
 
-# If using OpenAI:
-# Get key: https://platform.openai.com/api-keys
+# OpenAI:
+# Key at: https://platform.openai.com/api-keys
 OPENAI_API_KEY=""
+OPENAI_MODEL="gpt-4o-mini"
 
 # AI Daily Quotas & Token Rate Limits:
 DEFAULT_AI_DAILY_REQUEST_LIMIT=15
@@ -110,21 +117,30 @@ RUNNER_DRIVER="isolated-process"
 
 ## 🛠️ 4. How to Enable Optional Features
 
-### A. Enabling Real AI Debugging Assistant (Google Gemini — Recommended Free Tier)
-1. Get a free API key at **[Google AI Studio](https://aistudio.google.com/app/apikey)**.
-2. In your `.env` file, update:
+### A. Enabling Groq AI Provider (Ultra-Fast LPU Inference — Recommended)
+1. Get a free API key at **[Groq Console](https://console.groq.com/keys)**.
+2. In your `.env` file, configure:
    ```ini
-   AI_PROVIDER="gemini"
-   GEMINI_API_KEY="AIzaSy..."
+   AI_PROVIDER="groq"
+   GROQ_API_KEY="gsk_..."
+   GROQ_MODEL="llama-3.3-70b-versatile" # or "llama-3.1-8b-instant"
    ```
-3. Restart the dev server (`npm run dev`).
-4. In any assignment workspace, open the **AI Assistant Drawer** and chat with RepoHamster!
+3. Restart `npm run dev`.
+4. Open any challenge and ask the Socratic Hamster AI for debugging tips with sub-second response times!
 
-*(If `AI_PROVIDER="mock"` is used, the built-in hamster tutor provides intelligent contextual hints without needing any external API key).*
+> [!TIP]
+> RepoHamster uses a resilient **Factory Architecture** (`AIFactory`). If your external API key is empty or an external LLM call experiences a network timeout, it automatically falls back to the built-in Socratic Hamster engine so candidates are never blocked.
 
 ---
 
-### B. Enabling Real GitHub OAuth Sign-In
+### B. Other AI Providers (Gemini, OpenAI, or Mock)
+- **Google Gemini**: Set `AI_PROVIDER="gemini"` and `GEMINI_API_KEY="AIzaSy..."` from [Google AI Studio](https://aistudio.google.com/app/apikey).
+- **OpenAI**: Set `AI_PROVIDER="openai"` and `OPENAI_API_KEY="sk-..."` from [OpenAI Platform](https://platform.openai.com/api-keys).
+- **Mock (Offline)**: Set `AI_PROVIDER="mock"` for zero-dependency local rule-based hints.
+
+---
+
+### C. Enabling Real GitHub OAuth Sign-In
 1. Navigate to **[GitHub Developer Settings → OAuth Apps → New OAuth App](https://github.com/settings/applications/new)**.
 2. Fill in:
    - **Application name**: `RepoHamster Local`
