@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, Terminal, Copy, Check, GitFork, ArrowUpRight, X } from 'lucide-react';
+import { ExternalLink, Terminal, Copy, Check, GitFork, ArrowUpRight, X, Code2, Monitor } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 interface CodespacesLaunchModalProps {
@@ -13,15 +13,21 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
   const [isOpen, setIsOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  const parts = repoUrl.replace('https://github.com/', '').split('/');
-  const owner = parts[0] || 'debuglab-assessments';
-  const repo = parts[1] || 'assignment';
+  const cleanUrl = repoUrl.replace(/\/$/, '').replace(/\?.*$/, '');
+  const match = cleanUrl.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)(?:\/tree\/([^\/]+)\/(.+))?$/);
+  const owner = match ? match[1] : 'debuglab-assessments';
+  const repo = match ? match[2] : 'assignment';
+  const branch = match && match[3] ? match[3] : 'main';
+  const subFolder = match && match[4] ? match[4] : '';
 
-  const codespacesUrl = `https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=${owner}/${repo}`;
+  const baseRepoUrl = `https://github.com/${owner}/${repo}`;
+  const cloneUrl = `${baseRepoUrl}.git`;
+  const codespacesUrl = `https://github.com/codespaces/new?hide_repo_select=true&ref=${branch}&repo=${owner}/${repo}`;
+  const vscodeUrl = `vscode://vscode.git/clone?url=${encodeURIComponent(cloneUrl)}`;
 
   const gitCommands = [
-    `git clone ${repoUrl}.git`,
-    `cd ${repo}`,
+    `git clone ${cloneUrl}`,
+    subFolder ? `cd ${repo}/${subFolder}` : `cd ${repo}`,
     `git checkout -b fix/solution`,
     `# Fix the bug, run tests locally`,
     `git commit -am "fix: resolve bug and satisfy acceptance criteria"`,
@@ -41,13 +47,13 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
         className="flex items-center space-x-2 rounded-xl bg-brand-lime px-5 py-2.5 text-xs font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition"
       >
         <Terminal className="h-4 w-4" />
-        <span>Open in GitHub Codespaces</span>
+        <span>Launch in VS Code / Codespaces</span>
         <ArrowUpRight className="h-3.5 w-3.5" />
       </button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl rounded-2xl border border-card-border bg-[#0d101a] p-6 shadow-2xl">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-card-border bg-[#0d101a] p-6 shadow-2xl">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-card-border pb-4">
               <div className="flex items-center space-x-3">
@@ -55,8 +61,8 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
                   <HamsterMascot variant="avatar" size={28} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Launch Codespaces Environment</h3>
-                  <p className="text-xs text-slate-400 font-mono">{repoUrl}</p>
+                  <h3 className="font-bold text-white text-base">Launch Assessment Workspace</h3>
+                  <p className="text-xs text-slate-400 font-mono">{cleanUrl}</p>
                 </div>
               </div>
               <button
@@ -69,32 +75,49 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
 
             {/* Launch Instructions */}
             <div className="mt-5 space-y-4">
-              <div className="rounded-xl border border-brand-lime/30 bg-lime-950/20 p-4">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-brand-lime font-mono">
-                  Option 1: Recommended 1-Click Cloud Workspace
-                </h4>
-                <p className="mt-1 text-xs text-slate-300">
-                  GitHub Codespaces opens a pre-configured VS Code container in your browser with language runtimes, linters, and testing suites pre-installed.
+              {/* Option 1: VS Code Desktop & Codespaces */}
+              <div className="rounded-xl border border-brand-lime/30 bg-lime-950/20 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-brand-lime font-mono flex items-center space-x-1.5">
+                    <Monitor className="h-3.5 w-3.5" />
+                    <span>Option 1: 1-Click Interactive Environments</span>
+                  </h4>
+                  <span className="text-[10px] font-mono text-lime-400/80 bg-lime-950/50 border border-lime-800/40 px-2 py-0.5 rounded-full">
+                    Recommended
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300">
+                  Open the repository directly in your local VS Code editor or launch an isolated in-browser container via GitHub Codespaces with dependencies pre-configured.
                 </p>
 
-                <div className="mt-4 flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <a
+                    href={vscodeUrl}
+                    className="flex items-center space-x-2 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime"
+                  >
+                    <Code2 className="h-3.5 w-3.5" />
+                    <span>Open in VS Code (Desktop)</span>
+                  </a>
+
                   <a
                     href={codespacesUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center space-x-2 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime"
+                    className="flex items-center space-x-2 rounded-xl border border-card-border bg-[#0a0d14] px-4 py-2 text-xs font-bold text-white hover:border-brand-lime/60 hover:text-brand-lime transition"
                   >
-                    <span>Launch Codespaces Now</span>
-                    <ExternalLink className="h-3.5 w-3.5" />
+                    <Terminal className="h-3.5 w-3.5" />
+                    <span>Open in GitHub Codespaces</span>
+                    <ExternalLink className="h-3 w-3" />
                   </a>
+
                   <a
-                    href={repoUrl}
+                    href={cleanUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition"
                   >
                     <GitFork className="h-3.5 w-3.5 text-brand-purple" />
-                    <span>View Repository on GitHub</span>
+                    <span>View on GitHub</span>
                   </a>
                 </div>
               </div>
@@ -103,7 +126,7 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
               <div className="rounded-xl border border-card-border bg-card p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">
-                    Option 2: Local Git Clone Workflow
+                    Option 2: Terminal / Manual Git Workflow
                   </h4>
                   <button
                     onClick={() => handleCopy(gitCommands.join('\n'), 99)}

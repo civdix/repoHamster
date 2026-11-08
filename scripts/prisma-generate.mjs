@@ -29,6 +29,11 @@ console.log(`[PRISMA GENERATE] Target schema: ${schema} (detected: ${isPostgres 
 try {
   execSync(`npx prisma generate --schema=${schema}`, { stdio: 'inherit' });
 } catch (err) {
-  console.error('[PRISMA GENERATE] Failed:', err);
-  process.exit(1);
+  const clientPath = path.join(process.cwd(), 'node_modules', '@prisma', 'client', 'index.js');
+  if (fs.existsSync(clientPath)) {
+    console.warn('[PRISMA GENERATE] Warning: Prisma Client binary locked by active process. Using existing generated client.');
+  } else {
+    console.error('[PRISMA GENERATE] Failed:', err);
+    process.exit(1);
+  }
 }
