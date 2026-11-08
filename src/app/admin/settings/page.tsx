@@ -5,9 +5,14 @@ import { SettingsEditorForm } from '@/components/admin/SettingsEditorForm';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminSettingsPage() {
-  const settingsRows = await prisma.adminSettings.findMany({
-    orderBy: { key: 'asc' },
-  });
+  let settingsRows: any[] = [];
+  try {
+    settingsRows = await prisma.adminSettings.findMany({
+      orderBy: { key: 'asc' },
+    });
+  } catch (err) {
+    console.error('[ADMIN SETTINGS] Query error:', err);
+  }
 
   const settingsMap: Record<string, { value: string; description: string }> = {};
   for (const s of settingsRows) {

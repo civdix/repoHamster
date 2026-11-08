@@ -15,13 +15,18 @@ import { AssignmentEditorModal } from '@/components/admin/AssignmentEditorModal'
 export const dynamic = 'force-dynamic';
 
 export default async function AdminAssignmentsPage() {
-  const assignments = await prisma.assignment.findMany({
-    include: {
-      candidateAssignments: true,
-      pullRequests: true,
-    },
-    orderBy: { createdAt: 'asc' },
-  });
+  let assignments: any[] = [];
+  try {
+    assignments = await prisma.assignment.findMany({
+      include: {
+        candidateAssignments: true,
+        pullRequests: true,
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+  } catch (err) {
+    console.error('[ADMIN ASSIGNMENTS] Query error:', err);
+  }
 
   return (
     <div className="space-y-6">
@@ -37,9 +42,9 @@ export default async function AdminAssignmentsPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {assignments.map((assignment) => {
-          const completedCount = assignment.candidateAssignments.filter((ca) => ca.status === 'COMPLETED').length;
-          const totalAttempts = assignment.candidateAssignments.length;
+        {assignments.map((assignment: any) => {
+          const completedCount = (assignment.candidateAssignments || []).filter((ca: any) => ca.status === 'COMPLETED').length;
+          const totalAttempts = (assignment.candidateAssignments || []).length;
 
           return (
             <div

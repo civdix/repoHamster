@@ -19,17 +19,15 @@ function SignInForm() {
 
   const handleQuickSignIn = async (email: string, role: 'ADMIN' | 'CANDIDATE') => {
     setLoading(role.toLowerCase());
+    const targetUrl = role === 'ADMIN' ? '/admin' : '/dashboard';
     const res = await signIn('credentials', {
       redirect: false,
       email,
       role,
+      callbackUrl: targetUrl,
     });
     if (res?.ok) {
-      if (role === 'ADMIN') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard');
-      }
+      window.location.href = targetUrl;
     } else {
       setLoading(null);
     }

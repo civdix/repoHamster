@@ -1,10 +1,30 @@
+import fs from 'fs';
+import path from 'path';
 import { execSync } from 'child_process';
 
-const dbUrl = process.env.DATABASE_URL || '';
-const isSqlite = dbUrl.startsWith('file:') || (!dbUrl.startsWith('postgres') && !process.env.VERCEL);
-const schema = isSqlite ? 'prisma/schema.sqlite.prisma' : 'prisma/schema.prisma';
+let dbUrl = process.env.DATABASE_URL || '';
 
-console.log(`[PRISMA GENERATE] Target schema: ${schema} (detected: ${isSqlite ? 'SQLite' : 'PostgreSQL'})`);
+if (!dbUrl) {
+  try {
+    const envPath = path.join(process.cwd(), '.env');
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, 'utf-8');
+      const match = content.match(/^DATABASE_URL\s*=\s*["']?([^"'\r\n]+)["']?/m);
+      if (match) {
+        dbUrl = match[1];
+      }
+    }
+  } catch {}
+}
+
+const isPostgres =
+  dbUrl.startsWith('postgres://') ||
+  dbUrl.startsWith('postgresql://') ||
+  Boolean(process.env.VERCEL);
+
+const schema = isPostgres ? 'prisma/schema.prisma' : 'prisma/schema.sqlite.prisma';
+
+console.log(`[PRISMA GENERATE] Target schema: ${schema} (detected: ${isPostgres ? 'PostgreSQL' : 'SQLite'})`);
 
 try {
   execSync(`npx prisma generate --schema=${schema}`, { stdio: 'inherit' });

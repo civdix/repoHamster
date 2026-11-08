@@ -55,6 +55,11 @@ export const authOptions: NextAuthOptions = {
                 avatarUrl: `https://avatars.githubusercontent.com/u/9919?v=4`,
               },
             });
+          } else if (role === 'ADMIN' && user.role !== 'ADMIN') {
+            user = await prisma.user.update({
+              where: { id: user.id },
+              data: { role: 'ADMIN' },
+            });
           }
 
           return {
@@ -62,7 +67,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             email: user.email,
             image: user.avatarUrl,
-            role: user.role,
+            role: user.role || role,
             githubUsername: user.githubUsername,
           };
         } catch (error) {
@@ -116,7 +121,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role || 'CANDIDATE';
+        token.role = (user as any).role || (token.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
         token.githubUsername = (user as any).githubUsername || (user.email ? user.email.split('@')[0] : 'candidate');
       }
       return token;
@@ -124,7 +129,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id as string;
-        (session.user as any).role = token.role as string;
+        (session.user as any).role = (token.role as string) || (session.user.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
         (session.user as any).githubUsername = token.githubUsername as string;
       }
       return session;

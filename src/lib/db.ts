@@ -4,7 +4,8 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-// Safe fallback for build time / CI when DATABASE_URL is not yet defined
+// If DATABASE_URL is defined in environment, PrismaClient picks it up automatically.
+// Fallback is only provided if DATABASE_URL is not yet set (e.g. during build or static evaluation).
 const defaultDatabaseUrl =
   process.env.DATABASE_URL ||
   'postgresql://postgres:postgres@localhost:5432/repohamster?schema=public';
@@ -25,3 +26,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export default prisma;
+

@@ -12,16 +12,21 @@ import { CatalogueRepositoryList } from '@/components/admin/CatalogueRepositoryL
 export const dynamic = 'force-dynamic';
 
 export default async function AdminCataloguePage() {
-  const repositories = await prisma.catalogRepository.findMany({
-    include: {
-      assignments: true,
-    },
-    orderBy: { createdAt: 'asc' },
-  });
+  let repositories: any[] = [];
+  try {
+    repositories = await prisma.catalogRepository.findMany({
+      include: {
+        assignments: true,
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+  } catch (err) {
+    console.error('[ADMIN CATALOGUE] Query error:', err);
+  }
 
-  const readyCount = repositories.filter((r) => r.importStatus === 'READY_FOR_TESTING').length;
-  const mitCount = repositories.filter((r) => r.isCommercialAllowed).length;
-  const clonedCount = repositories.filter((r) => !!r.localPath).length;
+  const readyCount = repositories.filter((r: any) => r.importStatus === 'READY_FOR_TESTING').length;
+  const mitCount = repositories.filter((r: any) => r.isCommercialAllowed).length;
+  const clonedCount = repositories.filter((r: any) => !!r.localPath).length;
 
   return (
     <div className="space-y-6">

@@ -26,62 +26,88 @@ export default async function AdminOverviewPage({
 }) {
   const query = searchParams?.q?.toLowerCase() || '';
 
-  // 1. Fetch Aggregated Metrics
-  const totalCandidates = await prisma.user.count({ where: { role: 'CANDIDATE' } });
-  const totalAssignments = await prisma.assignment.count();
-  const completedAssignments = await prisma.candidateAssignment.count({ where: { status: 'COMPLETED' } });
-  const failedEvaluations = await prisma.evaluation.count({ where: { isPassed: false } });
-  const pendingEvaluations = await prisma.evaluation.count({ where: { status: 'RUNNING' } });
+  let totalCandidates = 0;
+  let totalAssignments = 0;
+  let completedAssignments = 0;
+  let failedEvaluations = 0;
+  let pendingEvaluations = 0;
+  let totalAiTokens = 0;
+  let totalAiQueries = 0;
+  let candidates: any[] = [];
+  let recentSubmissions: any[] = [];
+  let dbError: string | null = null;
 
-  // AI Usage
-  const aiStats = await prisma.aIUsage.aggregate({
-    _sum: { totalTokens: true },
-    _count: { id: true },
-  });
-  const totalAiTokens = aiStats._sum.totalTokens || 0;
-  const totalAiQueries = aiStats._count.id || 0;
+  try {
+    // 1. Fetch Aggregated Metrics
+    totalCandidates = await prisma.user.count({ where: { role: 'CANDIDATE' } });
+    totalAssignments = await prisma.assignment.count();
+    completedAssignments = await prisma.candidateAssignment.count({ where: { status: 'COMPLETED' } });
+    failedEvaluations = await prisma.evaluation.count({ where: { isPassed: false } });
+    pendingEvaluations = await prisma.evaluation.count({ where: { status: 'RUNNING' } });
 
-  // 2. Fetch Candidates (with search filter)
-  const candidates = await prisma.user.findMany({
-    where: {
-      role: 'CANDIDATE',
-      OR: query
-        ? [
-            { name: { contains: query } },
-            { email: { contains: query } },
-            { githubUsername: { contains: query } },
-          ]
-        : undefined,
-    },
-    include: {
-      assignments: {
-        include: { assignment: true },
+    // AI Usage
+    const aiStats = await prisma.aIUsage.aggregate({
+      _sum: { totalTokens: true },
+      _count: { id: true },
+    });
+    totalAiTokens = aiStats._sum.totalTokens || 0;
+    totalAiQueries = aiStats._count.id || 0;
+
+    // 2. Fetch Candidates (with search filter)
+    candidates = await prisma.user.findMany({
+      where: {
+        role: 'CANDIDATE',
+        OR: query
+          ? [
+              { name: { contains: query } },
+              { email: { contains: query } },
+              { githubUsername: { contains: query } },
+            ]
+          : undefined,
       },
-      aiUsages: true,
-      pullRequests: true,
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 20,
-  });
-
-  // 3. Fetch Recent Submissions & Evaluations
-  const recentSubmissions = await prisma.submission.findMany({
-    include: {
-      candidateAssignment: {
-        include: {
-          candidate: true,
-          assignment: true,
+      include: {
+        assignments: {
+          include: { assignment: true },
         },
+        aiUsages: true,
+        pullRequests: true,
       },
-      evaluation: true,
-      pullRequest: true,
-    },
-    orderBy: { submittedAt: 'desc' },
-    take: 8,
-  });
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+
+    // 3. Fetch Recent Submissions & Evaluations
+    recentSubmissions = await prisma.submission.findMany({
+      include: {
+        candidateAssignment: {
+          include: {
+            candidate: true,
+            assignment: true,
+          },
+        },
+        evaluation: true,
+        pullRequest: true,
+      },
+      orderBy: { submittedAt: 'desc' },
+      take: 8,
+    });
+  } catch (error: any) {
+    console.error('[ADMIN OVERVIEW] Database query error:', error);
+    dbError = error?.message || 'Database query failed';
+  }
 
   return (
     <div className="space-y-8">
+      {dbError && (
+        <div className="rounded-xl border border-amber-600/50 bg-amber-950/30 p-4 text-xs font-mono text-amber-200 flex items-start space-x-3">
+          <AlertCircle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="font-bold text-white">Database Synchronization Notice</p>
+            <p className="text-amber-200">{dbError}</p>
+            <p className="text-slate-400 text-[11px]">Run <code>npm run db:push</code> and <code>npm run db:seed</code> on your server to sync tables.</p>
+          </div>
+        </div>
+      )}
       {/* 5 High-Level Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="rounded-xl border border-card-border bg-card p-4">
@@ -188,10 +214,10 @@ export default async function AdminOverviewPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-card-border">
-              {candidates.map((candidate) => {
-                const completed = candidate.assignments.filter((a) => a.status === 'COMPLETED').length;
-                const totalAssigned = candidate.assignments.length;
-                const aiQueriesCount = candidate.aiUsages.length;
+              {candidates.map((candidate: any) => {
+                const completed = (candidate.assignments || []).filter((a: any) => a.status === 'COMPLETED').length;
+                const totalAssigned = (candidate.assignments || []).length;
+                const aiQueriesCount = (candidate.aiUsages || []).length;
 
                 return (
                   <tr key={candidate.id} className="hover:bg-card-hover transition">
@@ -262,11 +288,11 @@ export default async function AdminOverviewPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-card-border">
-              {recentSubmissions.map((sub) => {
+              {recentSubmissions.map((sub: any) => {
                 const evalData = sub.evaluation;
                 const isPassed = evalData?.isPassed;
-                const candidate = sub.candidateAssignment.candidate;
-                const assignment = sub.candidateAssignment.assignment;
+                const candidate = sub.candidateAssignment?.candidate || {};
+                const assignment = sub.candidateAssignment?.assignment || {};
 
                 return (
                   <tr key={sub.id} className="hover:bg-card-hover transition">

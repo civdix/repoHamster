@@ -24,37 +24,42 @@ interface Props {
 }
 
 export default async function CandidateInspectorPage({ params }: Props) {
-  const candidate = await prisma.user.findUnique({
-    where: { id: params.id },
-    include: {
-      assignments: {
-        include: {
-          assignment: true,
-          submissions: {
-            include: {
-              evaluation: {
-                include: { testResults: true },
+  let candidate: any = null;
+  try {
+    candidate = await prisma.user.findUnique({
+      where: { id: params.id },
+      include: {
+        assignments: {
+          include: {
+            assignment: true,
+            submissions: {
+              include: {
+                evaluation: {
+                  include: { testResults: true },
+                },
+                pullRequest: true,
               },
-              pullRequest: true,
+              orderBy: { submittedAt: 'desc' },
             },
-            orderBy: { submittedAt: 'desc' },
           },
         },
+        aiUsages: {
+          include: { assignment: true },
+          orderBy: { createdAt: 'desc' },
+        },
+        pullRequests: true,
       },
-      aiUsages: {
-        include: { assignment: true },
-        orderBy: { createdAt: 'desc' },
-      },
-      pullRequests: true,
-    },
-  });
+    });
+  } catch (err) {
+    console.error('[CANDIDATE INSPECTOR] Query error:', err);
+  }
 
   if (!candidate) {
     notFound();
   }
 
-  const completedCount = candidate.assignments.filter((a) => a.status === 'COMPLETED').length;
-  const totalTokens = candidate.aiUsages.reduce((sum, u) => sum + u.totalTokens, 0);
+  const completedCount = (candidate.assignments || []).filter((a: any) => a.status === 'COMPLETED').length;
+  const totalTokens = (candidate.aiUsages || []).reduce((sum: number, u: any) => sum + (u.totalTokens || 0), 0);
 
   return (
     <div className="space-y-6">
@@ -120,8 +125,8 @@ export default async function CandidateInspectorPage({ params }: Props) {
           </div>
         ) : (
           <div className="space-y-4">
-            {candidate.assignments.map((ca) => {
-              const latestSub = ca.submissions[0];
+            {(candidate.assignments || []).map((ca: any) => {
+              const latestSub = ca.submissions?.[0];
               const latestEval = latestSub?.evaluation;
               const isPassed = ca.status === 'COMPLETED' || latestEval?.isPassed;
 
@@ -192,7 +197,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
 
                       {/* Test cases list */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {latestEval.testResults.map((tr) => (
+                        {(latestEval.testResults || []).map((tr: any) => (
                           <div
                             key={tr.id}
                             className="flex items-center justify-between rounded-lg border border-card-border bg-[#0a0d14] px-3 py-2 text-xs"
@@ -258,7 +263,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
         ) : (
           <div className="rounded-xl border border-card-border bg-card overflow-hidden">
             <div className="divide-y divide-card-border">
-              {candidate.aiUsages.map((usage) => (
+              {(candidate.aiUsages || []).map((usage: any) => (
                 <div key={usage.id} className="p-4 space-y-2 hover:bg-card-hover transition">
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center space-x-2">
