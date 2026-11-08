@@ -3,6 +3,7 @@ import './globals.css';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { Navbar } from '@/components/layout/Navbar';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default function RootLayout({
             </div>
           </footer>
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
