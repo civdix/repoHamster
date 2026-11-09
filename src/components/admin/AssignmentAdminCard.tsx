@@ -15,6 +15,7 @@ import {
   Sparkles,
   Layers,
   Webhook,
+  Shield,
 } from 'lucide-react';
 import { AssignmentEditorModal } from './AssignmentEditorModal';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
@@ -30,6 +31,26 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [isProvisioning, setIsProvisioning] = useState(false);
   const [webhookMessage, setWebhookMessage] = useState<string | null>(null);
+  const [isProvisioningGuardrails, setIsProvisioningGuardrails] = useState(false);
+  const [guardrailsMessage, setGuardrailsMessage] = useState<string | null>(null);
+
+  const handleAutoProvisionGuardrails = async () => {
+    setIsProvisioningGuardrails(true);
+    setGuardrailsMessage(null);
+    try {
+      const res = await fetch('/api/admin/guardrails/provision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repoUrl: assignment.repoUrl }),
+      });
+      const data = await res.json();
+      setGuardrailsMessage(data.message || (data.success ? 'Guardrails installed!' : 'Failed to install.'));
+    } catch (err: any) {
+      setGuardrailsMessage(err?.message || 'Network error.');
+    } finally {
+      setIsProvisioningGuardrails(false);
+    }
+  };
 
   const handleAutoProvisionWebhook = async () => {
     setIsProvisioning(true);
@@ -129,6 +150,12 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
                 {webhookMessage}
               </span>
             )}
+
+            {guardrailsMessage && (
+              <span className="inline-flex items-center rounded-full border border-purple-800/50 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono text-purple-300 animate-in fade-in">
+                {guardrailsMessage}
+              </span>
+            )}
           </div>
 
           <h3 className="font-bold text-white text-base flex items-center space-x-2">
@@ -183,6 +210,21 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
               <Webhook className="h-3.5 w-3.5 text-brand-lime" />
             )}
             <span className="hidden sm:inline">Auto-Connect Hook</span>
+          </button>
+
+          {/* Install AI Guardrails Button */}
+          <button
+            onClick={handleAutoProvisionGuardrails}
+            disabled={isProvisioningGuardrails}
+            className="flex items-center space-x-1.5 rounded-xl border border-purple-800/40 bg-purple-950/20 px-2.5 py-1.5 text-xs text-purple-300 hover:text-white hover:bg-purple-950/50 transition active:scale-95"
+            title="Install Copilot Socratic rules and disable inline autocompletions in repository"
+          >
+            {isProvisioningGuardrails ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-purple" />
+            ) : (
+              <Shield className="h-3.5 w-3.5 text-brand-purple" />
+            )}
+            <span className="hidden sm:inline">AI Guardrails</span>
           </button>
 
           {/* Edit Information Modal Button */}
