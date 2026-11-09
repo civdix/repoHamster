@@ -79,7 +79,11 @@ export function Navbar() {
                 </span>
               )}
 
-              <div className="flex items-center space-x-2 rounded-xl border border-card-border bg-card px-3 py-1.5 text-xs text-slate-300">
+              <Link
+                href="/profile"
+                className="flex items-center space-x-2 rounded-xl border border-card-border bg-card px-3 py-1.5 text-xs text-slate-300 hover:border-brand-lime/60 hover:text-white transition active:scale-95 group"
+                title="View Coding Profile"
+              >
                 {session.user.image ? (
                   <img
                     src={session.user.image}
@@ -87,15 +91,17 @@ export function Navbar() {
                     className="h-6 w-6 rounded-full ring-1 ring-card-border"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
+                  <div className="h-6 w-6 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 group-hover:bg-brand-lime/20 group-hover:text-brand-lime">
                     <User className="h-3.5 w-3.5" />
                   </div>
                 )}
                 <div className="hidden sm:block text-left">
                   <p className="font-semibold text-white truncate max-w-[120px]">{session.user.name || 'Developer'}</p>
-                  <p className="text-[10px] text-slate-400 font-mono">@{(session.user as any).githubUsername || 'candidate'}</p>
+                  <p className="text-[10px] text-brand-lime font-mono">
+                    @{((session.user as any).username || (session.user as any).githubUsername || 'coder')}
+                  </p>
                 </div>
-              </div>
+              </Link>
 
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/signin' })}

@@ -6,6 +6,7 @@ import prisma from '@/lib/db';
 import { CodespacesLaunchModal } from '@/components/assignments/CodespacesLaunchModal';
 import { SubmitPRModal } from '@/components/assignments/SubmitPRModal';
 import { AIChatDrawer } from '@/components/ai/AIChatDrawer';
+import { getTestCaseSummary } from '@/lib/test-case-utils';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -115,6 +116,8 @@ export default async function AssignmentDetailPage({ params }: Props) {
   const hiddenPassCount = hiddenTestResults.filter((t) => t.status === 'PASSED').length;
   const hiddenTotalCount = hiddenTestResults.length;
 
+  const testSummary = getTestCaseSummary(assignment);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
       {/* Navigation Breadcrumb */}
@@ -156,6 +159,16 @@ export default async function AssignmentDetailPage({ params }: Props) {
               <span className="flex items-center text-xs text-slate-400">
                 <Timer className="mr-1 h-3.5 w-3.5 text-slate-500" />
                 ~{assignment.estimatedTimeMinutes} min estimated
+              </span>
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-[11px] font-mono border ${
+                  testSummary.hasTestCases
+                    ? 'border-brand-lime/40 bg-lime-950/30 text-brand-lime font-semibold'
+                    : 'border-amber-800/40 bg-amber-950/30 text-amber-400'
+                }`}
+                title={testSummary.displayText}
+              >
+                Testcases: {testSummary.displayText}
               </span>
             </div>
 

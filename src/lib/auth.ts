@@ -46,12 +46,14 @@ export const authOptions: NextAuthOptions = {
 
           if (!user) {
             // Auto-provision demo/admin user
+            const rawUsername = credentials.email.split('@')[0].replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase() || 'coder';
             user = await prisma.user.create({
               data: {
                 email,
                 name: credentials.email.split('@')[0],
                 role: role as any,
-                githubUsername: credentials.email.split('@')[0],
+                username: rawUsername,
+                githubUsername: rawUsername,
                 avatarUrl: `https://avatars.githubusercontent.com/u/9919?v=4`,
               },
             });
@@ -68,17 +70,20 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             image: user.avatarUrl,
             role: user.role || role,
+            username: user.username || user.githubUsername,
             githubUsername: user.githubUsername,
           };
         } catch (error) {
           console.warn('[AUTH] Database offline or error, providing authenticated fallback token:', error);
+          const fallbackUsername = credentials.email.split('@')[0].replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
           return {
             id: 'mock-user-id-' + (role === 'ADMIN' ? 'admin' : 'candidate'),
             name: credentials.email.split('@')[0],
             email,
             image: 'https://avatars.githubusercontent.com/u/9919?v=4',
             role,
-            githubUsername: credentials.email.split('@')[0],
+            username: fallbackUsername,
+            githubUsername: fallbackUsername,
           };
         }
       },
@@ -122,6 +127,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = (user as any).role || (token.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
+        token.username = (user as any).username || (user as any).githubUsername || (user.email ? user.email.split('@')[0] : 'candidate');
         token.githubUsername = (user as any).githubUsername || (user.email ? user.email.split('@')[0] : 'candidate');
       }
       return token;
@@ -130,6 +136,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         (session.user as any).id = token.id as string;
         (session.user as any).role = (token.role as string) || (session.user.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
+        (session.user as any).username = token.username as string;
         (session.user as any).githubUsername = token.githubUsername as string;
       }
       return session;

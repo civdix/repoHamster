@@ -854,6 +854,7 @@ async function main() {
     update: {
       role: 'ADMIN',
       name: 'RepoHamster Lead Architect',
+      username: 'repohamster-admin',
       githubUsername: 'repohamster-admin',
       avatarUrl: 'https://avatars.githubusercontent.com/u/9919?v=4',
     },
@@ -861,6 +862,7 @@ async function main() {
       email: 'admin@debuglab.internal',
       name: 'RepoHamster Lead Architect',
       role: 'ADMIN',
+      username: 'repohamster-admin',
       githubUsername: 'repohamster-admin',
       avatarUrl: 'https://avatars.githubusercontent.com/u/9919?v=4',
     },
@@ -921,6 +923,7 @@ async function main() {
       where: { email: c.email },
       update: {
         name: c.name,
+        username: c.githubUsername,
         githubUsername: c.githubUsername,
         avatarUrl: c.avatarUrl,
         role: 'CANDIDATE',
@@ -928,6 +931,7 @@ async function main() {
       create: {
         email: c.email,
         name: c.name,
+        username: c.githubUsername,
         githubUsername: c.githubUsername,
         avatarUrl: c.avatarUrl,
         role: 'CANDIDATE',

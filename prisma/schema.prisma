@@ -59,6 +59,7 @@ enum WebhookStatus {
 model User {
   id             String                @id @default(uuid())
   email          String                @unique
+  username       String?               @unique
   name           String?
   role           Role                  @default(CANDIDATE)
   githubId       String?               @unique
@@ -72,6 +73,7 @@ model User {
   aiUsages       AIUsage[]
   overrides      Evaluation[]          @relation("ManualOverrides")
 
+  @@index([username])
   @@index([githubUsername])
   @@index([email])
 }

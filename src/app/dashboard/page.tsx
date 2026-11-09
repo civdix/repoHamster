@@ -19,6 +19,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { getTestCaseSummary } from '@/lib/test-case-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -178,9 +179,13 @@ export default async function CandidateDashboardPage() {
                 <h1 className="text-2xl font-bold tracking-tight text-white">
                   Welcome back, {candidate?.name || session.user.name || 'Developer'}!
                 </h1>
-                <span className="rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-xs font-mono text-slate-400">
-                  @{candidate?.githubUsername || (session.user as any)?.githubUsername || 'github-user'}
-                </span>
+                <Link
+                  href="/profile"
+                  className="rounded-full border border-brand-lime/40 bg-[#0a0d14] px-2.5 py-0.5 text-xs font-mono text-brand-lime hover:border-brand-lime hover:underline transition"
+                  title="Claim / Manage Unique Username & Coding Profile"
+                >
+                  @{candidate?.username || candidate?.githubUsername || (session.user as any)?.githubUsername || 'coder'}
+                </Link>
               </div>
               <p className="mt-1.5 text-xs sm:text-sm text-brand-lime font-mono">
                 &ldquo;{hamsterQuote}&rdquo;
@@ -190,8 +195,14 @@ export default async function CandidateDashboardPage() {
 
           <div className="flex items-center space-x-3 self-end md:self-center">
             <Link
+              href="/profile"
+              className="rounded-xl border border-brand-lime/50 bg-lime-950/30 px-3.5 py-2 text-xs font-mono text-brand-lime hover:bg-lime-950/60 transition active:scale-95 shadow-glow-lime"
+            >
+              Coding Profile
+            </Link>
+            <Link
               href="/auth/signin"
-              className="rounded-xl border border-card-border bg-[#0a0d14] px-3.5 py-2 text-xs font-mono text-slate-300 hover:text-white hover:border-slate-700 transition"
+              className="rounded-xl border border-card-border bg-[#0a0d14] px-3.5 py-2 text-xs font-mono text-slate-300 hover:text-white hover:border-slate-700 transition active:scale-95"
             >
               Switch Profile
             </Link>
@@ -331,6 +342,24 @@ export default async function CandidateDashboardPage() {
                       <span>~{assignment.estimatedTimeMinutes} mins</span>
                     </div>
                   </div>
+
+                  {/* Total Testcases Present Block */}
+                  {(() => {
+                    const testSummary = getTestCaseSummary(assignment);
+                    return (
+                      <div className="mt-2 rounded-lg border border-card-border/80 bg-[#0a0d14] px-2.5 py-1.5 text-[10px] font-mono flex items-center justify-between">
+                        <span className="text-slate-500">Testcases Present:</span>
+                        <span
+                          className={`truncate font-semibold ${
+                            testSummary.hasTestCases ? 'text-brand-lime' : 'text-amber-400'
+                          }`}
+                          title={testSummary.displayText}
+                        >
+                          {testSummary.displayText}
+                        </span>
+                      </div>
+                    );
+                  })()}
 
                   {/* Test score summary if evaluated */}
                   {evaluation && (
