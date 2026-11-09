@@ -100,7 +100,7 @@ export function Navbar() {
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/signin' })}
                 title="Sign out"
-                className="rounded-xl border border-card-border bg-card p-2 text-slate-400 hover:text-rose-400 hover:border-rose-900/50 transition"
+                className="rounded-xl border border-card-border bg-card p-2 text-slate-400 hover:text-rose-400 hover:border-rose-900/50 transition active:scale-95"
               >
                 <LogOut className="h-4 w-4" />
               </button>
@@ -109,7 +109,7 @@ export function Navbar() {
             <div className="flex items-center space-x-2">
               <Link
                 href="/auth/signin"
-                className="rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime"
+                className="rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime active:scale-95"
               >
                 Start Debugging
               </Link>

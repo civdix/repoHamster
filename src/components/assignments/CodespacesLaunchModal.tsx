@@ -12,6 +12,7 @@ interface CodespacesLaunchModalProps {
 export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLaunchModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [vsCodeLaunched, setVsCodeLaunched] = useState(false);
 
   const cleanUrl = repoUrl.replace(/\/$/, '').replace(/\?.*$/, '');
   const match = cleanUrl.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)(?:\/tree\/([^\/]+)\/(.+))?$/);
@@ -93,7 +94,11 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
                 <div className="flex flex-wrap items-center gap-3 pt-1">
                   <a
                     href={vscodeUrl}
-                    className="flex items-center space-x-2 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime"
+                    onClick={() => {
+                      setVsCodeLaunched(true);
+                      setTimeout(() => setVsCodeLaunched(false), 6000);
+                    }}
+                    className="flex items-center space-x-2 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime active:scale-95"
                   >
                     <Code2 className="h-3.5 w-3.5" />
                     <span>Open in VS Code (Desktop)</span>
@@ -103,7 +108,7 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
                     href={codespacesUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center space-x-2 rounded-xl border border-card-border bg-[#0a0d14] px-4 py-2 text-xs font-bold text-white hover:border-brand-lime/60 hover:text-brand-lime transition"
+                    className="flex items-center space-x-2 rounded-xl border border-card-border bg-[#0a0d14] px-4 py-2 text-xs font-bold text-white hover:border-brand-lime/60 hover:text-brand-lime transition active:scale-95"
                   >
                     <Terminal className="h-3.5 w-3.5" />
                     <span>Open in GitHub Codespaces</span>
@@ -114,12 +119,18 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
                     href={cleanUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition"
+                    className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
                   >
                     <GitFork className="h-3.5 w-3.5 text-brand-purple" />
                     <span>View on GitHub</span>
                   </a>
                 </div>
+
+                {vsCodeLaunched && (
+                  <div className="rounded-lg border border-brand-lime/40 bg-lime-950/40 p-2.5 text-xs text-brand-lime font-mono animate-in fade-in duration-150">
+                    Launching VS Code Desktop protocol... If your browser prompted for permission, click &ldquo;Open Visual Studio Code&rdquo;. Alternatively, copy the Git Clone command below.
+                  </div>
+                )}
               </div>
 
               {/* Option 2: Local CLI */}

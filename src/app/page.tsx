@@ -89,7 +89,7 @@ export default async function HomePage() {
             {session ? (
               <Link
                 href="/dashboard"
-                className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-brand-lime px-7 py-3.5 text-sm font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition"
+                className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-brand-lime px-7 py-3.5 text-sm font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition active:scale-95"
               >
                 <span>Go to Candidate Dashboard</span>
                 <ArrowRight className="h-4 w-4" />
@@ -98,14 +98,14 @@ export default async function HomePage() {
               <>
                 <Link
                   href="/auth/signin"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-brand-lime px-7 py-3.5 text-sm font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition"
+                  className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-brand-lime px-7 py-3.5 text-sm font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition active:scale-95"
                 >
                   <span>Start Debugging</span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="#challenges"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-card-border bg-card px-6 py-3.5 text-sm font-semibold text-slate-300 hover:bg-card-hover hover:text-white transition"
+                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-card-border bg-card px-6 py-3.5 text-sm font-semibold text-slate-300 hover:bg-card-hover hover:text-white transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-brand-purple" />
                   <span>Explore Challenges</span>

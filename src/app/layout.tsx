@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { Navbar } from '@/components/layout/Navbar';
+import { NavigationProgressBar } from '@/components/layout/NavigationProgressBar';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
@@ -24,6 +26,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="min-h-screen bg-[#0a0d14] text-slate-100 antialiased selection:bg-brand-lime/25 selection:text-white flex flex-col">
         <SessionProvider>
+          <Suspense fallback={null}>
+            <NavigationProgressBar />
+          </Suspense>
           <Navbar />
           <main className="flex-1">{children}</main>
           <footer className="border-t border-card-border bg-[#07090e] py-8 text-xs text-slate-500">

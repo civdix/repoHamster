@@ -55,3 +55,12 @@ body {
 .bg-radial-glow {
   background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.12) 0%, rgba(163, 230, 53, 0.04) 35%, transparent 70%);
 }
+
+/* Tactile button active states to ensure every click shows immediate visual feedback */
+button:active:not(:disabled),
+a[role="button"]:active,
+a.btn:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
+  transition: transform 0.06s ease, filter 0.06s ease;
+}

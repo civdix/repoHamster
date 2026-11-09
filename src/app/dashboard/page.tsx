@@ -353,7 +353,7 @@ export default async function CandidateDashboardPage() {
                 <div className="mt-5 border-t border-card-border pt-4">
                   <Link
                     href={`/assignments/${assignment.slug}`}
-                    className={`flex w-full items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
+                    className={`flex w-full items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-semibold transition active:scale-95 ${
                       status === 'COMPLETED'
                         ? 'border border-card-border bg-card text-slate-200 hover:bg-slate-800'
                         : 'bg-brand-lime text-slate-950 hover:bg-brand-lime-light shadow-glow-lime font-bold'
