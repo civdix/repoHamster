@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
+import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,7 +90,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, assignment });
+    // Auto-create GitHub webhook on repository if GITHUB_TOKEN is configured
+    let webhookStatus: any = null;
+    try {
+      webhookStatus = await autoCreateRepositoryWebhook(assignment.repoUrl);
+    } catch (err: any) {
+      console.warn('[WEBHOOK AUTO-PROVISION] Could not auto-create hook:', err?.message);
+    }
+
+    return NextResponse.json({ success: true, assignment, webhookStatus });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Failed to create assignment' }, { status: 500 });
   }

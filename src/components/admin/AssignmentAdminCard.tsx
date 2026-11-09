@@ -14,6 +14,7 @@ import {
   Clock,
   Sparkles,
   Layers,
+  Webhook,
 } from 'lucide-react';
 import { AssignmentEditorModal } from './AssignmentEditorModal';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
@@ -27,6 +28,26 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
   const [isToggling, setIsToggling] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isProvisioning, setIsProvisioning] = useState(false);
+  const [webhookMessage, setWebhookMessage] = useState<string | null>(null);
+
+  const handleAutoProvisionWebhook = async () => {
+    setIsProvisioning(true);
+    setWebhookMessage(null);
+    try {
+      const res = await fetch('/api/admin/webhooks/provision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repoUrl: assignment.repoUrl }),
+      });
+      const data = await res.json();
+      setWebhookMessage(data.message || (data.success ? 'Webhook connected!' : 'Failed to connect.'));
+    } catch (err: any) {
+      setWebhookMessage(err?.message || 'Network error.');
+    } finally {
+      setIsProvisioning(false);
+    }
+  };
 
   const testSummary = getTestCaseSummary(assignment);
   const completedCount = (assignment.candidateAssignments || []).filter(
@@ -102,6 +123,12 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
                 HIDDEN (CANDIDATES CANNOT SEE)
               </span>
             )}
+
+            {webhookMessage && (
+              <span className="inline-flex items-center rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-[10px] font-mono text-brand-lime animate-in fade-in">
+                {webhookMessage}
+              </span>
+            )}
           </div>
 
           <h3 className="font-bold text-white text-base flex items-center space-x-2">
@@ -141,6 +168,21 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
                 <span>Unhide</span>
               </>
             )}
+          </button>
+
+          {/* Auto-Provision Webhook Button */}
+          <button
+            onClick={handleAutoProvisionWebhook}
+            disabled={isProvisioning}
+            className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-[#0a0d14] px-2.5 py-1.5 text-xs text-slate-300 hover:text-brand-lime hover:border-brand-lime/50 transition active:scale-95"
+            title="Auto-create or verify GitHub repository webhook via API"
+          >
+            {isProvisioning ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-lime" />
+            ) : (
+              <Webhook className="h-3.5 w-3.5 text-brand-lime" />
+            )}
+            <span className="hidden sm:inline">Auto-Connect Hook</span>
           </button>
 
           {/* Edit Information Modal Button */}
