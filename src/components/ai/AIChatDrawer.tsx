@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bot, Send, Sparkles, X, ShieldCheck, User, Loader2 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
 
 interface AIChatDrawerProps {
   assignmentId: string;
@@ -196,13 +197,17 @@ export function AIChatDrawer({
                   </div>
 
                   <div
-                    className={`rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-[90%] whitespace-pre-wrap ${
+                    className={`rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-[90%] ${
                       msg.role === 'user'
-                        ? 'bg-purple-600 text-white rounded-tr-none'
+                        ? 'bg-purple-600 text-white rounded-tr-none whitespace-pre-wrap'
                         : 'border border-card-border bg-[#131826] text-slate-200 rounded-tl-none font-sans'
                     }`}
                   >
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                      <MarkdownRenderer content={msg.content} />
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))}

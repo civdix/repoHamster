@@ -23,6 +23,7 @@ import {
   Download,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
 
 interface FileNode {
   name: string;
@@ -691,7 +692,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         </div>
                       </div>
 
-                      {/* Right: Code Preview Pane */}
+                      {/* Right: Code & Markdown Preview Pane */}
                       <div className="md:col-span-8 rounded-xl border border-card-border bg-[#05070a] p-3 flex flex-col overflow-hidden">
                         <div className="flex items-center justify-between border-b border-card-border pb-2 mb-2 shrink-0">
                           <span className="text-xs font-mono text-slate-400 truncate">
@@ -702,7 +703,18 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                             )}
                           </span>
                           {fileContent && (
-                            <span className="text-[10px] font-mono text-slate-600">Read-Only</span>
+                            <div className="flex items-center space-x-2">
+                              {selectedFile?.toLowerCase().endsWith('.md') || selectedFile?.toLowerCase().endsWith('.markdown') ? (
+                                <span className="text-[10px] font-mono bg-purple-950/60 border border-purple-800/40 text-brand-purple-light px-2 py-0.5 rounded-full">
+                                  Type: Markdown
+                                </span>
+                              ) : (
+                                <span className="text-[10px] font-mono bg-[#0a0d14] border border-card-border text-slate-400 px-2 py-0.5 rounded-full">
+                                  Type: Source Code
+                                </span>
+                              )}
+                              <span className="text-[10px] font-mono text-slate-600">Read-Only</span>
+                            </div>
                           )}
                         </div>
 
@@ -713,9 +725,15 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                               <span>Loading file content...</span>
                             </div>
                           ) : fileContent !== null ? (
-                            <pre className="text-xs font-mono text-slate-300 leading-relaxed p-2 whitespace-pre select-text">
-                              <code>{fileContent}</code>
-                            </pre>
+                            selectedFile?.toLowerCase().endsWith('.md') || selectedFile?.toLowerCase().endsWith('.markdown') ? (
+                              <div className="p-3 bg-[#0a0d14]/70 rounded-xl border border-card-border/50">
+                                <MarkdownRenderer content={fileContent} />
+                              </div>
+                            ) : (
+                              <pre className="text-xs font-mono text-slate-300 leading-relaxed p-2 whitespace-pre select-text">
+                                <code>{fileContent}</code>
+                              </pre>
+                            )
                           ) : (
                             <div className="h-full flex flex-col items-center justify-center text-slate-600 font-mono text-xs space-y-2">
                               <Terminal className="h-8 w-8 text-slate-700" />

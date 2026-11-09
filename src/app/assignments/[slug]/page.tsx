@@ -7,6 +7,7 @@ import { CodespacesLaunchModal } from '@/components/assignments/CodespacesLaunch
 import { SubmitPRModal } from '@/components/assignments/SubmitPRModal';
 import { AIChatDrawer } from '@/components/ai/AIChatDrawer';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
+import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -229,8 +230,8 @@ export default async function AssignmentDetailPage({ params }: Props) {
               <span>Assignment Instructions & Acceptance Criteria</span>
             </h2>
 
-            <div className="prose prose-invert prose-sm max-w-none text-slate-300 whitespace-pre-wrap leading-relaxed font-sans">
-              {assignment.instructions}
+            <div className="text-slate-300 leading-relaxed font-sans">
+              <MarkdownRenderer content={assignment.instructions} />
             </div>
           </div>
 
