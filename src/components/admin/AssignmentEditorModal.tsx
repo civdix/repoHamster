@@ -236,7 +236,7 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                 <input
                   type="url"
                   required
-                  placeholder="https://github.com/repohamsterowner/repo-name"
+                  placeholder="https://github.com/repohamster/repo-name"
                   value={formData.repoUrl}
                   onChange={(e) => setFormData({ ...formData, repoUrl: e.target.value })}
                   className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"

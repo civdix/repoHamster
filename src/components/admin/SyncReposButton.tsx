@@ -24,7 +24,7 @@ export function SyncReposButton() {
       if (res.ok && data.success) {
         setStatus('success');
         setMessage(
-          `Sync completed: ${data.importedCount || 0} new repos imported, ${data.totalScanned || 0} audited from @${data.owner || 'repohamsterowner'}.`
+          `Sync completed: ${data.importedCount || 0} new repos imported, ${data.totalScanned || 0} audited from @${data.owner || 'repohamster'}.`
         );
         router.refresh();
       } else {
@@ -51,7 +51,7 @@ export function SyncReposButton() {
         ) : (
           <RefreshCw className="h-3.5 w-3.5 text-brand-purple" />
         )}
-        <span>{syncing ? 'Syncing Repositories...' : 'Sync from @repohamsterowner'}</span>
+        <span>{syncing ? 'Syncing Repositories...' : 'Sync from @repohamster'}</span>
       </button>
 
       {message && (

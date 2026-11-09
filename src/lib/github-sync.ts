@@ -19,9 +19,9 @@ export async function syncRepositoriesFromOwner(customOwner?: string): Promise<S
       const setting = await prisma.adminSettings.findUnique({
         where: { key: 'github_sync_owner' },
       });
-      owner = setting?.value || process.env.REPO_HAMSTER_OWNER || 'repohamsterowner';
+      owner = setting?.value || process.env.REPO_HAMSTER_OWNER || 'repohamster';
     } catch {
-      owner = process.env.REPO_HAMSTER_OWNER || 'repohamsterowner';
+      owner = process.env.REPO_HAMSTER_OWNER || 'repohamster';
     }
   }
 

@@ -7,7 +7,7 @@ export const STILL_FORM_ASSIGNMENT = {
   title: 'Still & Form: Commerce API & React Storefront',
   description:
     'A realistic home-goods storefront built with React 19 and Express 5. Track down cart deduction race conditions, tax calculation discrepancies, and checkout flow bugs with Vitest.',
-  repoUrl: 'https://github.com/repohamsterowner/Still-Form',
+  repoUrl: 'https://github.com/repohamster/Still-Form',
   baseBranch: 'main',
   difficulty: 'INTERMEDIATE',
   language: 'JavaScript & React',
@@ -113,7 +113,7 @@ async function seed() {
     { key: 'ai_token_limit', value: '10000', description: 'Daily AI token budget per candidate' },
     { key: 'platform_mode', value: 'SANDBOX', description: 'Execution mode: SANDBOX, HYBRID, or GITHUB_STRICT' },
     { key: 'socratic_strictness', value: 'HIGH', description: 'AI guidance mode: HIGH (never provides full answers)' },
-    { key: 'github_sync_owner', value: 'repohamsterowner', description: 'GitHub owner account for challenge sync' },
+    { key: 'github_sync_owner', value: 'repohamster', description: 'GitHub owner account for challenge sync' },
   ];
 
   for (const s of settings) {
@@ -229,7 +229,7 @@ async function seed() {
           assignmentId: stillForm.id,
           prNumber: 1,
           prUrl: `${stillForm.repoUrl}/pull/1`,
-          repoFullName: 'repohamsterowner/Still-Form',
+          repoFullName: 'repohamster/Still-Form',
           branchName: 'fix/cart-deduction-tax-idempotency',
           state: 'OPEN',
         },
@@ -257,7 +257,7 @@ async function seed() {
           isPassed: true,
           executionTimeMs: 2950,
           evaluatedAt: new Date(Date.now() - 3600000 * 2),
-          logs: `[REPOHAMSTER_SANDBOX] Target Repo: repohamsterowner/Still-Form
+          logs: `[REPOHAMSTER_SANDBOX] Target Repo: repohamster/Still-Form
 [REPOHAMSTER_SANDBOX] Executing: vitest run --reporter=verbose
  ✓ client/src/tests/format.test.js (2 tests passed)
  ✓ client/src/tests/storefront.test.jsx (2 tests passed)
