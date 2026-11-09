@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import prisma from '@/lib/db';
 import { evaluateSubmission } from '@/lib/evaluation/engine';
+import { postGitHubEvaluationFeedback } from '@/lib/github-feedback';
 
 export const dynamic = 'force-dynamic';
 
@@ -138,6 +139,21 @@ export async function POST(req: NextRequest) {
       repoFullName,
       branchName,
       forceReevaluate: action === 'synchronize',
+    });
+
+    // Post feedback directly to GitHub (Commit Status + PR Comment)
+    postGitHubEvaluationFeedback({
+      repoFullName,
+      prNumber,
+      commitSha,
+      isPassed: evalResult.evaluation.isPassed,
+      scorePercent: evalResult.evaluation.scorePercent,
+      passedTests: evalResult.evaluation.passedTests,
+      totalTests: evalResult.evaluation.totalTests,
+      candidateUsername: githubUsername,
+      logs: evalResult.evaluation.logs,
+    }).catch((err) => {
+      console.warn('[WEBHOOK] Could not post GitHub feedback:', err);
     });
 
     return NextResponse.json({
