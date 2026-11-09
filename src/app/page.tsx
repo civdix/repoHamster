@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { LandingFaq } from '@/components/landing/LandingFaq';
+import { HowToUseHamsterGuide } from '@/components/guide/HowToUseHamsterGuide';
 
 export const dynamic = 'force-dynamic';
 
@@ -87,13 +88,22 @@ export default async function HomePage() {
           {/* CTAs */}
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             {session ? (
-              <Link
-                href="/dashboard"
-                className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-brand-lime px-7 py-3.5 text-sm font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition active:scale-95"
-              >
-                <span>Go to Candidate Dashboard</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <>
+                <Link
+                  href="/dashboard"
+                  className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-brand-lime px-7 py-3.5 text-sm font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition active:scale-95"
+                >
+                  <span>Go to Candidate Dashboard</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href="#how-to-use"
+                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-card-border bg-card px-6 py-3.5 text-sm font-semibold text-slate-300 hover:bg-card-hover hover:text-white transition active:scale-95"
+                >
+                  <Terminal className="h-4 w-4 text-brand-purple" />
+                  <span>How to Use Guide</span>
+                </a>
+              </>
             ) : (
               <>
                 <Link
@@ -104,11 +114,11 @@ export default async function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
-                  href="#challenges"
+                  href="#how-to-use"
                   className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-card-border bg-card px-6 py-3.5 text-sm font-semibold text-slate-300 hover:bg-card-hover hover:text-white transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-brand-purple" />
-                  <span>Explore Challenges</span>
+                  <span>How to Use Guide</span>
                 </a>
               </>
             )}
@@ -140,69 +150,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 2. How RepoHamster Works */}
-      <section className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 border-t border-card-border/60">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono uppercase tracking-wider text-brand-lime font-semibold">
-            Workflow Architecture
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
-            How RepoHamster Evaluates Engineering Talent
-          </h2>
-          <p className="mt-3 text-sm text-slate-400">
-            No trivia questions or artificial leetcode puzzles. Pure real-world software debugging in realistic Git repositories.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Step 1 */}
-          <div className="rounded-xl border border-card-border bg-card p-6 relative">
-            <div className="absolute top-4 right-4 text-2xl font-mono font-bold text-slate-700">01</div>
-            <div className="h-10 w-10 rounded-xl bg-lime-950/60 border border-lime-800/40 flex items-center justify-center text-brand-lime mb-4">
-              <Layers className="h-5 w-5" />
-            </div>
-            <h3 className="font-bold text-white text-base">Select Challenge</h3>
-            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-              Choose from 5 production-grade codebases in TypeScript, Python, or Go, each with deliberate concurrency bugs, memory leaks, or CVEs.
-            </p>
-          </div>
-
-          {/* Step 2 */}
-          <div className="rounded-xl border border-card-border bg-card p-6 relative">
-            <div className="absolute top-4 right-4 text-2xl font-mono font-bold text-slate-700">02</div>
-            <div className="h-10 w-10 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-brand-purple mb-4">
-              <Code2 className="h-5 w-5" />
-            </div>
-            <h3 className="font-bold text-white text-base">Launch Codespaces</h3>
-            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-              One click opens the exact repository in GitHub Codespaces. Full VS Code in your browser with pre-installed runtimes and dependencies.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div className="rounded-xl border border-card-border bg-card p-6 relative">
-            <div className="absolute top-4 right-4 text-2xl font-mono font-bold text-slate-700">03</div>
-            <div className="h-10 w-10 rounded-xl bg-lime-950/60 border border-lime-800/40 flex items-center justify-center text-brand-lime mb-4">
-              <Bot className="h-5 w-5" />
-            </div>
-            <h3 className="font-bold text-white text-base">Controlled AI Assist</h3>
-            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-              Stuck on a tricky stack trace? Ask the Socratic Hamster AI Assistant. Token budgets and quotas prevent cheating while guiding your diagnosis.
-            </p>
-          </div>
-
-          {/* Step 4 */}
-          <div className="rounded-xl border border-card-border bg-card p-6 relative">
-            <div className="absolute top-4 right-4 text-2xl font-mono font-bold text-slate-700">04</div>
-            <div className="h-10 w-10 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-brand-purple mb-4">
-              <GitPullRequest className="h-5 w-5" />
-            </div>
-            <h3 className="font-bold text-white text-base">PR & Hidden Tests</h3>
-            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-              Open a GitHub Pull Request. Webhooks trigger our isolated test runner, executing public tests and authoritative hidden security test suites.
-            </p>
-          </div>
-        </div>
+      {/* 2. How RepoHamster Works (Interactive Hamster Guide with Graphics & Indications) */}
+      <section id="how-to-use" className="relative border-t border-card-border/60">
+        <HowToUseHamsterGuide />
       </section>
 
       {/* 3. Explore Debugging Challenges */}

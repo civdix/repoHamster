@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Code2, Shield, User, LogOut, CheckCircle2, Sparkles, Terminal } from 'lucide-react';
+import { Code2, Shield, User, LogOut, CheckCircle2, Sparkles, Terminal, BookOpen } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 export function Navbar() {
@@ -45,6 +45,18 @@ export function Navbar() {
             >
               <Code2 className="h-4 w-4" />
               <span>Challenges</span>
+            </Link>
+
+            <Link
+              href="/guide"
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                pathname === '/guide'
+                  ? 'bg-card text-brand-lime border border-card-border shadow-glow-lime'
+                  : 'text-slate-400 hover:text-white hover:bg-card/60'
+              }`}
+            >
+              <BookOpen className="h-4 w-4 text-brand-lime" />
+              <span>How to Use</span>
             </Link>
 
             {isAdmin && (
