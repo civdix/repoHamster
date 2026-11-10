@@ -15,7 +15,27 @@ export class MockSocraticProvider extends BaseAIProvider implements IAIProvider 
 
     let advice = '';
 
-    if (q.includes('race') || q.includes('concurrency') || q.includes('lock') || q.includes('atomic') || q.includes('mutex')) {
+    if (q.includes('policy') || q.includes('rule') || q.includes('submit') || q.includes('evaluation') || q.includes('score')) {
+      advice = `### 🐹 RepoHamster Assessment Policies & Workflow
+Here is how the assessment and evaluation process works:
+1. **Local Setup**: Clone the repository or launch it in GitHub Codespaces.
+2. **Local Verification**: Fix the bugs in your workspace and verify locally using public test suites.
+3. **Pull Request Submission**: Push your branch and open a Pull Request against the base branch.
+4. **Automated Evaluation**: Our runner triggers automatically in an isolated sandbox, running both public and hidden test suites to generate your verified scorecard.
+5. **Honor Code**: Direct solution code is strictly forbidden. The AI mentor provides conceptual hints only.`;
+    } else if (q.includes('test') || q.includes('testcase') || q.includes('hidden') || q.includes('suite')) {
+      advice = `### 🐹 Test Cases & Accessibility Guide
+Regarding test cases in **${assignmentTitle}**:
+1. **Public Tests**: Accessible directly in the challenge repo. Run \`${options.publicTestInfo || 'npm test'}\` locally to verify basic bug fixes.
+2. **Hidden Tests**: Executed strictly on isolated platform servers when your Pull Request is evaluated. You **cannot** view, inspect, or edit hidden test files directly—this ensures assessment integrity and prevents hardcoding.
+3. **Passing Criteria**: Ensure your fix handles edge cases, race conditions, and boundary conditions so both public and hidden test suites pass.`;
+    } else if (q.includes('repo') || q.includes('clone') || q.includes('codespace') || q.includes('access repo') || q.includes('whole codebase') || q.includes('scan')) {
+      advice = `### 🐹 Challenge Repository & Setup Guide
+For **${assignmentTitle}**:
+1. **Repository Access**: Access the challenge via GitHub (${options.repoUrl || 'repo link on your dashboard'}) or click "Open in GitHub Codespaces".
+2. **Base Branch**: Ensure your Pull Request targets \`${options.baseBranch || 'main'}\`.
+3. **Codebase Boundary**: To conserve tokens and keep assistance fast, I do not scan or hold your entire codebase. Please inspect files directly in your editor or terminal.`;
+    } else if (q.includes('race') || q.includes('concurrency') || q.includes('lock') || q.includes('atomic') || q.includes('mutex')) {
       advice = `### 🐹 Concurrency & Synchronization Diagnostic Hint
 When troubleshooting race conditions in **${assignmentTitle}**:
 1. **Critical Section Inspection**: Locate where shared state is read and updated. If there is an asynchronous pause (such as an \`await\` or non-atomic DB call) between validating inventory and committing the update, concurrent requests will interleave.

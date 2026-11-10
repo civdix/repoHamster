@@ -96,6 +96,9 @@ export async function POST(req: NextRequest) {
     assignmentTitle: assignment.title,
     language: assignment.language,
     framework: assignment.framework,
+    repoUrl: assignment.repoUrl,
+    baseBranch: assignment.baseBranch,
+    publicTestInfo: assignment.publicTestInfo,
     userMessage: message,
     history: history.map((h: any) => ({
       role: h.role === 'assistant' ? 'assistant' : 'user',

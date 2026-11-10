@@ -33,7 +33,7 @@ export function AIChatDrawer({
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: `Hey there! 🐹 I'm your **Socratic Hamster Assistant** for **${assignmentTitle}**.\n\nI can help you analyze concurrency pitfalls, decode gnarly stack traces, or discuss reproduction steps. But remember: my senior coder ethics prevent me from writing the solution for you! What symptoms are you noticing in the codebase?`,
+      content: `Hey there! 🐹 I'm **Hamster AI**, your RepoHamster platform assistant for **${assignmentTitle}**.\n\nI can help you with:\n- 📋 **Platform Policies**: Assessment rules & PR evaluation workflow\n- 📦 **Repository & Test Cases**: How to access the repo, run public tests, and how hidden tests work\n- 💡 **General Coding Concepts**: Socratic debugging guidance and error concepts\n\n*(Note: To conserve tokens, I do not scan your entire codebase, and platform rules prevent me from writing solution code.)* What can I help you with?`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -145,7 +145,7 @@ export function AIChatDrawer({
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-sm flex items-center space-x-1.5">
-                    <span>RepoHamster AI Assistant</span>
+                    <span>Hamster AI</span>
                     <span className="h-1.5 w-1.5 rounded-full bg-brand-lime" />
                   </h3>
                   <div className="flex items-center space-x-2 text-[11px] text-slate-400 font-mono">

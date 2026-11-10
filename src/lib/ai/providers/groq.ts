@@ -10,7 +10,7 @@ export class GroqProvider extends BaseAIProvider implements IAIProvider {
   constructor(apiKey?: string, model?: string) {
     super();
     this.apiKey = apiKey || process.env.GROQ_API_KEY || '';
-    this.defaultModel = model || process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+    this.defaultModel = model || process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
   }
 
   get isConfigured(): boolean {

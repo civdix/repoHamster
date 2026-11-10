@@ -13,6 +13,9 @@ export interface AIRequestOptions {
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
   maxOutputTokens?: number;
   temperature?: number;
+  repoUrl?: string;
+  baseBranch?: string;
+  publicTestInfo?: string;
 }
 
 export interface AIResponse {
