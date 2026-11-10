@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
+import { isPlatformAdmin, isReviewer, canViewAdmin } from '@/lib/permissions';
 import {
   LayoutDashboard,
   Users,
@@ -12,6 +13,7 @@ import {
   FileSpreadsheet,
   ArrowLeft,
   FolderGit2,
+  Eye,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
@@ -22,16 +24,12 @@ export default async function AdminLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  const userRole = (session?.user as any)?.role?.toUpperCase();
-  const userEmail = session?.user?.email?.toLowerCase();
-  const isAdmin =
-    userRole === 'ADMIN' ||
-    userEmail === 'admin@debuglab.internal' ||
-    Boolean(userEmail && userEmail.includes('admin'));
-
-  if (!session?.user || !isAdmin) {
+  if (!session?.user || !canViewAdmin(session)) {
     redirect('/auth/signin?callbackUrl=/admin');
   }
+
+  const isStaffAdmin = isPlatformAdmin(session);
+  const isReviewerSession = isReviewer(session);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
@@ -44,8 +42,12 @@ export default async function AdminLayout({
           <div>
             <h1 className="text-xl font-bold tracking-tight text-white flex items-center space-x-2">
               <span>RepoHamster Administration</span>
-              <span className="rounded-full border border-purple-800/40 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono font-medium text-brand-purple-light">
-                Staff Only
+              <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-mono font-medium ${
+                isReviewerSession
+                  ? 'border-amber-500/40 bg-amber-950/40 text-amber-300'
+                  : 'border-purple-800/40 bg-purple-950/40 text-brand-purple-light'
+              }`}>
+                {isReviewerSession ? 'Project Review (Read-Only)' : 'Staff Only (@repohamster)'}
               </span>
             </h1>
             <p className="text-xs text-slate-400">
@@ -107,6 +109,19 @@ export default async function AdminLayout({
       </div>
 
       {/* Main Content */}
+      {isReviewerSession && (
+        <div className="rounded-xl border border-amber-500/40 bg-amber-950/25 p-4 flex items-center justify-between text-xs font-mono text-amber-200">
+          <div className="flex items-center space-x-2.5">
+            <Eye className="h-4 w-4 text-amber-400 shrink-0" />
+            <span>
+              You are inspecting the staff administration console in <strong>Read-Only Review Mode</strong>. Modifying challenges, saving settings, and applying score overrides are disabled.
+            </span>
+          </div>
+          <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[10px] text-amber-300 font-bold uppercase shrink-0">
+            Inspection Mode
+          </span>
+        </div>
+      )}
       <div>{children}</div>
     </div>
   );

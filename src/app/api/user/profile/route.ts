@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
+import { checkReviewerMutation } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -99,6 +100,9 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized: Sign in required' }, { status: 401 });
   }
 
+  const reviewerErr = checkReviewerMutation(session);
+  if (reviewerErr) return reviewerErr;
+
   try {
     const { username } = await req.json();
 
@@ -107,6 +111,13 @@ export async function PATCH(req: NextRequest) {
     }
 
     const cleanUsername = username.trim().toLowerCase();
+
+    if (cleanUsername === 'repohamster') {
+      return NextResponse.json(
+        { error: 'Username "repohamster" is reserved for the platform administrator.' },
+        { status: 403 }
+      );
+    }
 
     // Validate format (alphanumeric, dashes, underscores, length 3-30)
     if (!/^[a-z0-9_-]{3,30}$/.test(cleanUsername)) {

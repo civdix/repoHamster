@@ -11,6 +11,7 @@ import {
   CodespaceItem,
 } from '@/lib/github-codespaces';
 import { withLock, LockAcquisitionError } from '@/lib/lock-manager';
+import { isReviewer, checkReviewerMutation } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +24,10 @@ export async function GET(req: NextRequest) {
 
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized: Candidate sign-in required' }, { status: 401 });
+  }
+
+  if (isReviewer(session)) {
+    return NextResponse.json({ codespaces: [], activeCodespace: null, isReviewer: true });
   }
 
   const { searchParams } = new URL(req.url);
@@ -92,6 +97,9 @@ export async function POST(req: NextRequest) {
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized: Candidate sign-in required' }, { status: 401 });
   }
+
+  const reviewerErr = checkReviewerMutation(session);
+  if (reviewerErr) return reviewerErr;
 
   let body: any;
   try {

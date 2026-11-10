@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { createCandidatePullRequest, parseGitHubRepo } from '@/lib/github-candidate';
+import { checkReviewerMutation } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +13,9 @@ export async function POST(req: NextRequest) {
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized: Candidate sign-in required' }, { status: 401 });
   }
+
+  const reviewerErr = checkReviewerMutation(session);
+  if (reviewerErr) return reviewerErr;
 
   try {
     const { assignmentId, branch, title, body } = await req.json();

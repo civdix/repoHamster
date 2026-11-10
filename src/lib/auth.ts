@@ -3,6 +3,12 @@ import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from './db';
 
+// The sole platform administrator of RepoHamster is strictly '@repohamster'
+function isRepoHamsterAdmin(username?: string | null): boolean {
+  if (!username) return false;
+  return username.replace(/^@/, '').toLowerCase().trim() === 'repohamster';
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     ...(process.env.GITHUB_ID && process.env.GITHUB_SECRET
@@ -16,81 +22,68 @@ export const authOptions: NextAuthOptions = {
               },
             },
             profile(profile) {
+              const ghLogin = profile.login || '';
+              const isAdmin = isRepoHamsterAdmin(ghLogin);
               return {
                 id: String(profile.id),
-                name: profile.name || profile.login,
-                email: profile.email || `${profile.login}@github.users.noreply`,
+                name: profile.name || ghLogin,
+                email: profile.email || `${ghLogin}@github.users.noreply`,
                 image: profile.avatar_url,
-                githubUsername: profile.login,
-                role: 'CANDIDATE',
+                githubUsername: ghLogin,
+                role: isAdmin ? 'ADMIN' : 'CANDIDATE',
               };
             },
           }),
         ]
       : []),
-    // Credentials provider for Admin login and instant local demonstration
+    // Credentials provider exclusively for password-protected /project-review access
     CredentialsProvider({
       id: 'credentials',
-      name: 'Admin & Quick Demo Access',
+      name: 'Project Review Access',
       credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'admin@debuglab.internal' },
-        password: { label: 'Password', type: 'password' },
-        role: { label: 'Role', type: 'text' },
+        passcode: { label: 'Review Passcode', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email) return null;
+        const enteredPasscode = credentials?.passcode?.trim();
+        const configuredPasscode = (process.env.PROJECT_REVIEW_PASSCODE || 'repohamster2026').trim();
 
-        const email = credentials.email.trim().toLowerCase();
-        const role = credentials.role === 'ADMIN' || email.includes('admin') ? 'ADMIN' : 'CANDIDATE';
-
-        // Check if user exists in database
-        try {
-          let user = await prisma.user.findUnique({
-            where: { email },
-          });
-
-          if (!user) {
-            // Auto-provision demo/admin user
-            const rawUsername = credentials.email.split('@')[0].replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase() || 'coder';
-            user = await prisma.user.create({
-              data: {
-                email,
-                name: credentials.email.split('@')[0],
-                role: role as any,
-                username: rawUsername,
-                githubUsername: rawUsername,
-                avatarUrl: `https://avatars.githubusercontent.com/u/9919?v=4`,
-              },
-            });
-          } else if (role === 'ADMIN' && user.role !== 'ADMIN') {
-            user = await prisma.user.update({
-              where: { id: user.id },
-              data: { role: 'ADMIN' },
-            });
-          }
-
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.avatarUrl,
-            role: user.role || role,
-            username: user.username || user.githubUsername,
-            githubUsername: user.githubUsername,
-          };
-        } catch (error) {
-          console.warn('[AUTH] Database offline or error, providing authenticated fallback token:', error);
-          const fallbackUsername = credentials.email.split('@')[0].replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
-          return {
-            id: 'mock-user-id-' + (role === 'ADMIN' ? 'admin' : 'candidate'),
-            name: credentials.email.split('@')[0],
-            email,
-            image: 'https://avatars.githubusercontent.com/u/9919?v=4',
-            role,
-            username: fallbackUsername,
-            githubUsername: fallbackUsername,
-          };
+        if (!enteredPasscode || enteredPasscode !== configuredPasscode) {
+          throw new Error('Invalid review passcode. Access denied.');
         }
+
+        // Auto-provision guest reviewer user in DB so relations and profile queries resolve seamlessly
+        try {
+          await prisma.user.upsert({
+            where: { email: 'reviewer@repohamster.internal' },
+            update: {
+              name: 'Project Reviewer (Guest)',
+              username: 'project-reviewer',
+              githubUsername: 'project-reviewer',
+            },
+            create: {
+              email: 'reviewer@repohamster.internal',
+              name: 'Project Reviewer (Guest)',
+              username: 'project-reviewer',
+              githubUsername: 'project-reviewer',
+              role: 'CANDIDATE',
+              avatarUrl: 'https://avatars.githubusercontent.com/u/9919?v=4',
+            },
+          });
+        } catch (dbErr) {
+          console.warn('[AUTH] Could not upsert reviewer guest record in DB (offline fallback active):', dbErr);
+        }
+
+        // Return a dedicated Read-Only Project Reviewer guest session
+        return {
+          id: 'project-reviewer-guest',
+          name: 'Project Reviewer (Guest)',
+          email: 'reviewer@repohamster.internal',
+          image: 'https://avatars.githubusercontent.com/u/9919?v=4',
+          role: 'REVIEWER',
+          username: 'project-reviewer',
+          githubUsername: 'project-reviewer',
+          isReviewer: true,
+        } as any;
       },
     }),
   ],
@@ -103,6 +96,7 @@ export const authOptions: NextAuthOptions = {
         try {
           const ghProfile = profile as any;
           const ghUsername = ghProfile?.login || user.name || 'gh-candidate';
+          const isAdmin = isRepoHamsterAdmin(ghUsername);
           const ghId = String(account.providerAccountId);
 
           await prisma.user.upsert({
@@ -112,6 +106,7 @@ export const authOptions: NextAuthOptions = {
               avatarUrl: user.image ?? undefined,
               githubId: ghId,
               githubUsername: ghUsername,
+              role: isAdmin ? 'ADMIN' : 'CANDIDATE',
             },
             create: {
               email: user.email,
@@ -119,7 +114,7 @@ export const authOptions: NextAuthOptions = {
               avatarUrl: user.image,
               githubId: ghId,
               githubUsername: ghUsername,
-              role: 'CANDIDATE',
+              role: isAdmin ? 'ADMIN' : 'CANDIDATE',
             },
           });
         } catch (err) {
@@ -134,7 +129,12 @@ export const authOptions: NextAuthOptions = {
       }
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role || (token.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
+        const isReviewerSession = (user as any).role === 'REVIEWER' || (user as any).isReviewer === true;
+        const ghUsername = ((user as any).githubUsername || (user as any).username || '').replace(/^@/, '').toLowerCase().trim();
+        const isAdmin = isRepoHamsterAdmin(ghUsername);
+
+        token.isReviewer = isReviewerSession;
+        token.role = isReviewerSession ? 'REVIEWER' : (isAdmin ? 'ADMIN' : 'CANDIDATE');
         token.username = (user as any).username || (user as any).githubUsername || (user.email ? user.email.split('@')[0] : 'candidate');
         token.githubUsername = (user as any).githubUsername || (user.email ? user.email.split('@')[0] : 'candidate');
       }
@@ -143,7 +143,8 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id as string;
-        (session.user as any).role = (token.role as string) || (session.user.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
+        (session.user as any).role = token.role as string;
+        (session.user as any).isReviewer = Boolean(token.isReviewer);
         (session.user as any).username = token.username as string;
         (session.user as any).githubUsername = token.githubUsername as string;
         (session.user as any).accessToken = token.accessToken as string;

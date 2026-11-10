@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { AIFactory } from '@/lib/ai';
+import { checkReviewerMutation } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +13,9 @@ export async function POST(req: NextRequest) {
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized. Please sign in.' }, { status: 401 });
   }
+
+  const reviewerErr = checkReviewerMutation(session);
+  if (reviewerErr) return reviewerErr;
 
   let body: any;
   try {

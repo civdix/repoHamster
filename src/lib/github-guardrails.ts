@@ -41,19 +41,30 @@ export async function autoInstallAIGuardrails(repoUrl: string, customToken?: str
   // Check token scopes
   try {
     const userRes = await fetch('https://api.github.com/user', { headers });
-    const scopes = userRes.headers.get('x-oauth-scopes') || '';
-    const hasRepoScope = scopes.includes('repo') || scopes.includes('public_repo');
+    const rawScopes = userRes.headers.get('x-oauth-scopes') || '';
+    const scopeList = rawScopes.split(',').map((s) => s.trim().toLowerCase());
+    const hasRepoScope = scopeList.includes('repo') || scopeList.includes('public_repo');
 
     if (!hasRepoScope) {
       return {
         success: false,
-        message: `Token has scopes "${scopes}", but requires "public_repo" or "repo" to commit files via API. You can copy the files from templates/guardrails/ into ${owner}/${repo} using git, or add public_repo scope to your personal access token.`,
+        message: `Token has scopes "${rawScopes || 'none'}", but requires "repo" or "public_repo" to commit files via GitHub API. Please generate a GitHub Personal Access Token with the "repo" scope checked and configure GITHUB_TOKEN in .env.`,
         requiresManualCommit: true,
       };
     }
   } catch (err: any) {
     console.warn('[GUARDRAILS] Failed to verify token scopes:', err);
   }
+
+  // Detect default branch dynamically
+  let targetBranch = 'main';
+  try {
+    const repoInfoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+    if (repoInfoRes.ok) {
+      const repoInfo = await repoInfoRes.json();
+      targetBranch = repoInfo.default_branch || 'main';
+    }
+  } catch {}
 
   const COPILOT_INSTRUCTIONS = `# RepoHamster Technical Assessment: AI Guardrails & Socratic Guidelines
 
@@ -129,6 +140,7 @@ Failure to follow these rules invalidates the candidate's assessment results.
   ];
 
   const committedFiles: string[] = [];
+  let lastError: string | null = null;
 
   for (const item of filesToCommit) {
     try {
@@ -145,7 +157,7 @@ Failure to follow these rules invalidates the candidate's assessment results.
       const payload: any = {
         message: item.message,
         content: Buffer.from(item.content, 'utf8').toString('base64'),
-        branch: 'main',
+        branch: targetBranch,
       };
       if (existingSha) {
         payload.sha = existingSha;
@@ -162,9 +174,11 @@ Failure to follow these rules invalidates the candidate's assessment results.
       } else {
         const errText = await putRes.text();
         console.warn(`[GUARDRAILS] Failed to commit ${item.path}:`, errText);
+        lastError = `Failed to commit ${item.path} (HTTP ${putRes.status}): ${errText}`;
       }
-    } catch (e) {
+    } catch (e: any) {
       console.warn(`[GUARDRAILS] Error committing ${item.path}:`, e);
+      lastError = e?.message || String(e);
     }
   }
 
@@ -178,7 +192,9 @@ Failure to follow these rules invalidates the candidate's assessment results.
 
   return {
     success: false,
-    message: 'Could not commit guardrails files. Check repository permissions or copy templates/guardrails manually.',
+    message: lastError
+      ? `Could not commit guardrails files: ${lastError}. Check repository write permissions or copy templates/guardrails manually.`
+      : 'Could not commit guardrails files. Check repository permissions or copy templates/guardrails manually.',
     requiresManualCommit: true,
   };
 }

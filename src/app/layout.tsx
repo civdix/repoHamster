@@ -4,6 +4,7 @@ import './globals.css';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { Navbar } from '@/components/layout/Navbar';
 import { NavigationProgressBar } from '@/components/layout/NavigationProgressBar';
+import { ReviewerModeBanner } from '@/components/layout/ReviewerModeBanner';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
@@ -30,6 +31,7 @@ export default function RootLayout({
             <NavigationProgressBar />
           </Suspense>
           <Navbar />
+          <ReviewerModeBanner />
           <main className="flex-1">{children}</main>
           <footer className="border-t border-card-border bg-[#07090e] py-8 text-xs text-slate-500">
             <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">

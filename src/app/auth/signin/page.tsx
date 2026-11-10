@@ -3,7 +3,8 @@
 import { Suspense, useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Github, Shield, ArrowRight, CheckCircle2, Lock, Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Github, Shield, Lock, Sparkles, Loader2, AlertCircle, Eye, ArrowRight } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 function SignInForm() {
@@ -18,9 +19,9 @@ function SignInForm() {
   useEffect(() => {
     if (queryError) {
       if (queryError === 'OAuthSignin' || queryError === 'OAuthCallback') {
-        setErrorMessage('GitHub OAuth sign-in could not be completed. Check GitHub App credentials or use Quick Demo Access below.');
+        setErrorMessage('GitHub OAuth sign-in could not be completed. Check GitHub App configuration or network connectivity.');
       } else if (queryError === 'CredentialsSignin') {
-        setErrorMessage('Sign-in failed. Please verify credentials or database connectivity.');
+        setErrorMessage('Invalid authentication credentials.');
       } else {
         setErrorMessage(`Authentication notice: ${queryError}`);
       }
@@ -35,33 +36,6 @@ function SignInForm() {
     } catch (err: any) {
       setLoading(null);
       setErrorMessage(err?.message || 'Failed to initiate GitHub sign-in.');
-    }
-  };
-
-  const handleQuickSignIn = async (email: string, role: 'ADMIN' | 'CANDIDATE') => {
-    try {
-      setErrorMessage(null);
-      const roleKey = role.toLowerCase();
-      setLoading(roleKey);
-
-      const targetUrl = callbackUrl && callbackUrl !== '/auth/signin' ? callbackUrl : (role === 'ADMIN' ? '/admin' : '/dashboard');
-
-      const res = await signIn('credentials', {
-        redirect: false,
-        email,
-        role,
-        callbackUrl: targetUrl,
-      });
-
-      if (res?.ok) {
-        window.location.href = targetUrl;
-      } else {
-        setLoading(null);
-        setErrorMessage(res?.error || 'Authentication failed. Please verify database connection or try again.');
-      }
-    } catch (err: any) {
-      setLoading(null);
-      setErrorMessage(err?.message || 'An unexpected error occurred during sign in.');
     }
   };
 
@@ -100,7 +74,7 @@ function SignInForm() {
         <button
           onClick={handleGitHubSignIn}
           disabled={loading !== null}
-          className="flex w-full items-center justify-center space-x-3 rounded-xl bg-white px-4 py-3 text-xs font-bold text-slate-950 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-lime disabled:opacity-60 shadow-md active:scale-[0.98]"
+          className="flex w-full items-center justify-center space-x-3 rounded-xl bg-white px-4 py-3.5 text-xs font-bold text-slate-950 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-lime disabled:opacity-60 shadow-md active:scale-[0.98]"
         >
           {loading === 'github' ? (
             <>
@@ -115,80 +89,27 @@ function SignInForm() {
           )}
         </button>
 
-        <div className="relative flex items-center justify-center py-2">
-          <div className="w-full border-t border-card-border" />
-          <span className="absolute bg-card px-3 text-[11px] font-mono uppercase tracking-wider text-slate-500">
-            or 1-click instant demo access
-          </span>
-        </div>
-
-        {/* Quick Demo Access Buttons */}
-        <div className="grid grid-cols-1 gap-2.5">
-          <button
-            onClick={() => handleQuickSignIn('alex.chen@example.com', 'CANDIDATE')}
-            disabled={loading !== null}
-            className={`flex items-center justify-between rounded-xl border p-3.5 text-left transition active:scale-[0.98] focus:outline-none ${
-              loading === 'candidate'
-                ? 'border-brand-lime bg-lime-950/40 shadow-glow-lime'
-                : 'border-card-border bg-[#0a0d14] hover:border-brand-lime/50 hover:bg-card-hover'
-            } ${loading && loading !== 'candidate' ? 'opacity-40 cursor-not-allowed' : ''}`}
+        {/* Project Review Link */}
+        <div className="pt-2">
+          <Link
+            href="/project-review"
+            className="flex items-center justify-between rounded-xl border border-card-border bg-[#0a0d14] p-3 text-left transition hover:border-amber-500/50 hover:bg-card-hover group"
           >
-            <div className="flex items-center space-x-3">
-              <div className="h-8 w-8 rounded-lg bg-lime-950/60 border border-lime-800/40 flex items-center justify-center text-brand-lime shrink-0">
-                {loading === 'candidate' ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-brand-lime" />
-                ) : (
-                  <CheckCircle2 className="h-4 w-4" />
-                )}
+            <div className="flex items-center space-x-2.5">
+              <div className="h-7 w-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                <Eye className="h-3.5 w-3.5" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-white">
-                  {loading === 'candidate' ? 'Authenticating Candidate...' : 'Candidate Workspace'}
+                <p className="text-xs font-semibold text-slate-200 group-hover:text-amber-300 transition">
+                  Have a Project Review Passcode?
                 </p>
-                <p className="text-[11px] text-slate-400 font-mono">
-                  {loading === 'candidate' ? 'Loading candidate dashboard...' : 'Sign in as Alex Chen (Candidate)'}
+                <p className="text-[10px] text-slate-400 font-mono">
+                  Read-only preview of challenges &amp; admin console
                 </p>
               </div>
             </div>
-            {loading === 'candidate' ? (
-              <Loader2 className="h-4 w-4 text-brand-lime animate-spin shrink-0" />
-            ) : (
-              <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-            )}
-          </button>
-
-          <button
-            onClick={() => handleQuickSignIn('admin@debuglab.internal', 'ADMIN')}
-            disabled={loading !== null}
-            className={`flex items-center justify-between rounded-xl border p-3.5 text-left transition active:scale-[0.98] focus:outline-none ${
-              loading === 'admin'
-                ? 'border-purple-500 bg-purple-950/40 shadow-glow-purple'
-                : 'border-card-border bg-[#0a0d14] hover:border-purple-600/50 hover:bg-card-hover'
-            } ${loading && loading !== 'admin' ? 'opacity-40 cursor-not-allowed' : ''}`}
-          >
-            <div className="flex items-center space-x-3">
-              <div className="h-8 w-8 rounded-lg bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-brand-purple shrink-0">
-                {loading === 'admin' ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-brand-purple" />
-                ) : (
-                  <Shield className="h-4 w-4" />
-                )}
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-white">
-                  {loading === 'admin' ? 'Authenticating Administrator...' : 'Platform Administrator'}
-                </p>
-                <p className="text-[11px] text-slate-400 font-mono">
-                  {loading === 'admin' ? 'Entering Staff Administration console...' : 'Full admin, catalogue & override console'}
-                </p>
-              </div>
-            </div>
-            {loading === 'admin' ? (
-              <Loader2 className="h-4 w-4 text-brand-purple animate-spin shrink-0" />
-            ) : (
-              <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-            )}
-          </button>
+            <ArrowRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-amber-400 transition shrink-0" />
+          </Link>
         </div>
       </div>
 

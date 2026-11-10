@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Code2, Shield, User, LogOut, CheckCircle2, Sparkles, Terminal, BookOpen } from 'lucide-react';
+import { Code2, Shield, User, LogOut, CheckCircle2, Sparkles, Terminal, BookOpen, Eye } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 export function Navbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const isAdmin = (session?.user as any)?.role === 'ADMIN';
+  const isStaffAdmin = (session?.user as any)?.role === 'ADMIN';
+  const isReviewer = (session?.user as any)?.role === 'REVIEWER' || (session?.user as any)?.isReviewer === true;
+  const canSeeAdmin = isStaffAdmin || isReviewer;
 
   return (
     <header className="sticky top-0 z-40 border-b border-card-border bg-[#0a0d14]/85 backdrop-blur-md">
@@ -59,17 +61,25 @@ export function Navbar() {
               <span>How to Use</span>
             </Link>
 
-            {isAdmin && (
+            {canSeeAdmin && (
               <Link
                 href="/admin"
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                   pathname?.startsWith('/admin')
-                    ? 'bg-purple-950/50 text-brand-purple-light border border-purple-800/50'
+                    ? isReviewer
+                      ? 'bg-amber-950/50 text-amber-300 border border-amber-800/50'
+                      : 'bg-purple-950/50 text-brand-purple-light border border-purple-800/50'
+                    : isReviewer
+                    ? 'text-amber-300/80 hover:text-amber-200 hover:bg-amber-950/20'
                     : 'text-slate-400 hover:text-brand-purple-light hover:bg-purple-950/20'
                 }`}
               >
-                <Shield className="h-4 w-4 text-brand-purple" />
-                <span>Admin Console</span>
+                {isReviewer ? (
+                  <Eye className="h-4 w-4 text-amber-400" />
+                ) : (
+                  <Shield className="h-4 w-4 text-brand-purple" />
+                )}
+                <span>Admin Console {isReviewer && '(Preview)'}</span>
               </Link>
             )}
           </nav>
@@ -79,10 +89,15 @@ export function Navbar() {
         <div className="flex items-center space-x-3">
           {session?.user ? (
             <div className="flex items-center space-x-3">
-              {isAdmin ? (
+              {isStaffAdmin ? (
                 <span className="hidden sm:inline-flex items-center rounded-full border border-purple-800/50 bg-purple-950/40 px-2.5 py-0.5 text-xs font-mono font-medium text-purple-300">
                   <Shield className="mr-1 h-3 w-3" />
                   Staff Admin
+                </span>
+              ) : isReviewer ? (
+                <span className="hidden sm:inline-flex items-center rounded-full border border-amber-500/40 bg-amber-950/40 px-2.5 py-0.5 text-xs font-mono font-medium text-amber-300">
+                  <Eye className="mr-1 h-3 w-3 text-amber-400" />
+                  Reviewer (Read-Only)
                 </span>
               ) : (
                 <span className="hidden sm:inline-flex items-center rounded-full border border-lime-800/40 bg-lime-950/30 px-2.5 py-0.5 text-xs font-mono font-medium text-brand-lime">

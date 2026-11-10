@@ -2,14 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { validateRepositoryCompatibility } from '@/lib/catalogue/validator';
+import { isPlatformAdmin, isReviewer } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user || (session.user as any).role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized: Admin role required' }, { status: 403 });
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (isReviewer(session)) {
+    return NextResponse.json(
+      { error: 'Read-only mode: Validating catalogue repositories is disabled during project review.' },
+      { status: 403 }
+    );
+  }
+  if (!isPlatformAdmin(session)) {
+    return NextResponse.json(
+      { error: 'Unauthorized: Only platform administrator @repohamster can validate repositories.' },
+      { status: 403 }
+    );
   }
 
   try {

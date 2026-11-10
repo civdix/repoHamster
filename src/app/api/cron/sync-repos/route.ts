@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { syncRepositoriesFromOwner } from '@/lib/github-sync';
+import { isPlatformAdmin } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,10 +13,8 @@ function isAuthorized(req: NextRequest, session: any) {
     return true;
   }
 
-  // Check admin session
-  const role = session?.user?.role?.toUpperCase();
-  const email = session?.user?.email?.toLowerCase();
-  return role === 'ADMIN' || email === 'admin@debuglab.internal' || (email && email.includes('admin'));
+  // Check admin session strictly for sole admin @repohamster
+  return isPlatformAdmin(session);
 }
 
 export async function GET(req: NextRequest) {

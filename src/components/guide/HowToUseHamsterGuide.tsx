@@ -301,7 +301,7 @@ export function HowToUseHamsterGuide() {
                           <span className="font-mono text-brand-lime font-bold">1.</span>
                           <span>
                             Click <strong className="text-white">Start Debugging</strong> on the top right
-                            to sign in via GitHub or use Demo credentials.
+                            to sign in via GitHub or preview with a Project Review Passcode.
                           </span>
                         </li>
                         <li className="flex items-start gap-2">

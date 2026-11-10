@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { evaluateSubmission } from '@/lib/evaluation/engine';
+import { checkReviewerMutation } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +14,9 @@ export async function POST(req: NextRequest) {
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  const reviewerErr = checkReviewerMutation(session);
+  if (reviewerErr) return reviewerErr;
 
   let body: any;
   try {
@@ -34,13 +38,13 @@ export async function POST(req: NextRequest) {
   });
 
   if (!candidate) {
-    // If running in quick demo mode without pre-existing user row
+    const fallbackUsername = (session.user as any)?.githubUsername || session.user.name || 'candidate';
     candidate = await prisma.user.create({
       data: {
-        email: userEmail || 'demo-candidate@debuglab.internal',
-        name: session.user.name || 'Demo Candidate',
+        email: userEmail || `${fallbackUsername}@github.users.noreply`,
+        name: session.user.name || fallbackUsername,
         role: 'CANDIDATE',
-        githubUsername: (session.user as any)?.githubUsername || 'demo-candidate',
+        githubUsername: fallbackUsername,
       },
     });
   }
