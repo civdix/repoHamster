@@ -177,7 +177,16 @@ export async function POST(req: NextRequest) {
       }
 
       // Step B: Create the new codespace first (Safe pattern)
-      const createRes = await createCodespaceDirectly(forkOwner, forkRepo, userToken, 'main');
+      let createRes = await createCodespaceDirectly(forkOwner, forkRepo, userToken);
+
+      // If creation on personal fork returned 404 (e.g. fork still propagating on GitHub), fallback to upstream repo
+      if (!createRes.success && !createRes.isQuotaExceeded && !createRes.isMissingScope && forkOwner !== parsed.owner) {
+        console.warn(`[CODESPACE] Failed on fork ${forkOwner}/${forkRepo}, trying upstream ${parsed.owner}/${parsed.repo}`);
+        const upstreamRes = await createCodespaceDirectly(parsed.owner, parsed.repo, userToken);
+        if (upstreamRes.success) {
+          createRes = upstreamRes;
+        }
+      }
 
       if (!createRes.success) {
         if (createRes.isQuotaExceeded) {

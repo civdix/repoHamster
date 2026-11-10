@@ -127,6 +127,25 @@ export async function forkChallengeRepository(
       const forkUrl = forkData.html_url || `https://github.com/${forkOwner}/${forkRepo}`;
       const codespaceUrl = `https://codespaces.new/${forkOwner}/${forkRepo}?ref=main`;
 
+      // Forking on GitHub is asynchronous (202 Accepted). Wait for the repository to be ready.
+      if (forkRes.status === 202) {
+        let attempts = 0;
+        while (attempts < 5) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          attempts++;
+          try {
+            const checkRes = await fetch(`https://api.github.com/repos/${forkOwner}/${forkRepo}`, {
+              headers,
+            });
+            if (checkRes.ok) {
+              break;
+            }
+          } catch {
+            // keep waiting
+          }
+        }
+      }
+
       return {
         success: true,
         message: `Successfully created fork in ${forkOwner}/${forkRepo}!`,

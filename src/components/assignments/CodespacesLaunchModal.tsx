@@ -190,7 +190,11 @@ export function CodespacesLaunchModal({
             data.error ||
               'GitHub Codespaces Free Quota Limit Reached. Your account has exhausted its included monthly free hours (120 core hours) or spending limit.'
           );
-        } else if (data.isMissingScope) {
+        } else if (
+          data.isMissingScope ||
+          data.error?.toLowerCase().includes('codespace') ||
+          data.error?.toLowerCase().includes('permission')
+        ) {
           setMissingScope(true);
         } else if (data.isLocked) {
           setGeneralError(data.error || 'A Codespace operation is already in progress. Please wait a moment.');
@@ -296,8 +300,32 @@ export function CodespacesLaunchModal({
             )}
 
             {generalError && (
-              <div className="mt-4 rounded-lg border border-rose-800/40 bg-rose-950/40 p-3 text-xs text-rose-300 font-mono animate-in fade-in">
-                ❌ {generalError}
+              <div className="mt-4 rounded-lg border border-rose-800/40 bg-rose-950/40 p-3 text-xs text-rose-300 font-mono animate-in fade-in space-y-2">
+                <div className="flex items-center space-x-1.5 font-bold">
+                  <AlertTriangle className="h-4 w-4 text-rose-400 shrink-0" />
+                  <span>{generalError}</span>
+                </div>
+                {generalError.includes('404') && (
+                  <div className="text-[11px] text-slate-300 font-sans pt-1">
+                    💡 <strong>Why this happens:</strong> GitHub returns 404 when your current session token lacks the <code>codespace</code> permission, or if the repository fork is still propagating on GitHub.
+                    <div className="flex flex-wrap items-center gap-2 pt-2">
+                      <button
+                        onClick={() => signIn('github', { callbackUrl: window.location.href })}
+                        className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-slate-950 hover:bg-amber-400 transition"
+                      >
+                        Re-Authenticate with GitHub (Authorize Codespaces)
+                      </button>
+                      <a
+                        href={defaultCodespacesUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-lg border border-card-border bg-[#0a0d14] px-3 py-1.5 text-xs text-slate-300 hover:text-white transition"
+                      >
+                        Launch Fallback Wizard (codespaces.new)
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

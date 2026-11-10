@@ -166,7 +166,7 @@ export async function createCodespaceDirectly(
   owner: string,
   repo: string,
   userToken?: string,
-  ref = 'main'
+  ref?: string
 ): Promise<{ success: boolean; codespace?: CodespaceItem; error?: string; isQuotaExceeded?: boolean; isMissingScope?: boolean }> {
   const token = getEffectiveToken(userToken);
   if (!token) {
@@ -182,12 +182,15 @@ export async function createCodespaceDirectly(
   };
 
   try {
+    const payload: any = {};
+    if (ref && ref !== 'main' && ref !== 'master') {
+      payload.ref = ref;
+    }
+
     const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/codespaces`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({
-        ref,
-      }),
+      body: JSON.stringify(payload),
     });
 
     const status = res.status;
@@ -220,12 +223,26 @@ export async function createCodespaceDirectly(
       };
     }
 
-    if (status === 403 && !res.headers.get('x-oauth-scopes')?.includes('codespace')) {
-      return {
-        success: false,
-        isMissingScope: true,
-        error: `Missing 'codespace' permission on GitHub session. Please re-authenticate to authorize Codespace management.`,
-      };
+    // GitHub returns 404 or 403 when the 'codespace' OAuth scope is missing
+    if (status === 404 || status === 403 || status === 401) {
+      const scopes = res.headers.get('x-oauth-scopes') || '';
+      let hasCodespaceScope = scopes.includes('codespace');
+
+      if (!hasCodespaceScope) {
+        try {
+          const userCheck = await fetch('https://api.github.com/user', { headers });
+          const userScopes = userCheck.headers.get('x-oauth-scopes') || '';
+          hasCodespaceScope = userScopes.includes('codespace');
+        } catch {}
+      }
+
+      if (!hasCodespaceScope) {
+        return {
+          success: false,
+          isMissingScope: true,
+          error: `Your GitHub session is missing the 'codespace' permission. Please sign out and sign back in to authorize Codespaces management.`,
+        };
+      }
     }
 
     return {
