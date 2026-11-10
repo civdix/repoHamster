@@ -5,8 +5,8 @@ export interface GuardrailsProvisionResult {
   requiresManualCommit?: boolean;
 }
 
-export async function autoInstallAIGuardrails(repoUrl: string): Promise<GuardrailsProvisionResult> {
-  const rawToken = process.env.GITHUB_TOKEN;
+export async function autoInstallAIGuardrails(repoUrl: string, customToken?: string): Promise<GuardrailsProvisionResult> {
+  const rawToken = customToken || process.env.GITHUB_TOKEN;
   const token = rawToken ? rawToken.trim().replace(/^['"]|['"]$/g, '') : null;
 
   if (!token) {
@@ -77,13 +77,17 @@ Failure to follow these rules invalidates the candidate's assessment results.
       name: `${repo} Challenge (RepoHamster)`,
       image: 'mcr.microsoft.com/devcontainers/javascript-node:20',
       forwardPorts: [3001, 5173],
-      postCreateCommand: 'npm install && (test -f .env || cp .env.example .env)',
+      postCreateCommand:
+        'npm install && (test -f .env || cp .env.example .env) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md 2>/dev/null || true)',
       customizations: {
         vscode: {
           settings: {
             'editor.inlineSuggest.enabled': false,
             'github.copilot.inlineSuggest.enable': false,
             'github.copilot.editor.enableCodeActions': false,
+            'github.copilot.advanced': {
+              'inlineSuggestCount': 0
+            },
           },
           extensions: ['dbaeumer.vscode-eslint'],
         },
@@ -98,6 +102,9 @@ Failure to follow these rules invalidates the candidate's assessment results.
       'editor.inlineSuggest.enabled': false,
       'github.copilot.inlineSuggest.enable': false,
       'github.copilot.editor.enableCodeActions': false,
+      'github.copilot.advanced': {
+        'inlineSuggestCount': 0,
+      },
     },
     null,
     2

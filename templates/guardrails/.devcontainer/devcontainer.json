@@ -2,7 +2,7 @@
   "name": "Still & Form Challenge (RepoHamster)",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
   "forwardPorts": [3001, 5173],
-  "postCreateCommand": "npm install && (test -f .env || cp .env.example .env)",
+  "postCreateCommand": "npm install && (test -f .env || cp .env.example .env) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md 2>/dev/null || true)",
   "customizations": {
     "vscode": {
       "settings": {

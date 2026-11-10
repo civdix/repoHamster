@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
+import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
 
 export const dynamic = 'force-dynamic';
 
@@ -126,6 +127,11 @@ Your objective is to identify intentionally introduced defects, fix the root cau
         isActive: true,
       },
     });
+
+    // Auto-install AI guardrails and Copilot restrictions to the upstream challenge repository
+    autoInstallAIGuardrails(catalogRepo.originalUrl).catch((err) =>
+      console.warn('[CATALOGUE CONVERT] Non-fatal error installing AI guardrails:', err)
+    );
 
     return NextResponse.json({
       success: true,
