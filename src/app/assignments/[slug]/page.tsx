@@ -186,12 +186,15 @@ export default async function AssignmentDetailPage({ params }: Props) {
             <CodespacesLaunchModal
               repoUrl={assignment.repoUrl}
               assignmentTitle={assignment.title}
+              assignmentId={assignment.id}
+              candidateGithubUsername={(session?.user as any)?.githubUsername || (session?.user as any)?.username}
             />
 
             <SubmitPRModal
               assignmentId={assignment.id}
               assignmentSlug={assignment.slug}
               repoUrl={assignment.repoUrl}
+              candidateGithubUsername={(session?.user as any)?.githubUsername || (session?.user as any)?.username}
             />
 
             <AIChatDrawer

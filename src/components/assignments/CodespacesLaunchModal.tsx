@@ -1,29 +1,61 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, Terminal, Copy, Check, GitFork, ArrowUpRight, X, Code2, Monitor } from 'lucide-react';
+import {
+  ExternalLink,
+  Terminal,
+  Copy,
+  Check,
+  GitFork,
+  ArrowUpRight,
+  X,
+  Code2,
+  Monitor,
+  Zap,
+  Loader2,
+  Sparkles,
+} from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 interface CodespacesLaunchModalProps {
   repoUrl: string;
   assignmentTitle: string;
+  assignmentId?: string;
+  candidateGithubUsername?: string;
 }
 
-export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLaunchModalProps) {
+export function CodespacesLaunchModal({
+  repoUrl,
+  assignmentTitle,
+  assignmentId,
+  candidateGithubUsername,
+}: CodespacesLaunchModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [vsCodeLaunched, setVsCodeLaunched] = useState(false);
 
+  // Auto-fork state
+  const [isForking, setIsForking] = useState(false);
+  const [forkData, setForkData] = useState<{
+    forkOwner?: string;
+    forkRepo?: string;
+    forkUrl?: string;
+    codespaceUrl?: string;
+    alreadyExists?: boolean;
+    message?: string;
+  } | null>(null);
+  const [forkError, setForkError] = useState<string | null>(null);
+
   const cleanUrl = repoUrl.replace(/\/$/, '').replace(/\?.*$/, '');
   const match = cleanUrl.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)(?:\/tree\/([^\/]+)\/(.+))?$/);
-  const owner = match ? match[1] : 'debuglab-assessments';
+  const owner = match ? match[1] : 'repohamster';
   const repo = match ? match[2] : 'assignment';
   const branch = match && match[3] ? match[3] : 'main';
   const subFolder = match && match[4] ? match[4] : '';
 
   const baseRepoUrl = `https://github.com/${owner}/${repo}`;
   const cloneUrl = `${baseRepoUrl}.git`;
-  const codespacesUrl = `https://github.com/codespaces/new?hide_repo_select=true&ref=${branch}&repo=${owner}/${repo}`;
+  const defaultCodespacesUrl = `https://codespaces.new/${owner}/${repo}?ref=${branch}`;
   const vscodeUrl = `vscode://vscode.git/clone?url=${encodeURIComponent(cloneUrl)}`;
 
   const gitCommands = [
@@ -41,14 +73,47 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
+  const handleAutoForkAndLaunch = async () => {
+    setIsForking(true);
+    setForkError(null);
+
+    try {
+      const res = await fetch('/api/candidate/fork', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repoUrl, assignmentId }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setForkData(data);
+        if (data.codespaceUrl) {
+          window.open(data.codespaceUrl, '_blank');
+        }
+      } else {
+        setForkError(data.message || 'Could not auto-fork repository.');
+        // Fallback: Open upstream Codespaces directly
+        if (data.codespaceUrl || defaultCodespacesUrl) {
+          window.open(data.codespaceUrl || defaultCodespacesUrl, '_blank');
+        }
+      }
+    } catch (err: any) {
+      setForkError(err.message || 'Network error triggering fork.');
+      window.open(defaultCodespacesUrl, '_blank');
+    } finally {
+      setIsForking(false);
+    }
+  };
+
   return (
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center space-x-2 rounded-xl bg-brand-lime px-5 py-2.5 text-xs font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition"
+        className="flex items-center space-x-2 rounded-xl bg-brand-lime px-5 py-2.5 text-xs font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition active:scale-95"
       >
         <Terminal className="h-4 w-4" />
-        <span>Launch in VS Code / Codespaces</span>
+        <span>Launch Codespaces / VS Code</span>
         <ArrowUpRight className="h-3.5 w-3.5" />
       </button>
 
@@ -76,19 +141,100 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
 
             {/* Launch Instructions */}
             <div className="mt-5 space-y-4">
-              {/* Option 1: VS Code Desktop & Codespaces */}
+              {/* Option 1: 1-Click Auto-Fork & Launch Codespaces (Hero Option) */}
+              <div className="rounded-xl border border-purple-600/40 bg-gradient-to-r from-purple-950/40 to-slate-900/60 p-4 space-y-3 shadow-lg">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-purple-300 font-mono flex items-center space-x-1.5">
+                    <Sparkles className="h-3.5 w-3.5 text-brand-lime" />
+                    <span>Option 1: 1-Click Auto-Fork &amp; Launch Codespaces</span>
+                  </h4>
+                  <span className="text-[10px] font-mono text-lime-400/90 bg-lime-950/60 border border-lime-800/40 px-2 py-0.5 rounded-full">
+                    Recommended
+                  </span>
+                </div>
+
+                <p className="text-xs text-slate-300">
+                  Automatically forks <code className="text-brand-lime font-mono">{owner}/{repo}</code> into your personal GitHub account and immediately boots an in-browser VS Code cloud environment pre-configured with Socratic AI guardrails.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    onClick={handleAutoForkAndLaunch}
+                    disabled={isForking}
+                    className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-brand-purple to-purple-600 px-4 py-2.5 text-xs font-bold text-white hover:brightness-110 transition shadow-glow-purple active:scale-95 disabled:opacity-50"
+                  >
+                    {isForking ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-white" />
+                    ) : (
+                      <Zap className="h-4 w-4 text-brand-lime" />
+                    )}
+                    <span>
+                      {isForking
+                        ? 'Forking & Booting Codespace...'
+                        : candidateGithubUsername
+                        ? `⚡ Fork to @${candidateGithubUsername} & Launch Codespaces`
+                        : '⚡ 1-Click Auto-Fork & Launch Codespaces'}
+                    </span>
+                    <ExternalLink className="h-3 w-3" />
+                  </button>
+
+                  <a
+                    href={defaultCodespacesUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-[#0a0d14] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
+                    title="Launch Codespaces directly on upstream repo without forking"
+                  >
+                    <Terminal className="h-3.5 w-3.5 text-brand-lime" />
+                    <span>Direct Upstream Codespace</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                {forkData && (
+                  <div className="rounded-lg border border-brand-lime/40 bg-lime-950/40 p-2.5 text-xs text-brand-lime font-mono animate-in fade-in flex flex-wrap items-center justify-between gap-2">
+                    <span>
+                      ✅ {forkData.alreadyExists ? 'Using active fork:' : 'Fork ready:'}{' '}
+                      <a
+                        href={forkData.forkUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline font-bold text-white hover:text-brand-lime"
+                      >
+                        {forkData.forkOwner}/{forkData.forkRepo}
+                      </a>
+                    </span>
+                    {forkData.codespaceUrl && (
+                      <a
+                        href={forkData.codespaceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-white hover:underline text-[11px] font-bold flex items-center space-x-1 bg-lime-950 px-2 py-0.5 rounded border border-lime-700/50"
+                      >
+                        <span>Open Codespace</span>
+                        <ArrowUpRight className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {forkError && (
+                  <div className="rounded-lg border border-amber-800/40 bg-amber-950/40 p-2.5 text-xs text-amber-300 font-mono animate-in fade-in">
+                    ℹ️ {forkError} (Opening direct Codespace session...)
+                  </div>
+                )}
+              </div>
+
+              {/* Option 2: VS Code Desktop & Direct Upstream */}
               <div className="rounded-xl border border-brand-lime/30 bg-lime-950/20 p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-brand-lime font-mono flex items-center space-x-1.5">
                     <Monitor className="h-3.5 w-3.5" />
-                    <span>Option 1: 1-Click Interactive Environments</span>
+                    <span>Option 2: Local VS Code Desktop</span>
                   </h4>
-                  <span className="text-[10px] font-mono text-lime-400/80 bg-lime-950/50 border border-lime-800/40 px-2 py-0.5 rounded-full">
-                    Recommended
-                  </span>
                 </div>
                 <p className="text-xs text-slate-300">
-                  Open the repository directly in your local VS Code editor or launch an isolated in-browser container via GitHub Codespaces with dependencies pre-configured.
+                  Open the repository in your local VS Code editor via desktop protocol.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -105,24 +251,13 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
                   </a>
 
                   <a
-                    href={codespacesUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center space-x-2 rounded-xl border border-card-border bg-[#0a0d14] px-4 py-2 text-xs font-bold text-white hover:border-brand-lime/60 hover:text-brand-lime transition active:scale-95"
-                  >
-                    <Terminal className="h-3.5 w-3.5" />
-                    <span>Open in GitHub Codespaces</span>
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-
-                  <a
                     href={cleanUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
                   >
                     <GitFork className="h-3.5 w-3.5 text-brand-purple" />
-                    <span>View on GitHub</span>
+                    <span>View Upstream on GitHub</span>
                   </a>
                 </div>
 
@@ -133,11 +268,11 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
                 )}
               </div>
 
-              {/* Option 2: Local CLI */}
+              {/* Option 3: Local CLI */}
               <div className="rounded-xl border border-card-border bg-card p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">
-                    Option 2: Terminal / Manual Git Workflow
+                    Option 3: Terminal / Manual Git Workflow
                   </h4>
                   <button
                     onClick={() => handleCopy(gitCommands.join('\n'), 99)}
@@ -167,7 +302,7 @@ export function CodespacesLaunchModal({ repoUrl, assignmentTitle }: CodespacesLa
 
               {/* PR Submission Instructions */}
               <div className="rounded-xl border border-card-border bg-[#0a0d14] p-3 text-xs text-slate-400 font-mono">
-                <span className="font-semibold text-white">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-brand-lime font-mono">main</code>. RepoHamster&apos;s webhook automatically runs public and hidden test suites in an isolated sandbox.
+                <span className="font-semibold text-white">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-brand-lime font-mono">{branch}</code>. RepoHamster&apos;s webhook automatically runs public and hidden test suites in an isolated sandbox.
               </div>
             </div>
 

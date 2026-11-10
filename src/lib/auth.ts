@@ -10,6 +10,11 @@ export const authOptions: NextAuthOptions = {
           GithubProvider({
             clientId: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET,
+            authorization: {
+              params: {
+                scope: 'read:user user:email public_repo',
+              },
+            },
             profile(profile) {
               return {
                 id: String(profile.id),
@@ -123,7 +128,10 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      if (account?.access_token) {
+        token.accessToken = account.access_token;
+      }
       if (user) {
         token.id = user.id;
         token.role = (user as any).role || (token.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
@@ -138,7 +146,9 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).role = (token.role as string) || (session.user.email?.includes('admin') ? 'ADMIN' : 'CANDIDATE');
         (session.user as any).username = token.username as string;
         (session.user as any).githubUsername = token.githubUsername as string;
+        (session.user as any).accessToken = token.accessToken as string;
       }
+      (session as any).accessToken = token.accessToken as string;
       return session;
     },
   },
