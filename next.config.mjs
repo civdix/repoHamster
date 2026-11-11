@@ -4,6 +4,14 @@ const nextConfig = {
   images: {
     domains: ['avatars.githubusercontent.com', 'github.com'],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/@:username',
+        destination: '/u/:username',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

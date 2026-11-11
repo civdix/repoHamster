@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { UsernameEditor } from '@/components/profile/UsernameEditor';
+import { ShareProfileBar } from '@/components/profile/ShareProfileBar';
 
 export const dynamic = 'force-dynamic';
 
@@ -186,6 +187,11 @@ export default async function UserProfilePage() {
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
+        </div>
+
+        {/* Sharable Profile Link Bar */}
+        <div className="mt-6 pt-6 border-t border-card-border/60">
+          <ShareProfileBar username={displayUsername} />
         </div>
       </div>
 

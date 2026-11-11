@@ -88,9 +88,14 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
             )}
           </div>
 
-          <div className="flex items-center space-x-1.5 text-[11px] font-mono text-slate-400">
-            <ShieldCheck className="h-3.5 w-3.5 text-brand-lime" />
-            <span>Unique developer handle (3-30 chars: a-z, 0-9, dashes, underscores)</span>
+          <div className="flex flex-col space-y-1 text-[11px] font-mono text-slate-400">
+            <div className="flex items-center space-x-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-brand-lime" />
+              <span>Unique developer handle (3-30 chars: a-z, 0-9, dashes, underscores)</span>
+            </div>
+            <div className="text-[10px] text-slate-500">
+              Sharable link preview: <span className="text-brand-lime">https://www.repohamster.com/@{username || 'your-handle'}</span>
+            </div>
           </div>
 
           {error && (
