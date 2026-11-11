@@ -4,6 +4,26 @@ import { GeminiProvider } from './providers/gemini';
 import { OpenAIProvider } from './providers/openai';
 import { MockSocraticProvider } from './providers/mock';
 
+export function isPlatformQuotaError(err: any): boolean {
+  if (!err) return false;
+  const msg = (err.message || '').toLowerCase();
+  const status = err.status || err.statusCode;
+  return (
+    status === 429 ||
+    status === '429' ||
+    msg.includes('rate_limit') ||
+    msg.includes('rate limit') ||
+    msg.includes('quota') ||
+    msg.includes('resource_exhausted') ||
+    msg.includes('too many requests') ||
+    msg.includes('insufficient_quota') ||
+    msg.includes('tokens per minute') ||
+    msg.includes('tpm') ||
+    msg.includes('rpm') ||
+    msg.includes('429')
+  );
+}
+
 export class AIFactory {
   private static providerInstances = new Map<AIProviderType, IAIProvider>();
 
@@ -85,6 +105,22 @@ export class AIFactory {
       return await primaryProvider.generateSocraticHint(options);
     } catch (err: any) {
       console.error(`[AI FACTORY] Primary provider "${primaryProvider.providerType}" failed:`, err.message);
+
+      // Check if upstream AI provider (like Groq) hit platform quota / rate limit
+      if (primaryProvider.providerType !== 'mock' && isPlatformQuotaError(err)) {
+        console.warn(`[AI FACTORY] Platform AI API quota hit on provider "${primaryProvider.providerType}".`);
+        return {
+          reply: `🐹💨 **Hamster Wheel Overheated! (Platform Quota Hit)**\n\nWhoa there! Our server hamster spun the **${primaryProvider.providerType.toUpperCase()}** inference wheel so furiously that the bearings caught fire and we hit our platform AI quota! 🔥\n\n*Rest easy: your personal daily quota is completely safe.* Our DevOps hamsters are currently refilling the token pantry and cooling the GPUs. Please give our overheated hamster a couple of minutes to catch its breath and try again!`,
+          promptTokens: 0,
+          completionTokens: 0,
+          totalTokens: 0,
+          modelName: primaryProvider.defaultModel,
+          provider: primaryProvider.providerType,
+          isPlatformQuotaExceeded: true,
+          quotaImage: '/images/platform-quota-exceeded.png',
+          error: `Platform quota hit: ${err.message}`,
+        };
+      }
 
       // If primary wasn't already mock, fall back to mock
       if (primaryProvider.providerType !== 'mock') {

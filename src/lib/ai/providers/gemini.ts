@@ -62,7 +62,10 @@ export class GeminiProvider extends BaseAIProvider implements IAIProvider {
 
     if (!response.ok) {
       const errBody = await response.text().catch(() => '');
-      throw new Error(`Gemini API error (${response.status}): ${errBody || response.statusText}`);
+      const err: any = new Error(`Gemini API error (${response.status}): ${errBody || response.statusText}`);
+      err.status = response.status;
+      err.statusCode = response.status;
+      throw err;
     }
 
     const data = await response.json();

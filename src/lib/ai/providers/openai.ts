@@ -47,7 +47,10 @@ export class OpenAIProvider extends BaseAIProvider implements IAIProvider {
 
     if (!response.ok) {
       const errBody = await response.text().catch(() => '');
-      throw new Error(`OpenAI API error (${response.status}): ${errBody || response.statusText}`);
+      const err: any = new Error(`OpenAI API error (${response.status}): ${errBody || response.statusText}`);
+      err.status = response.status;
+      err.statusCode = response.status;
+      throw err;
     }
 
     const data = await response.json();

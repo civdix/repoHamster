@@ -73,6 +73,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: `Daily AI request limit reached (${usedRequests}/${dailyRequestLimit}). Your quota will reset in 24 hours.`,
+        isUserQuotaExceeded: true,
+        quotaImage: '/images/user-quota-exceeded.png',
+        quotaType: 'user_limit',
         remainingRequests: 0,
         remainingTokens: Math.max(0, dailyTokenLimit - usedTokens),
       },
@@ -84,6 +87,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: `Daily AI token budget exhausted (${usedTokens}/${dailyTokenLimit} tokens used). Your quota will reset in 24 hours.`,
+        isUserQuotaExceeded: true,
+        quotaImage: '/images/user-quota-exceeded.png',
+        quotaType: 'user_limit',
         remainingRequests: Math.max(0, dailyRequestLimit - usedRequests),
         remainingTokens: 0,
       },
@@ -92,20 +98,51 @@ export async function POST(req: NextRequest) {
   }
 
   // 2. Dispatch query through AIFactory
-  const aiResult = await AIFactory.generateSocraticHint({
-    assignmentTitle: assignment.title,
-    language: assignment.language,
-    framework: assignment.framework,
-    repoUrl: assignment.repoUrl,
-    baseBranch: assignment.baseBranch,
-    publicTestInfo: assignment.publicTestInfo,
-    userMessage: message,
-    history: history.map((h: any) => ({
-      role: h.role === 'assistant' ? 'assistant' : 'user',
-      content: String(h.content || ''),
-    })),
-    maxOutputTokens: 600,
-  });
+  let aiResult;
+  try {
+    aiResult = await AIFactory.generateSocraticHint({
+      assignmentTitle: assignment.title,
+      language: assignment.language,
+      framework: assignment.framework,
+      repoUrl: assignment.repoUrl,
+      baseBranch: assignment.baseBranch,
+      publicTestInfo: assignment.publicTestInfo,
+      userMessage: message,
+      history: history.map((h: any) => ({
+        role: h.role === 'assistant' ? 'assistant' : 'user',
+        content: String(h.content || ''),
+      })),
+      maxOutputTokens: 600,
+    });
+  } catch (err: any) {
+    console.error('[AI CHAT ROUTE] Generation failure:', err);
+    return NextResponse.json(
+      {
+        reply: `🐹💨 **Hamster Wheel Overheated! (Platform Quota Hit)**\n\nWhoa there! Our server hamster spun the inference wheel so fast that the bearings melted and we hit our platform AI quota! 🔥\n\n*Rest easy: your personal credit is 100% safe.* Our engineers are currently dousing the GPUs and refilling the token pantry. Please give the hamster wheel a couple minutes to cool down and try again!`,
+        isPlatformQuotaExceeded: true,
+        quotaImage: '/images/platform-quota-exceeded.png',
+        tokensUsed: 0,
+        remainingRequests: Math.max(0, dailyRequestLimit - usedRequests),
+        remainingTokens: Math.max(0, dailyTokenLimit - usedTokens),
+      },
+      { status: 200 }
+    );
+  }
+
+  // Handle platform quota exceeded gracefully
+  if (aiResult.isPlatformQuotaExceeded) {
+    return NextResponse.json({
+      reply: aiResult.reply,
+      isPlatformQuotaExceeded: true,
+      quotaImage: aiResult.quotaImage || '/images/platform-quota-exceeded.png',
+      tokensUsed: 0,
+      provider: aiResult.provider,
+      modelName: aiResult.modelName,
+      fallbackUsed: false,
+      remainingRequests: Math.max(0, dailyRequestLimit - usedRequests),
+      remainingTokens: Math.max(0, dailyTokenLimit - usedTokens),
+    });
+  }
 
   const promptTokens = aiResult.promptTokens;
   const completionTokens = aiResult.completionTokens;

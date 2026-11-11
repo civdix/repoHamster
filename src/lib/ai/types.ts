@@ -27,6 +27,8 @@ export interface AIResponse {
   provider: AIProviderType;
   fallbackUsed?: boolean;
   error?: string;
+  isPlatformQuotaExceeded?: boolean;
+  quotaImage?: string;
 }
 
 export interface IAIProvider {

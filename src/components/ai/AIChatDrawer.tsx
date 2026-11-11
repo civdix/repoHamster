@@ -17,6 +17,9 @@ interface Message {
   content: string;
   tokens?: number;
   timestamp: string;
+  image?: string;
+  isPlatformQuotaExceeded?: boolean;
+  isUserQuotaExceeded?: boolean;
 }
 
 export function AIChatDrawer({
@@ -54,7 +57,16 @@ export function AIChatDrawer({
     if (!input.trim() || loading) return;
 
     if (remainingRequests <= 0 || remainingTokens <= 0) {
-      alert('Your daily AI credit budget is exhausted. Check back after your 24-hour reset window!');
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: `🛑 **Personal Daily AI Limit Reached!**\n\nYou've exhausted your personal daily Hamster AI allowance (${remainingRequests <= 0 ? 'request limit reached' : 'token budget spent'}). Take a pause to review your code and test assertions manually, or check back after your 24-hour rolling reset window!`,
+          image: '/images/user-quota-exceeded.png',
+          isUserQuotaExceeded: true,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
       return;
     }
 
@@ -82,26 +94,63 @@ export function AIChatDrawer({
       const data = await res.json();
 
       if (!res.ok) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: `⚠️ **Hamster Quota Alert**: ${data.error || 'Failed to generate response.'}`,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          },
-        ]);
+        if (data.isUserQuotaExceeded || res.status === 429) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: `🛑 **Personal Daily Limit Reached!**\n\n${data.error || 'Your personal daily AI allowance has been exhausted.'}`,
+              image: data.quotaImage || '/images/user-quota-exceeded.png',
+              isUserQuotaExceeded: true,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        } else if (data.isPlatformQuotaExceeded) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: data.reply || data.error || 'Platform AI quota limit reached.',
+              image: data.quotaImage || '/images/platform-quota-exceeded.png',
+              isPlatformQuotaExceeded: true,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: `⚠️ **Hamster Quota Alert**: ${data.error || 'Failed to generate response.'}`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        }
         if (data.remainingRequests !== undefined) setRemainingRequests(data.remainingRequests);
         if (data.remainingTokens !== undefined) setRemainingTokens(data.remainingTokens);
       } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: data.reply,
-            tokens: data.tokensUsed,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          },
-        ]);
+        if (data.isPlatformQuotaExceeded) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: data.reply,
+              image: data.quotaImage || '/images/platform-quota-exceeded.png',
+              isPlatformQuotaExceeded: true,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: data.reply,
+              tokens: data.tokensUsed,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        }
         if (data.remainingRequests !== undefined) setRemainingRequests(data.remainingRequests);
         if (data.remainingTokens !== undefined) setRemainingTokens(data.remainingTokens);
       }
@@ -207,6 +256,30 @@ export function AIChatDrawer({
                       <MarkdownRenderer content={msg.content} />
                     ) : (
                       msg.content
+                    )}
+
+                    {msg.image && (
+                      <div className="mt-3 overflow-hidden rounded-2xl border border-card-border/80 bg-[#060810] shadow-2xl p-2 flex flex-col items-center">
+                        <div className="w-full max-w-[340px] overflow-hidden rounded-xl bg-black/50 border border-card-border/50">
+                          <img
+                            src={msg.image}
+                            alt={msg.isPlatformQuotaExceeded ? 'Platform AI Quota Overheated' : 'Personal Daily Quota Exhausted'}
+                            className="w-full h-auto max-h-[420px] object-contain rounded-lg block mx-auto"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="mt-2 text-center text-[10px] font-mono">
+                          {msg.isPlatformQuotaExceeded ? (
+                            <span className="text-amber-400 font-semibold flex items-center justify-center">
+                              ⚡ Platform Quota Limit • Hamsters Refilling Token Pantry
+                            </span>
+                          ) : (
+                            <span className="text-rose-400 font-semibold flex items-center justify-center">
+                              ⏳ Personal Daily Allowance Exhausted • Resets in 24h
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

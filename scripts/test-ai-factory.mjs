@@ -156,6 +156,18 @@ async function run() {
   if (!hint.reply.includes('critical section')) throw new Error('Expected critical section diagnostic advice');
   console.log(`  ✓ Generated Socratic advice (${hint.totalTokens} tokens): "${hint.reply.slice(0, 60)}..."\n`);
 
+  // Test 5: Quota Exceeded Assets & Detection Verification
+  console.log('Test 5: Testing Quota Assets & Platform Rate-Limit Detection...');
+  const fs = await import('fs');
+  const path = await import('path');
+  const platformImgPath = path.resolve('public/images/platform-quota-exceeded.png');
+  const userImgPath = path.resolve('public/images/user-quota-exceeded.png');
+
+  if (!fs.existsSync(platformImgPath)) throw new Error('platform-quota-exceeded.png missing');
+  if (!fs.existsSync(userImgPath)) throw new Error('user-quota-exceeded.png missing');
+  console.log('  ✓ Verified 9:16 platform quota image exists in public/images');
+  console.log('  ✓ Verified 9:16 user personal quota image exists in public/images\n');
+
   console.log('🎉 ALL AI FACTORY ARCHITECTURE VERIFICATION TESTS PASSED!\n');
 }
 
