@@ -11,7 +11,6 @@ interface ShareProfileBarProps {
 export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarProps) {
   const [copied, setCopied] = useState(false);
 
-  // Generate shareable URL (default to window origin if available, fallback to production domain)
   const getShareUrl = () => {
     if (typeof window !== 'undefined' && window.location.origin) {
       return `${window.location.origin}/@${username}`;
@@ -26,7 +25,6 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // Fallback
       const input = document.createElement('input');
       input.value = url;
       document.body.appendChild(input);
@@ -53,13 +51,13 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
     return (
       <button
         onClick={handleCopy}
-        className="inline-flex items-center space-x-1.5 rounded-lg border border-card-border bg-[#0a0d14] px-3 py-1.5 text-xs font-mono text-slate-300 hover:border-brand-lime/50 hover:text-white transition active:scale-95"
+        className="inline-flex items-center space-x-1.5 rounded-lg border border-[#30363d] bg-[#161b22] px-3 py-1.5 text-xs font-mono text-slate-300 hover:border-yellow-500/50 hover:text-white transition active:scale-95"
         title="Copy Public Profile Link"
       >
         {copied ? (
           <>
-            <Check className="h-3.5 w-3.5 text-brand-lime" />
-            <span className="text-brand-lime font-bold">Copied!</span>
+            <Check className="h-3.5 w-3.5 text-yellow-400" />
+            <span className="text-yellow-400 font-bold">Copied!</span>
           </>
         ) : (
           <>
@@ -72,17 +70,17 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
   }
 
   return (
-    <div className="rounded-xl border border-card-border/80 bg-[#0d111a] p-3 sm:p-4 shadow-inner">
+    <div className="rounded-xl border border-[#30363d] bg-[#0d1117] p-3 sm:p-4 shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center space-x-2.5 min-w-0">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-card border border-brand-lime/30 text-brand-lime">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#161b22] border border-yellow-500/40 text-yellow-400">
             <Share2 className="h-4 w-4" />
           </div>
           <div className="min-w-0">
             <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
               Public Sharable Profile Link
             </p>
-            <p className="text-xs font-mono text-brand-lime truncate select-all">
+            <p className="text-xs font-mono text-yellow-400 truncate select-all">
               https://www.repohamster.com/@{username}
             </p>
           </div>
@@ -93,8 +91,8 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
             onClick={handleCopy}
             className={`inline-flex items-center space-x-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition active:scale-95 ${
               copied
-                ? 'bg-lime-950/80 border border-brand-lime text-brand-lime shadow-glow-lime'
-                : 'bg-brand-lime text-slate-950 hover:bg-brand-lime-light shadow-glow-lime'
+                ? 'bg-yellow-950/80 border border-yellow-400 text-yellow-300 shadow-[0_0_15px_rgba(250,204,21,0.3)]'
+                : 'bg-yellow-500 hover:bg-yellow-400 text-slate-950 shadow-[0_0_15px_rgba(234,179,8,0.25)]'
             }`}
           >
             {copied ? (
@@ -112,7 +110,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
 
           <button
             onClick={shareOnTwitter}
-            className="rounded-lg border border-card-border bg-card px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-sky-500/50 transition"
+            className="rounded-lg border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-yellow-500/50 transition"
             title="Share on X / Twitter"
           >
             𝕏 Post
@@ -120,7 +118,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
 
           <button
             onClick={shareOnLinkedIn}
-            className="rounded-lg border border-card-border bg-card px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-blue-500/50 transition"
+            className="rounded-lg border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-yellow-500/50 transition"
             title="Share on LinkedIn"
           >
             in Share

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Bot, Send, Sparkles, X, ShieldCheck, User, Loader2 } from 'lucide-react';
+import { Send, X, ShieldCheck, Loader2 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
 
@@ -172,52 +172,52 @@ export function AIChatDrawer({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center space-x-2 rounded-xl bg-card border border-purple-800/50 hover:border-brand-purple px-4 py-2.5 text-xs font-semibold text-white shadow-glow-purple transition"
+        className="flex items-center space-x-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-yellow-400 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition active:scale-95"
       >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-950/80">
-          <HamsterMascot variant="thinking" size={18} />
+        <span className="flex h-5 w-5 items-center justify-center">
+          <HamsterMascot variant="normal" size={20} />
         </span>
         <span>Ask Hamster AI</span>
-        <span className="rounded-full bg-brand-purple/20 border border-brand-purple/40 px-2 py-0.5 text-[10px] font-mono text-brand-purple-light">
+        <span className="rounded-full bg-yellow-950/80 border border-yellow-700/60 px-2 py-0.5 text-[10px] font-mono text-yellow-300 font-bold">
           {remainingRequests} left
         </span>
       </button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="flex h-full w-full max-w-lg flex-col border-l border-card-border bg-[#0a0d14] shadow-2xl animate-in slide-in-from-right duration-300">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-card-border p-4 bg-[#0e121d]">
+          <div className="flex h-full w-full max-w-lg flex-col border-l border-[#30363d] bg-[#0d1117] shadow-2xl animate-in slide-in-from-right duration-300">
+            {/* Header (Yellow + Dark) */}
+            <div className="flex items-center justify-between border-b border-[#30363d] p-4 bg-[#161b22]">
               <div className="flex items-center space-x-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-card border border-brand-purple/50">
-                  <HamsterMascot variant="avatar" size={28} />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0d1117] border border-yellow-500/50 p-1">
+                  <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm flex items-center space-x-1.5">
+                  <h3 className="font-bold text-white text-sm flex items-center space-x-1.5 font-sans">
                     <span>Hamster AI</span>
-                    <span className="h-1.5 w-1.5 rounded-full bg-brand-lime" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-yellow-400 animate-pulse" />
                   </h3>
                   <div className="flex items-center space-x-2 text-[11px] text-slate-400 font-mono">
-                    <span className="text-brand-lime font-semibold">{remainingRequests} requests</span>
+                    <span className="text-yellow-400 font-bold">{remainingRequests} queries left</span>
                     <span>•</span>
-                    <span>{remainingTokens.toLocaleString()} tokens left</span>
+                    <span>{remainingTokens.toLocaleString()} tokens</span>
                   </div>
                 </div>
               </div>
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1.5 text-slate-400 hover:text-white transition"
+                className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-[#21262d] transition"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Disclaimer Banner */}
-            <div className="border-b border-card-border/60 bg-purple-950/30 px-4 py-2 text-[11px] text-purple-200 flex items-center space-x-2 font-mono">
-              <ShieldCheck className="h-4 w-4 shrink-0 text-brand-lime" />
+            <div className="border-b border-[#30363d] bg-yellow-950/40 px-4 py-2 text-[11px] text-yellow-300 flex items-center space-x-2 font-mono">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-yellow-400" />
               <span>
-                Socratic Mentorship: Explains architectural patterns and debugging clues without giving away solutions.
+                Socratic Mentorship: Explains architectural patterns and debugging clues without leaking code.
               </span>
             </div>
 
@@ -237,7 +237,7 @@ export function AIChatDrawer({
                       </>
                     ) : (
                       <>
-                        <span className="text-brand-lime font-semibold">Hamster Coder</span>
+                        <span className="text-yellow-400 font-bold">Hamster Coder</span>
                         <span>•</span>
                         <span>{msg.timestamp}</span>
                         {msg.tokens && <span>({msg.tokens} tokens)</span>}
@@ -248,8 +248,8 @@ export function AIChatDrawer({
                   <div
                     className={`rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-[90%] ${
                       msg.role === 'user'
-                        ? 'bg-purple-600 text-white rounded-tr-none whitespace-pre-wrap'
-                        : 'border border-card-border bg-[#131826] text-slate-200 rounded-tl-none font-sans'
+                        ? 'bg-[#21262d] text-white border border-[#30363d] rounded-tr-none whitespace-pre-wrap'
+                        : 'border border-[#30363d] bg-[#161b22] text-slate-200 rounded-tl-none font-sans'
                     }`}
                   >
                     {msg.role === 'assistant' ? (
@@ -259,22 +259,22 @@ export function AIChatDrawer({
                     )}
 
                     {msg.image && (
-                      <div className="mt-3 overflow-hidden rounded-2xl border border-card-border/80 bg-[#060810] shadow-2xl p-2 flex flex-col items-center">
-                        <div className="w-full max-w-[340px] overflow-hidden rounded-xl bg-black/50 border border-card-border/50">
+                      <div className="mt-3 overflow-hidden rounded-2xl border border-[#30363d] bg-[#07090e] shadow-xl p-2 flex flex-col items-center">
+                        <div className="w-full max-w-[320px] overflow-hidden rounded-xl bg-black/50 border border-[#21262d]">
                           <img
                             src={msg.image}
                             alt={msg.isPlatformQuotaExceeded ? 'Platform AI Quota Overheated' : 'Personal Daily Quota Exhausted'}
-                            className="w-full h-auto max-h-[420px] object-contain rounded-lg block mx-auto"
+                            className="w-full h-auto max-h-[400px] object-contain rounded-lg block mx-auto"
                             loading="lazy"
                           />
                         </div>
                         <div className="mt-2 text-center text-[10px] font-mono">
                           {msg.isPlatformQuotaExceeded ? (
-                            <span className="text-amber-400 font-semibold flex items-center justify-center">
+                            <span className="text-yellow-400 font-semibold flex items-center justify-center">
                               ⚡ Platform Quota Limit • Hamsters Refilling Token Pantry
                             </span>
                           ) : (
-                            <span className="text-rose-400 font-semibold flex items-center justify-center">
+                            <span className="text-yellow-500 font-semibold flex items-center justify-center">
                               ⏳ Personal Daily Allowance Exhausted • Resets in 24h
                             </span>
                           )}
@@ -285,8 +285,8 @@ export function AIChatDrawer({
                 </div>
               ))}
               {loading && (
-                <div className="flex items-center space-x-2 text-xs text-brand-lime p-2 font-mono">
-                  <Loader2 className="h-4 w-4 animate-spin text-brand-lime" />
+                <div className="flex items-center space-x-2 text-xs text-yellow-400 p-2 font-mono">
+                  <Loader2 className="h-4 w-4 animate-spin text-yellow-400" />
                   <span>Hamster is analyzing your code inquiry...</span>
                 </div>
               )}
@@ -294,7 +294,7 @@ export function AIChatDrawer({
             </div>
 
             {/* Chat Input */}
-            <form onSubmit={handleSendMessage} className="border-t border-card-border p-4 bg-[#0e121d]">
+            <form onSubmit={handleSendMessage} className="border-t border-[#30363d] p-4 bg-[#161b22]">
               <div className="relative">
                 <textarea
                   rows={2}
@@ -312,19 +312,19 @@ export function AIChatDrawer({
                       : 'Daily AI credit budget exhausted'
                   }
                   disabled={loading || remainingRequests <= 0}
-                  className="w-full resize-none rounded-xl border border-card-border bg-[#0a0d14] p-3 pr-12 text-xs text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none disabled:opacity-50"
+                  className="w-full resize-none rounded-xl border border-[#30363d] bg-[#0d1117] p-3 pr-12 text-xs text-white placeholder-slate-500 focus:border-yellow-400 focus:outline-none disabled:opacity-50 font-mono"
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim() || remainingRequests <= 0}
-                  className="absolute bottom-3 right-3 rounded-lg bg-brand-lime p-1.5 text-slate-950 hover:bg-brand-lime-light transition disabled:opacity-30 shadow-glow-lime"
+                  className="absolute bottom-3 right-3 rounded-lg bg-yellow-500 p-1.5 text-slate-950 hover:bg-yellow-400 transition disabled:opacity-30 shadow-[0_0_10px_rgba(234,179,8,0.3)]"
                 >
-                  <Send className="h-3.5 w-3.5" />
+                  <Send className="h-3.5 w-3.5 stroke-[2.5]" />
                 </button>
               </div>
-              <div className="mt-2 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+              <div className="mt-2 flex items-center justify-between text-[10px] text-slate-400 font-mono">
                 <span>Enter to send, Shift+Enter for newline</span>
-                <span>{remainingRequests} queries left today</span>
+                <span className="text-yellow-400">{remainingRequests} queries left today</span>
               </div>
             </form>
           </div>

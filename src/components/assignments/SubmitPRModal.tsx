@@ -175,20 +175,20 @@ export function SubmitPRModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center space-x-2 rounded-xl border border-card-border bg-card px-4 py-2.5 text-xs font-semibold text-slate-200 hover:border-brand-purple hover:bg-card-hover transition"
+        className="flex items-center space-x-2 rounded-lg border border-[#30363d] bg-[#21262d] hover:border-yellow-500/60 hover:text-white px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition active:scale-95 shadow-sm"
       >
-        <GitPullRequest className="h-4 w-4 text-brand-purple" />
-        <span>Submit PR or Evaluate</span>
+        <GitPullRequest className="h-3.5 w-3.5 text-yellow-400" />
+        <span>Submit PR</span>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg rounded-2xl border border-card-border bg-[#0d101a] p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-lg rounded-2xl border border-[#30363d] bg-[#0d1117] p-6 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-card-border pb-4">
+            <div className="flex items-center justify-between border-b border-[#30363d] pb-4">
               <div className="flex items-center space-x-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-card border border-brand-purple/50">
-                  <HamsterMascot variant="detective" size={28} />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#161b22] border border-yellow-500/50 p-1">
+                  <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-base">Submit Assessment Solution</h3>
@@ -197,7 +197,7 @@ export function SubmitPRModal({
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-slate-400 hover:text-white transition"
+                className="rounded-lg p-1 text-slate-400 hover:text-white hover:bg-[#21262d] transition"
               >
                 <X className="h-5 w-5" />
               </button>

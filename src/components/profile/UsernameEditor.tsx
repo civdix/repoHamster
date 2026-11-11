@@ -60,14 +60,14 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
                 value={username}
                 onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                 placeholder="choose-unique-username"
-                className="w-full rounded-xl border border-card-border bg-[#0a0d14] pl-7 pr-3 py-1.5 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
+                className="w-full rounded-xl border border-[#30363d] bg-[#0d1117] pl-7 pr-3 py-1.5 text-xs font-mono text-white focus:border-yellow-400 focus:outline-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading || !username.trim()}
-              className="flex items-center space-x-1.5 rounded-xl bg-brand-lime px-3 py-1.5 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition active:scale-95 disabled:opacity-50"
+              className="flex items-center space-x-1.5 rounded-xl bg-yellow-500 px-3 py-1.5 text-xs font-bold text-slate-950 hover:bg-yellow-400 transition active:scale-95 disabled:opacity-50 shadow-[0_0_10px_rgba(234,179,8,0.25)]"
             >
               {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
               <span>Claim Handle</span>
@@ -81,7 +81,7 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
                   setIsEditing(false);
                   setError(null);
                 }}
-                className="rounded-xl border border-card-border bg-card px-2.5 py-1.5 text-xs text-slate-400 hover:text-white"
+                className="rounded-xl border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-slate-400 hover:text-white"
               >
                 Cancel
               </button>
@@ -90,38 +90,38 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
 
           <div className="flex flex-col space-y-1 text-[11px] font-mono text-slate-400">
             <div className="flex items-center space-x-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-brand-lime" />
+              <ShieldCheck className="h-3.5 w-3.5 text-yellow-400" />
               <span>Unique developer handle (3-30 chars: a-z, 0-9, dashes, underscores)</span>
             </div>
             <div className="text-[10px] text-slate-500">
-              Sharable link preview: <span className="text-brand-lime">https://www.repohamster.com/@{username || 'your-handle'}</span>
+              Sharable link preview: <span className="text-yellow-400">https://www.repohamster.com/@{username || 'your-handle'}</span>
             </div>
           </div>
 
           {error && (
-            <div className="rounded-lg border border-rose-800/50 bg-rose-950/40 p-2 text-xs text-rose-300 flex items-center space-x-1.5">
-              <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+            <div className="rounded-lg border border-[#713f12] bg-[#422006] p-2 text-xs text-yellow-300 flex items-center space-x-1.5">
+              <AlertCircle className="h-3.5 w-3.5 text-yellow-400 shrink-0" />
               <span>{error}</span>
             </div>
           )}
         </form>
       ) : (
         <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center space-x-1.5 rounded-full border border-brand-lime/40 bg-lime-950/30 px-3 py-1 text-xs font-mono text-brand-lime font-bold">
+          <div className="inline-flex items-center space-x-1.5 rounded-full border border-yellow-600/50 bg-yellow-950/40 px-3 py-1 text-xs font-mono text-yellow-300 font-bold">
             <AtSign className="h-3.5 w-3.5" />
             <span>{username}</span>
           </div>
 
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center space-x-1 rounded-lg border border-card-border bg-[#0a0d14] px-2.5 py-1 text-[11px] font-mono text-slate-400 hover:text-white transition active:scale-95"
+            className="flex items-center space-x-1 rounded-lg border border-[#30363d] bg-[#161b22] px-2.5 py-1 text-[11px] font-mono text-slate-400 hover:text-white hover:border-yellow-500/50 transition active:scale-95"
           >
             <Edit2 className="h-3 w-3" />
             <span>Change Handle</span>
           </button>
 
           {success && (
-            <span className="text-[11px] font-mono text-brand-lime flex items-center space-x-1 animate-in fade-in">
+            <span className="text-[11px] font-mono text-yellow-400 flex items-center space-x-1 animate-in fade-in">
               <Check className="h-3 w-3" />
               <span>{success}</span>
             </span>
@@ -129,7 +129,7 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
         </div>
       )}
 
-      {/* Identity notice clarifying that immutable UUID is used for backend logic */}
+      {/* Permanent Identity */}
       <div className="text-[10px] font-mono text-slate-500 flex items-center space-x-1">
         <span>System ID:</span>
         <code className="text-slate-400 select-all">{userId}</code>

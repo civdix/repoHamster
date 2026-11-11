@@ -215,21 +215,21 @@ export function CodespacesLaunchModal({
     <>
       <button
         onClick={handleOpenModal}
-        className="flex items-center space-x-2 rounded-xl bg-brand-lime px-5 py-2.5 text-xs font-bold text-slate-950 shadow-glow-lime hover:bg-brand-lime-light transition active:scale-95"
+        className="flex items-center space-x-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-slate-950 px-3.5 py-1.5 text-xs font-extrabold transition shadow-[0_0_15px_rgba(234,179,8,0.25)] active:scale-95"
       >
-        <Terminal className="h-4 w-4" />
-        <span>Launch Codespaces / VS Code</span>
-        <ArrowUpRight className="h-3.5 w-3.5" />
+        <Terminal className="h-3.5 w-3.5 stroke-[2.5]" />
+        <span>&lt;&gt; Code</span>
+        <ArrowUpRight className="h-3 w-3" />
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-card-border bg-[#0d101a] p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[#30363d] bg-[#0d1117] p-6 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-card-border pb-4">
+            <div className="flex items-center justify-between border-b border-[#30363d] pb-4">
               <div className="flex items-center space-x-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-card border border-brand-lime/50 shadow-glow-lime">
-                  <HamsterMascot variant="avatar" size={28} />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#161b22] border border-yellow-500/50 p-1">
+                  <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-base">Launch Assessment Workspace</h3>
@@ -238,19 +238,19 @@ export function CodespacesLaunchModal({
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-slate-400 hover:text-white transition"
+                className="rounded-lg p-1 text-slate-400 hover:text-white hover:bg-[#21262d] transition"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            {/* AI Integrity & Guardrails Notice */}
-            <div className="mt-4 rounded-xl border border-brand-purple/40 bg-purple-950/25 p-3 flex items-start space-x-3 text-xs">
-              <ShieldAlert className="h-4 w-4 text-brand-purple-light shrink-0 mt-0.5" />
+            {/* AI Integrity & Guardrails Notice (Yellow + Dark) */}
+            <div className="mt-4 rounded-xl border border-yellow-700/50 bg-yellow-950/30 p-3 flex items-start space-x-3 text-xs">
+              <ShieldAlert className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-semibold text-white">Assessment AI Integrity Guardrails:</span>
+                <span className="font-semibold text-yellow-300">Assessment AI Integrity Guardrails:</span>
                 <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Inline code autocompletion (Copilot Ghost Text) is disabled in this environment for assessment integrity. You can ask for conceptual debugging help using the <strong>RepoHamster AI Mentor</strong>. All questions asked to the AI are recorded in your assessment audit log for reviewer evaluation.
+                  Inline code autocompletion (Copilot Ghost Text) is disabled in this environment for assessment integrity. You can ask for conceptual debugging help using the <strong className="text-yellow-400">RepoHamster AI Mentor</strong>. All questions asked to the AI are recorded in your assessment audit log for reviewer evaluation.
                 </p>
               </div>
             </div>
