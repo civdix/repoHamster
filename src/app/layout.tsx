@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-[#0a0d14] text-slate-100 antialiased selection:bg-brand-lime/25 selection:text-white flex flex-col">
+      <body className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] antialiased selection:bg-[var(--yellow-primary)]/30 selection:text-white flex flex-col">
         <SessionProvider>
           <Suspense fallback={null}>
             <NavigationProgressBar />
@@ -33,25 +33,25 @@ export default function RootLayout({
           <Navbar />
           <ReviewerModeBanner />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-card-border bg-[#07090e] py-8 text-xs text-slate-500">
+          <footer className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] py-8 text-xs text-[var(--gh-text-muted)]">
             <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-card border border-card-border">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--gh-bg)] border border-[var(--gh-border)]">
                   <HamsterMascot variant="avatar" size={22} />
                 </div>
                 <div className="flex items-baseline space-x-2">
-                  <span className="font-bold text-slate-300 font-sans">
-                    Repo<span className="text-brand-lime">Hamster</span>
+                  <span className="font-bold text-white font-sans">
+                    Repo<span className="text-[var(--yellow-bright)]">Hamster</span>
                   </span>
-                  <span className="text-[11px] text-slate-500 font-mono">— Break Bugs. Ship Fixes.</span>
+                  <span className="text-[11px] text-[var(--gh-text-muted)] font-mono">— Break Bugs. Ship Fixes.</span>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-6 text-[11px] font-mono text-slate-400">
-                <Link href="/dashboard" className="hover:text-brand-lime transition">Challenges</Link>
-                <Link href="/admin" className="hover:text-brand-purple-light transition">Admin Console</Link>
+              <div className="flex items-center space-x-6 text-[11px] font-mono text-[var(--gh-text-secondary)]">
+                <Link href="/dashboard" className="hover:text-[var(--yellow-bright)] transition">Challenges</Link>
+                <Link href="/admin" className="hover:text-white transition">Admin Console</Link>
                 <span>Automated Hidden Test Engine</span>
-                <span className="text-slate-600">© 2026 RepoHamster Inc.</span>
+                <span className="text-[var(--gh-text-muted)]">© 2026 RepoHamster Inc.</span>
               </div>
             </div>
           </footer>

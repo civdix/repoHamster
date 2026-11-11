@@ -50,7 +50,7 @@ export function LandingFaq() {
         return (
           <div
             key={i}
-            className="rounded-xl border border-card-border bg-card transition hover:border-slate-700 overflow-hidden"
+            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] transition hover:border-[var(--yellow-primary)]/50 overflow-hidden"
           >
             <button
               onClick={() => toggle(i)}
@@ -58,13 +58,13 @@ export function LandingFaq() {
             >
               <span>{faq.question}</span>
               <ChevronDown
-                className={`h-4 w-4 shrink-0 text-brand-lime transition-transform duration-200 ${
+                className={`h-4 w-4 shrink-0 text-[var(--yellow-bright)] transition-transform duration-200 ${
                   isOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
             {isOpen && (
-              <div className="border-t border-card-border/60 bg-[#0d101a] p-4 sm:p-5 text-xs text-slate-300 leading-relaxed font-sans">
+              <div className="border-t border-[var(--gh-border-subtle)] bg-[var(--gh-bg)] p-4 sm:p-5 text-xs text-slate-300 leading-relaxed font-sans">
                 {faq.answer}
               </div>
             )}

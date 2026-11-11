@@ -21,22 +21,22 @@ export function HamsterSpeechCloud({
   badge,
 }: HamsterSpeechCloudProps) {
   const accentBorder = {
-    lime: 'border-brand-lime/50 shadow-[0_0_20px_rgba(163,230,53,0.15)] text-slate-100',
-    purple: 'border-brand-purple/50 shadow-[0_0_20px_rgba(168,85,247,0.15)] text-slate-100',
-    amber: 'border-amber-400/50 shadow-[0_0_20px_rgba(251,191,36,0.15)] text-slate-100',
+    lime: 'border-[var(--yellow-bright)]/60 shadow-[var(--yellow-glow)] text-slate-100',
+    purple: 'border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] text-slate-100',
+    amber: 'border-[var(--yellow-bright)]/60 shadow-[var(--yellow-glow)] text-slate-100',
   }[accent];
 
   const badgeColor = {
-    lime: 'bg-lime-950/80 text-brand-lime border-brand-lime/40',
-    purple: 'bg-purple-950/80 text-brand-purple-light border-brand-purple/40',
-    amber: 'bg-amber-950/80 text-amber-300 border-amber-400/40',
+    lime: 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border-[var(--amber-badge-border)]',
+    purple: 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border-[var(--amber-badge-border)]',
+    amber: 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border-[var(--amber-badge-border)]',
   }[accent];
 
   return (
     <div className={`relative inline-block ${className}`}>
       {/* Speech/Thought bubble container */}
       <div
-        className={`relative z-10 rounded-2xl bg-[#0f1422]/95 border-2 ${accentBorder} p-4 sm:p-5 backdrop-blur-md`}
+        className={`relative z-10 rounded-2xl bg-[var(--gh-bg-secondary)] border-2 ${accentBorder} p-4 sm:p-5 backdrop-blur-md`}
       >
         {badge && (
           <div
@@ -51,8 +51,8 @@ export function HamsterSpeechCloud({
         {/* Thought bubbles (if thought variant) */}
         {variant === 'thought' && (
           <div className="absolute -bottom-3 left-6 flex gap-1 items-center">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#0f1422] border-2 border-brand-lime/50" />
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0f1422] border-2 border-brand-lime/40" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[var(--gh-bg-secondary)] border-2 border-[var(--yellow-bright)]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--gh-bg-secondary)] border-2 border-[var(--yellow-primary)]" />
           </div>
         )}
 
@@ -65,12 +65,12 @@ export function HamsterSpeechCloud({
           >
             <path
               d="M 0 0 L 6 14 L 14 0 Z"
-              fill="#0f1422"
-              stroke={accent === 'lime' ? '#a3e635' : accent === 'purple' ? '#a855f7' : '#fbbf24'}
+              fill="var(--gh-bg-secondary)"
+              stroke="var(--yellow-bright)"
               strokeWidth="2"
             />
             {/* Mask seam */}
-            <line x1="1" y1="0" x2="13" y2="0" stroke="#0f1422" strokeWidth="3" />
+            <line x1="1" y1="0" x2="13" y2="0" stroke="var(--gh-bg-secondary)" strokeWidth="3" />
           </svg>
         )}
 
@@ -82,11 +82,11 @@ export function HamsterSpeechCloud({
           >
             <path
               d="M 6 0 L 14 14 L 20 0 Z"
-              fill="#0f1422"
-              stroke={accent === 'lime' ? '#a3e635' : accent === 'purple' ? '#a855f7' : '#fbbf24'}
+              fill="var(--gh-bg-secondary)"
+              stroke="var(--yellow-bright)"
               strokeWidth="2"
             />
-            <line x1="7" y1="0" x2="19" y2="0" stroke="#0f1422" strokeWidth="3" />
+            <line x1="7" y1="0" x2="19" y2="0" stroke="var(--gh-bg-secondary)" strokeWidth="3" />
           </svg>
         )}
 
@@ -98,11 +98,11 @@ export function HamsterSpeechCloud({
           >
             <path
               d="M 16 0 L 2 7 L 16 14 Z"
-              fill="#0f1422"
-              stroke={accent === 'lime' ? '#a3e635' : accent === 'purple' ? '#a855f7' : '#fbbf24'}
+              fill="var(--gh-bg-secondary)"
+              stroke="var(--yellow-bright)"
               strokeWidth="2"
             />
-            <line x1="16" y1="1" x2="16" y2="13" stroke="#0f1422" strokeWidth="3" />
+            <line x1="16" y1="1" x2="16" y2="13" stroke="var(--gh-bg-secondary)" strokeWidth="3" />
           </svg>
         )}
 
@@ -114,11 +114,11 @@ export function HamsterSpeechCloud({
           >
             <path
               d="M 0 0 L 14 7 L 0 14 Z"
-              fill="#0f1422"
-              stroke={accent === 'lime' ? '#a3e635' : accent === 'purple' ? '#a855f7' : '#fbbf24'}
+              fill="var(--gh-bg-secondary)"
+              stroke="var(--yellow-bright)"
               strokeWidth="2"
             />
-            <line x1="0" y1="1" x2="0" y2="13" stroke="#0f1422" strokeWidth="3" />
+            <line x1="0" y1="1" x2="0" y2="13" stroke="var(--gh-bg-secondary)" strokeWidth="3" />
           </svg>
         )}
       </div>
@@ -145,17 +145,17 @@ export function DrawnHighlightCircle({
   dashed = false,
 }: DrawnHighlightCircleProps) {
   const strokeColor = {
-    lime: '#a3e635',
-    purple: '#a855f7',
-    amber: '#fbbf24',
-    rose: '#f43f5e',
+    lime: 'var(--yellow-bright)',
+    purple: 'var(--yellow-primary)',
+    amber: 'var(--yellow-bright)',
+    rose: 'var(--status-error)',
   }[color];
 
   const labelBg = {
-    lime: 'bg-lime-950 text-brand-lime border-brand-lime/40',
-    purple: 'bg-purple-950 text-brand-purple-light border-brand-purple/40',
-    amber: 'bg-amber-950 text-amber-300 border-amber-400/40',
-    rose: 'bg-rose-950 text-rose-300 border-rose-500/40',
+    lime: 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border-[var(--amber-badge-border)]',
+    purple: 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border-[var(--amber-badge-border)]',
+    amber: 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border-[var(--amber-badge-border)]',
+    rose: 'bg-[var(--status-error-bg)] text-[var(--status-error)] border-[var(--status-error-border)]',
   }[color];
 
   return (
@@ -231,9 +231,9 @@ export function CurvedDrawnArrow({
   className = '',
 }: CurvedDrawnArrowProps) {
   const strokeColor = {
-    lime: '#a3e635',
-    purple: '#a855f7',
-    amber: '#fbbf24',
+    lime: 'var(--yellow-bright)',
+    purple: 'var(--yellow-primary)',
+    amber: 'var(--yellow-bright)',
   }[color];
 
   const markerId = `arrowhead-${color}-${direction}`;
@@ -318,7 +318,7 @@ export function CurvedDrawnArrow({
       {/* Label on the curve */}
       {label && (
         <span
-          className="absolute text-[10px] font-mono font-bold bg-[#090d16] px-2 py-0.5 rounded-full border border-card-border shadow-sm text-slate-200"
+          className="absolute text-[10px] font-mono font-bold bg-[var(--gh-bg)] px-2 py-0.5 rounded-full border border-[var(--gh-border)] shadow-sm text-slate-200"
           style={{ color: strokeColor }}
         >
           {label}
@@ -346,14 +346,14 @@ export function HamsterMascotCallout({
 }: HamsterMascotCalloutProps) {
   return (
     <div
-      className={`rounded-2xl border border-lime-800/40 bg-gradient-to-r from-lime-950/20 via-[#0d101a] to-purple-950/20 p-4 sm:p-5 flex items-start gap-4 ${className}`}
+      className={`rounded-2xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 p-4 sm:p-5 flex items-start gap-4 ${className}`}
     >
       <div className="shrink-0 flex flex-col items-center">
-        <div className="w-12 h-12 rounded-2xl bg-lime-950/50 border border-brand-lime/40 flex items-center justify-center text-xl shadow-glow-lime">
+        <div className="w-12 h-12 rounded-2xl bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/50 flex items-center justify-center text-xl shadow-[var(--yellow-glow)]">
           🐹
         </div>
         {stepNumber && (
-          <span className="mt-1 text-[10px] font-mono font-bold text-brand-lime">
+          <span className="mt-1 text-[10px] font-mono font-bold text-[var(--yellow-bright)]">
             STEP 0{stepNumber}
           </span>
         )}
@@ -363,7 +363,7 @@ export function HamsterMascotCallout({
         <div className="flex items-center gap-2">
           <h4 className="text-sm font-bold text-white tracking-wide">{title}</h4>
           {highlightText && (
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-lime/10 text-brand-lime border border-brand-lime/30">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
               {highlightText}
             </span>
           )}

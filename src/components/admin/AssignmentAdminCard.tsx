@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { AssignmentEditorModal } from './AssignmentEditorModal';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
-import { getLanguageStyle, parseLanguageHierarchy } from '@/lib/language-utils';
+import { parseLanguageHierarchy } from '@/lib/language-utils';
 
 interface AssignmentAdminCardProps {
   assignment: any;
@@ -37,7 +37,6 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
   const [guardrailsMessage, setGuardrailsMessage] = useState<string | null>(null);
 
   const hierarchy = parseLanguageHierarchy(assignment.language, assignment.framework);
-  const langStyle = getLanguageStyle(hierarchy.parent);
 
   const handleAutoProvisionGuardrails = async () => {
     setIsProvisioningGuardrails(true);
@@ -123,47 +122,45 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
     <div
       className={`rounded-xl border p-5 space-y-4 transition ${
         assignment.isActive
-          ? 'border-card-border bg-card'
-          : 'border-amber-900/30 bg-[#0d0f17] opacity-85'
+          ? 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]'
+          : 'border-[var(--gh-border)] bg-[var(--gh-bg)] opacity-75'
       }`}
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="space-y-1.5 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             {/* Distinct Parent Language & Sub-Repo Type Badge */}
-            <span
-              className={`inline-flex items-center space-x-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-mono font-semibold ${langStyle.bg} ${langStyle.color} ${langStyle.border}`}
-            >
-              <span className={`h-1.5 w-1.5 rounded-full ${langStyle.dot}`} />
+            <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[11px] font-mono font-semibold text-[var(--amber-badge-text)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
               <span>{hierarchy.parent}</span>
               <span className="opacity-40">/</span>
               <span className="font-bold text-white">{hierarchy.subType}</span>
             </span>
-            <span className="rounded-full border border-amber-800/40 bg-amber-950/40 px-2.5 py-0.5 text-[10px] font-mono text-amber-400 font-semibold">
+            <span className="rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--amber-badge-text)] font-semibold">
               {assignment.difficulty}
             </span>
 
             {/* Visibility Status Badge */}
             {assignment.isActive ? (
-              <span className="inline-flex items-center rounded-full border border-lime-800/40 bg-lime-950/40 px-2.5 py-0.5 text-[10px] font-mono font-medium text-brand-lime">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-lime mr-1.5 animate-pulse" />
+              <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono font-medium text-[var(--yellow-bright)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)] mr-1.5 animate-pulse" />
                 ACTIVE (VISIBLE TO CANDIDATES)
               </span>
             ) : (
-              <span className="inline-flex items-center rounded-full border border-amber-800/50 bg-amber-950/40 px-2.5 py-0.5 text-[10px] font-mono font-medium text-amber-400">
+              <span className="inline-flex items-center rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-0.5 text-[10px] font-mono font-medium text-[var(--gh-text-muted)]">
                 <EyeOff className="h-3 w-3 mr-1" />
                 HIDDEN (CANDIDATES CANNOT SEE)
               </span>
             )}
 
             {webhookMessage && (
-              <span className="inline-flex items-center rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-[10px] font-mono text-brand-lime animate-in fade-in">
+              <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--yellow-bright)] animate-in fade-in">
                 {webhookMessage}
               </span>
             )}
 
             {guardrailsMessage && (
-              <span className="inline-flex items-center rounded-full border border-purple-800/50 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono text-purple-300 animate-in fade-in">
+              <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--amber-badge-text)] animate-in fade-in">
                 {guardrailsMessage}
               </span>
             )}
@@ -171,11 +168,11 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
 
           <h3 className="font-bold text-white text-base flex items-center space-x-2">
             <span>{assignment.title}</span>
-            <span className="text-xs font-mono font-normal text-slate-500">
+            <span className="text-xs font-mono font-normal text-[var(--gh-text-muted)]">
               ({assignment.slug})
             </span>
           </h3>
-          <p className="text-xs text-slate-400 max-w-3xl leading-relaxed">
+          <p className="text-xs text-[var(--gh-text-secondary)] max-w-3xl leading-relaxed">
             {assignment.description}
           </p>
         </div>
@@ -189,8 +186,8 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             title={assignment.isActive ? 'Hide challenge from candidates' : 'Make challenge active'}
             className={`flex items-center space-x-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${
               assignment.isActive
-                ? 'border-card-border bg-[#0a0d14] text-slate-300 hover:text-amber-400 hover:border-amber-800/50'
-                : 'border-lime-800/50 bg-lime-950/30 text-brand-lime hover:bg-lime-950/50'
+                ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white hover:border-[var(--yellow-primary)]'
+                : 'border-[var(--yellow-primary)] bg-[var(--yellow-primary)] text-black font-bold'
             }`}
           >
             {isToggling ? (
@@ -212,13 +209,13 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           <button
             onClick={handleAutoProvisionWebhook}
             disabled={isProvisioning}
-            className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-[#0a0d14] px-2.5 py-1.5 text-xs text-slate-300 hover:text-brand-lime hover:border-brand-lime/50 transition active:scale-95"
+            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1.5 text-xs text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50 transition active:scale-95"
             title="Auto-create or verify GitHub repository webhook via API"
           >
             {isProvisioning ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-lime" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--yellow-bright)]" />
             ) : (
-              <Webhook className="h-3.5 w-3.5 text-brand-lime" />
+              <Webhook className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
             )}
             <span className="hidden sm:inline">Auto-Connect Hook</span>
           </button>
@@ -227,13 +224,13 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           <button
             onClick={handleAutoProvisionGuardrails}
             disabled={isProvisioningGuardrails}
-            className="flex items-center space-x-1.5 rounded-xl border border-purple-800/40 bg-purple-950/20 px-2.5 py-1.5 text-xs text-purple-300 hover:text-white hover:bg-purple-950/50 transition active:scale-95"
+            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1.5 text-xs text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50 transition active:scale-95"
             title="Install Copilot Socratic rules and disable inline autocompletions in repository"
           >
             {isProvisioningGuardrails ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-purple" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--yellow-bright)]" />
             ) : (
-              <Shield className="h-3.5 w-3.5 text-brand-purple" />
+              <Shield className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
             )}
             <span className="hidden sm:inline">AI Guardrails</span>
           </button>
@@ -246,7 +243,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             href={assignment.repoUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl border border-card-border bg-[#0a0d14] p-2 text-slate-400 hover:text-white transition active:scale-95"
+            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-white transition active:scale-95"
             title="Open GitHub Repository"
           >
             <ExternalLink className="h-3.5 w-3.5" />
@@ -258,13 +255,13 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex items-center space-x-1 rounded-xl bg-rose-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-rose-500 transition active:scale-95"
+                className="flex items-center space-x-1 rounded-xl bg-[var(--gh-border)] border border-[var(--gh-border-active)] px-2.5 py-1.5 text-xs font-bold text-white hover:text-[var(--yellow-bright)] transition active:scale-95"
               >
                 {isDeleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <span>Confirm Delete</span>}
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="rounded-xl border border-card-border bg-[#0a0d14] px-2 py-1.5 text-xs text-slate-400 hover:text-white"
+                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white"
               >
                 Cancel
               </button>
@@ -272,7 +269,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           ) : (
             <button
               onClick={() => setConfirmDelete(true)}
-              className="rounded-xl border border-card-border bg-[#0a0d14] p-2 text-slate-400 hover:text-rose-400 hover:border-rose-900/50 transition active:scale-95"
+              className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--gh-border-active)] transition active:scale-95"
               title="Remove Challenge"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -282,25 +279,25 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
       </div>
 
       {/* Specs & Configuration Grid - Including Total Testcases Block */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 rounded-xl border border-card-border bg-[#0a0d14] p-3 text-xs font-mono">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 text-xs font-mono">
         {/* Block 1: Total Test Cases Count Block */}
-        <div className="sm:col-span-1 rounded-lg border border-card-border/80 bg-card/60 p-2.5">
-          <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
+        <div className="sm:col-span-1 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5">
+          <span className="text-[var(--gh-text-muted)] block text-[10px] uppercase font-bold tracking-wider">
             Total Testcases Present
           </span>
           <div className="mt-1 flex items-baseline space-x-1.5">
             <span
               className={`text-sm font-bold ${
-                testSummary.hasTestCases ? 'text-brand-lime font-mono' : 'text-amber-400/90'
+                testSummary.hasTestCases ? 'text-[var(--yellow-bright)] font-mono' : 'text-[var(--gh-text-muted)]'
               }`}
             >
               {testSummary.total}
             </span>
-            <span className="text-[11px] text-slate-400 truncate">
+            <span className="text-[11px] text-[var(--gh-text-muted)] truncate">
               {testSummary.hasTestCases ? 'tests configured' : 'unspecified'}
             </span>
           </div>
-          <p className="text-[10px] text-slate-500 mt-0.5 truncate" title={testSummary.displayText}>
+          <p className="text-[10px] text-[var(--gh-text-muted)] mt-0.5 truncate" title={testSummary.displayText}>
             {testSummary.hasTestCases
               ? `${testSummary.publicCount} Public + ${testSummary.hiddenCount} Hidden`
               : '0 (Unspecified / 0 tests provided)'}
@@ -308,13 +305,13 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
         </div>
 
         {/* Block 2: Repository Target */}
-        <div className="rounded-lg border border-card-border/80 bg-card/60 p-2.5">
+        <div className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
+            <span className="text-[var(--gh-text-muted)] block text-[10px] uppercase font-bold tracking-wider">
               Repository Target
             </span>
-            <span className={`inline-flex items-center space-x-1 text-[10px] font-mono ${langStyle.color}`}>
-              <span className={`h-1.5 w-1.5 rounded-full ${langStyle.dot}`} />
+            <span className="inline-flex items-center space-x-1 text-[10px] font-mono text-[var(--yellow-bright)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
               <span>{hierarchy.subType}</span>
             </span>
           </div>
@@ -322,51 +319,51 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             href={assignment.repoUrl}
             target="_blank"
             rel="noreferrer"
-            className="text-brand-lime hover:underline truncate block mt-1 font-semibold"
+            className="text-[var(--yellow-bright)] hover:underline truncate block mt-1 font-semibold"
             title={assignment.repoUrl}
           >
             {assignment.repoUrl.replace('https://github.com/', '')}
           </a>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">
             Branch: {assignment.baseBranch || 'main'}
           </span>
         </div>
 
         {/* Block 3: AI Quota */}
-        <div className="rounded-lg border border-card-border/80 bg-card/60 p-2.5">
-          <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
+        <div className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5">
+          <span className="text-[var(--gh-text-muted)] block text-[10px] uppercase font-bold tracking-wider">
             AI Quota / Candidate
           </span>
-          <div className="mt-1 text-purple-300 font-semibold truncate">
+          <div className="mt-1 text-[var(--yellow-bright)] font-semibold truncate">
             {assignment.aiRequestLimit} req / {assignment.aiTokenLimit.toLocaleString()} tok
           </div>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">
             ~{assignment.estimatedTimeMinutes} min duration
           </span>
         </div>
 
         {/* Block 4: Passing Threshold */}
-        <div className="rounded-lg border border-card-border/80 bg-card/60 p-2.5">
-          <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
+        <div className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5">
+          <span className="text-[var(--gh-text-muted)] block text-[10px] uppercase font-bold tracking-wider">
             Passing Threshold
           </span>
-          <div className="mt-1 text-brand-lime font-bold text-sm">
+          <div className="mt-1 text-[var(--yellow-bright)] font-bold text-sm">
             {assignment.passingThresholdPercent}%
           </div>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">
             Isolated Hidden Runner
           </span>
         </div>
 
         {/* Block 5: Completion Rate */}
-        <div className="rounded-lg border border-card-border/80 bg-card/60 p-2.5 col-span-2 sm:col-span-1">
-          <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
+        <div className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5 col-span-2 sm:col-span-1">
+          <span className="text-[var(--gh-text-muted)] block text-[10px] uppercase font-bold tracking-wider">
             Candidate Submissions
           </span>
           <div className="mt-1 text-white font-semibold">
             {completedCount} / {totalAttempts} passed
           </div>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">
             {totalAttempts > 0 ? Math.round((completedCount / totalAttempts) * 100) : 0}% success rate
           </span>
         </div>

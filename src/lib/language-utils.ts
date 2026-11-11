@@ -433,10 +433,10 @@ export function getLanguageStyle(languageStr?: string) {
   }
 
   return {
-    color: 'text-brand-lime',
-    border: 'border-brand-lime/40',
-    bg: 'bg-lime-950/30',
-    dot: 'bg-brand-lime',
+    color: 'text-[var(--yellow-bright)]',
+    border: 'border-[var(--amber-badge-border)]',
+    bg: 'bg-[var(--amber-badge-bg)]',
+    dot: 'bg-[var(--yellow-bright)]',
   };
 }
 

@@ -67,45 +67,45 @@ export function ManualOverrideModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-lg border border-purple-800/40 bg-purple-950/30 px-2.5 py-1 text-[11px] font-medium text-purple-300 hover:bg-purple-900/40 transition"
+        className="rounded-lg border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-1 text-[11px] font-medium text-[var(--amber-badge-text)] hover:bg-[var(--yellow-primary)]/20 transition"
       >
         Override
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md rounded-2xl border border-card-border bg-[#0d1424] p-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-card-border pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[var(--gh-border)] pb-4">
               <div className="flex items-center space-x-2">
-                <ShieldCheck className="h-5 w-5 text-purple-400" />
+                <ShieldCheck className="h-5 w-5 text-[var(--yellow-bright)]" />
                 <h3 className="font-bold text-white text-base">Manual Evaluation Override</h3>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-slate-400 hover:text-white transition"
+                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-white transition"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <form onSubmit={handleOverride} className="mt-4 space-y-4">
-              <div className="rounded-lg border border-card-border bg-[#090d16] p-3 text-xs text-slate-300 space-y-1">
+              <div className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 text-xs text-[var(--gh-text-secondary)] space-y-1">
                 <p>
-                  <span className="text-slate-500">Candidate:</span> <strong className="text-white">{candidateName}</strong>
+                  <span className="text-[var(--gh-text-muted)]">Candidate:</span> <strong className="text-white">{candidateName}</strong>
                 </p>
                 <p>
-                  <span className="text-slate-500">Challenge:</span> <strong className="text-white">{assignmentTitle}</strong>
+                  <span className="text-[var(--gh-text-muted)]">Challenge:</span> <strong className="text-white">{assignmentTitle}</strong>
                 </p>
                 <p>
-                  <span className="text-slate-500">Current Status:</span>{' '}
-                  <span className={currentPassed ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                  <span className="text-[var(--gh-text-muted)]">Current Status:</span>{' '}
+                  <span className={currentPassed ? 'text-[var(--yellow-bright)] font-semibold' : 'text-[var(--gh-text-secondary)] font-semibold'}>
                     {currentPassed ? 'PASSED' : 'FAILED'} ({currentScore}%)
                   </span>
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1.5">
                   Override Decision
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -117,8 +117,8 @@ export function ManualOverrideModal({
                     }}
                     className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
                       markAsPassed
-                        ? 'border-emerald-600 bg-emerald-950/60 text-emerald-300'
-                        : 'border-card-border bg-card text-slate-400 hover:text-white'
+                        ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold'
+                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-white'
                     }`}
                   >
                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -133,8 +133,8 @@ export function ManualOverrideModal({
                     }}
                     className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
                       !markAsPassed
-                        ? 'border-rose-600 bg-rose-950/60 text-rose-300'
-                        : 'border-card-border bg-card text-slate-400 hover:text-white'
+                        ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-white font-bold'
+                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-white'
                     }`}
                   >
                     <AlertCircle className="h-3.5 w-3.5" />
@@ -144,7 +144,7 @@ export function ManualOverrideModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
                   Adjusted Score Percentage (0 - 100)
                 </label>
                 <input
@@ -153,12 +153,12 @@ export function ManualOverrideModal({
                   max="100"
                   value={newScore}
                   onChange={(e) => setNewScore(e.target.value)}
-                  className="w-full rounded-lg border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-purple-500 focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
                   Administrative Audit Reason (Required)
                 </label>
                 <textarea
@@ -167,29 +167,29 @@ export function ManualOverrideModal({
                   placeholder="e.g. Solution uses alternative valid locking mechanism that timed out under synthetic test runner; code manually reviewed and verified."
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full rounded-lg border border-card-border bg-card p-2.5 text-xs text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2.5 text-xs text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
               {error && (
-                <div className="rounded-lg border border-rose-800/50 bg-rose-950/30 p-2.5 text-xs text-rose-300 flex items-center space-x-2">
-                  <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+                <div className="rounded-lg border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-2.5 text-xs text-[var(--amber-badge-text)] flex items-center space-x-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 text-[var(--yellow-bright)]" />
                   <span>{error}</span>
                 </div>
               )}
 
-              <div className="flex items-center justify-end space-x-3 border-t border-card-border pt-4">
+              <div className="flex items-center justify-end space-x-3 border-t border-[var(--gh-border)] pt-4">
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-card-border bg-card px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+                  className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-1.5 text-xs font-medium text-[var(--gh-text-secondary)] hover:text-white transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center space-x-1.5 rounded-lg bg-purple-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-purple-500 transition disabled:opacity-50"
+                  className="flex items-center space-x-1.5 rounded-lg bg-[var(--yellow-primary)] px-4 py-1.5 text-xs font-bold text-black hover:bg-[var(--yellow-bright)] transition disabled:opacity-50 shadow-[var(--yellow-glow)]"
                 >
                   {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
                   <span>Apply Override</span>

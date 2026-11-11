@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Search, Filter, Code2, Layers, CheckCircle2, EyeOff, Tag, FolderTree } from 'lucide-react';
 import { AssignmentAdminCard } from './AssignmentAdminCard';
-import { getLanguageStyle, COMMON_LANGUAGES, parseLanguageHierarchy } from '@/lib/language-utils';
+import { COMMON_LANGUAGES, parseLanguageHierarchy } from '@/lib/language-utils';
 
 interface AssignmentAdminListProps {
   initialAssignments: any[];
@@ -133,11 +133,11 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
   return (
     <div className="space-y-4">
       {/* Search and Language Filter Controls */}
-      <div className="rounded-2xl border border-card-border bg-card p-3 space-y-3">
+      <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 space-y-3">
         {/* Tier 1: Parent Language Filter Tabs */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-            <span className="text-[11px] font-mono text-slate-500 mr-1 shrink-0 flex items-center space-x-1">
+            <span className="text-[11px] font-mono text-[var(--gh-text-muted)] mr-1 shrink-0 flex items-center space-x-1">
               <FolderTree className="h-3 w-3" />
               <span>Language:</span>
             </span>
@@ -149,18 +149,17 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
               }}
               className={`flex items-center space-x-1.5 rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 ${
                 selectedParentLang === 'ALL'
-                  ? 'bg-brand-purple text-white shadow-sm'
-                  : 'border border-card-border bg-[#0a0d14] text-slate-400 hover:text-white'
+                  ? 'bg-[var(--yellow-primary)] text-black font-bold shadow-[var(--yellow-glow)]'
+                  : 'border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
               }`}
             >
               <span>All Languages</span>
-              <span className="rounded-full bg-white/20 px-1.5 py-0.2 text-[10px]">
+              <span className="rounded-full bg-black/20 px-1.5 py-0.2 text-[10px]">
                 {parentCounts['ALL'] || 0}
               </span>
             </button>
 
             {distinctParents.map((parent) => {
-              const style = getLanguageStyle(parent);
               const isSelected = selectedParentLang.toLowerCase() === parent.toLowerCase();
               const count = parentCounts[parent] || 0;
 
@@ -173,15 +172,15 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
                   }}
                   className={`flex items-center space-x-1.5 rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 border ${
                     isSelected
-                      ? `${style.bg} ${style.color} ${style.border} font-bold ring-1 ring-current`
-                      : 'border-card-border bg-[#0a0d14] text-slate-400 hover:text-white'
+                      ? 'border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)]'
+                      : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
                   }`}
                 >
-                  <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
                   <span>{parent}</span>
                   <span
                     className={`rounded-full px-1.5 py-0.2 text-[10px] ${
-                      isSelected ? 'bg-current/20' : 'bg-slate-800 text-slate-400'
+                      isSelected ? 'bg-[var(--yellow-primary)]/20' : 'bg-[var(--gh-bg-secondary)] text-[var(--gh-text-muted)]'
                     }`}
                   >
                     {count}
@@ -193,22 +192,22 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
 
           {/* Search Input */}
           <div className="relative min-w-[240px]">
-            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
+            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[var(--gh-text-muted)]" />
             <input
               type="text"
               placeholder="Search by repo, sub-type, or title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-card-border bg-[#0a0d14] pl-9 pr-4 py-1.5 text-xs font-mono text-white placeholder-slate-500 focus:border-brand-purple focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-4 py-1.5 text-xs font-mono text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
           </div>
         </div>
 
-        {/* Tier 2: Sub-Repo Types Filter Chips (When a parent language like Python is chosen) */}
+        {/* Tier 2: Sub-Repo Types Filter Chips */}
         {selectedParentLang !== 'ALL' && availableSubTypes.length > 0 && (
-          <div className="pt-2 border-t border-card-border/60 flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none animate-in fade-in duration-150">
-            <span className="text-[10px] font-mono text-slate-400 mr-1 shrink-0 flex items-center space-x-1">
-              <Tag className="h-3 w-3 text-brand-lime" />
+          <div className="pt-2 border-t border-[var(--gh-border)]/60 flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none animate-in fade-in duration-150">
+            <span className="text-[10px] font-mono text-[var(--gh-text-muted)] mr-1 shrink-0 flex items-center space-x-1">
+              <Tag className="h-3 w-3 text-[var(--yellow-bright)]" />
               <span>Sub-Repo Types under {selectedParentLang}:</span>
             </span>
 
@@ -216,8 +215,8 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
               onClick={() => setSelectedSubType('ALL')}
               className={`rounded-lg px-2.5 py-1 text-[11px] font-mono transition shrink-0 border ${
                 selectedSubType === 'ALL'
-                  ? 'border-brand-lime bg-lime-950/60 text-brand-lime font-bold'
-                  : 'border-card-border bg-[#0a0d14] text-slate-400 hover:text-white'
+                  ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold'
+                  : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
               }`}
             >
               All {selectedParentLang} ({parentCounts[selectedParentLang] || 0})
@@ -231,14 +230,14 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
                   onClick={() => setSelectedSubType(st.id)}
                   className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-[11px] font-mono transition shrink-0 border ${
                     isSelected
-                      ? 'border-brand-lime bg-lime-950/60 text-brand-lime font-bold ring-1 ring-brand-lime'
-                      : 'border-card-border bg-[#0a0d14] text-slate-300 hover:text-white'
+                      ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)]'
+                      : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
                   }`}
                 >
                   <span>{st.id}</span>
                   <span
                     className={`text-[9px] rounded-full px-1 ${
-                      isSelected ? 'bg-brand-lime/20 text-brand-lime' : 'bg-slate-800 text-slate-400'
+                      isSelected ? 'bg-[var(--yellow-primary)]/20 text-[var(--yellow-bright)]' : 'bg-[var(--gh-bg-secondary)] text-[var(--gh-text-muted)]'
                     }`}
                   >
                     {st.count}
@@ -252,14 +251,14 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
 
       {/* Filter Status Feedback */}
       {(selectedParentLang !== 'ALL' || selectedSubType !== 'ALL' || searchQuery.trim()) && (
-        <div className="flex items-center justify-between text-xs font-mono text-slate-400 px-1">
+        <div className="flex items-center justify-between text-xs font-mono text-[var(--gh-text-secondary)] px-1">
           <span>
             Showing {filteredAssignments.length} of {initialAssignments.length} challenges
             {selectedParentLang !== 'ALL' && (
               <> under <strong className="text-white">{selectedParentLang}</strong></>
             )}
             {selectedSubType !== 'ALL' && (
-              <> (sub-repo type: <strong className="text-brand-lime">{selectedSubType}</strong>)</>
+              <> (sub-repo type: <strong className="text-[var(--yellow-bright)]">{selectedSubType}</strong>)</>
             )}
             {searchQuery.trim() && <> matching &ldquo;{searchQuery}&rdquo;</>}
           </span>
@@ -269,7 +268,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
               setSelectedSubType('ALL');
               setSearchQuery('');
             }}
-            className="text-brand-lime hover:underline text-[11px]"
+            className="text-[var(--yellow-bright)] hover:underline text-[11px]"
           >
             Reset filters
           </button>
@@ -279,10 +278,10 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
       {/* Challenge Cards Grid */}
       <div className="grid grid-cols-1 gap-4">
         {filteredAssignments.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-card-border p-12 text-center space-y-2">
-            <Filter className="mx-auto h-8 w-8 text-slate-600" />
+          <div className="rounded-2xl border border-dashed border-[var(--gh-border)] p-12 text-center space-y-2">
+            <Filter className="mx-auto h-8 w-8 text-[var(--gh-text-muted)]" />
             <p className="text-sm font-semibold text-white">No repository challenges found</p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[var(--gh-text-muted)]">
               {selectedSubType !== 'ALL'
                 ? `No challenges found for sub-repo type "${selectedSubType}".`
                 : selectedParentLang !== 'ALL'
