@@ -19,12 +19,14 @@ import {
 } from 'lucide-react';
 import { AssignmentEditorModal } from './AssignmentEditorModal';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
+import { getLanguageStyle, parseLanguageHierarchy } from '@/lib/language-utils';
 
 interface AssignmentAdminCardProps {
   assignment: any;
+  catalogRepositories?: any[];
 }
 
-export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
+export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: AssignmentAdminCardProps) {
   const router = useRouter();
   const [isToggling, setIsToggling] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -33,6 +35,9 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
   const [webhookMessage, setWebhookMessage] = useState<string | null>(null);
   const [isProvisioningGuardrails, setIsProvisioningGuardrails] = useState(false);
   const [guardrailsMessage, setGuardrailsMessage] = useState<string | null>(null);
+
+  const hierarchy = parseLanguageHierarchy(assignment.language, assignment.framework);
+  const langStyle = getLanguageStyle(hierarchy.parent);
 
   const handleAutoProvisionGuardrails = async () => {
     setIsProvisioningGuardrails(true);
@@ -125,8 +130,14 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="space-y-1.5 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-[10px] font-mono text-slate-300">
-              {assignment.language} • {assignment.framework}
+            {/* Distinct Parent Language & Sub-Repo Type Badge */}
+            <span
+              className={`inline-flex items-center space-x-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-mono font-semibold ${langStyle.bg} ${langStyle.color} ${langStyle.border}`}
+            >
+              <span className={`h-1.5 w-1.5 rounded-full ${langStyle.dot}`} />
+              <span>{hierarchy.parent}</span>
+              <span className="opacity-40">/</span>
+              <span className="font-bold text-white">{hierarchy.subType}</span>
             </span>
             <span className="rounded-full border border-amber-800/40 bg-amber-950/40 px-2.5 py-0.5 text-[10px] font-mono text-amber-400 font-semibold">
               {assignment.difficulty}
@@ -228,7 +239,7 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
           </button>
 
           {/* Edit Information Modal Button */}
-          <AssignmentEditorModal assignment={assignment} />
+          <AssignmentEditorModal assignment={assignment} catalogRepositories={catalogRepositories} />
 
           {/* GitHub Repo External Link */}
           <a
@@ -298,9 +309,15 @@ export function AssignmentAdminCard({ assignment }: AssignmentAdminCardProps) {
 
         {/* Block 2: Repository Target */}
         <div className="rounded-lg border border-card-border/80 bg-card/60 p-2.5">
-          <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
-            Repository Target
-          </span>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">
+              Repository Target
+            </span>
+            <span className={`inline-flex items-center space-x-1 text-[10px] font-mono ${langStyle.color}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${langStyle.dot}`} />
+              <span>{hierarchy.subType}</span>
+            </span>
+          </div>
           <a
             href={assignment.repoUrl}
             target="_blank"

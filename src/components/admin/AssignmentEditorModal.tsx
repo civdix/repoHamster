@@ -1,21 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Edit3, X, Loader2, Layers, Trash2, CheckCircle2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit3, X, Loader2, Layers, Trash2, CheckCircle2, Eye, EyeOff, Sparkles, GitBranch, Terminal, FolderTree, Tag } from 'lucide-react';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
+import { COMMON_LANGUAGES, getLanguageStyle, detectLanguageFromRepo, parseLanguageHierarchy, SubRepoType } from '@/lib/language-utils';
 
 interface AssignmentEditorModalProps {
   assignment?: any;
   isNew?: boolean;
+  catalogRepositories?: any[];
 }
 
-export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentEditorModalProps) {
+export function AssignmentEditorModal({ assignment, isNew = false, catalogRepositories = [] }: AssignmentEditorModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [repos, setRepos] = useState<any[]>(catalogRepositories);
+  const [selectedRepoId, setSelectedRepoId] = useState<string>('');
+  const [detectedNotice, setDetectedNotice] = useState<string | null>(null);
+
+  // Fetch repositories if not provided as props
+  useEffect(() => {
+    if (isOpen && repos.length === 0) {
+      fetch('/api/admin/repositories')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.repositories) {
+            setRepos(data.repositories);
+          }
+        })
+        .catch((err) => console.error('Failed to load repositories for selector:', err));
+    }
+  }, [isOpen, repos.length]);
 
   const initialHiddenSpecStr = assignment?.hiddenTestSpec
     ? typeof assignment.hiddenTestSpec === 'string'
@@ -60,6 +79,65 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
     publicTestInfo: assignment?.publicTestInfo || '2 Public Tests: Basic unit test and validation check.',
     hiddenTestSpecStr: initialHiddenSpecStr,
   });
+
+  const [isCustomSubtype, setIsCustomSubtype] = useState(false);
+  const [customSubtypeInput, setCustomSubtypeInput] = useState('');
+
+  const hierarchy = parseLanguageHierarchy(formData.language, formData.framework);
+  const currentLangStyle = getLanguageStyle(hierarchy.parent);
+  const parentObj =
+    COMMON_LANGUAGES.find((l) => l.name.toLowerCase() === hierarchy.parent.toLowerCase()) ||
+    COMMON_LANGUAGES[0];
+  const subTypes = parentObj.subTypes || [];
+
+  const handleSelectRepo = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const repoId = e.target.value;
+    setSelectedRepoId(repoId);
+    if (!repoId) return;
+
+    const chosen = repos.find((r) => r.id === repoId);
+    if (!chosen) return;
+
+    const detected = detectLanguageFromRepo(chosen.originalUrl || chosen.name, repos);
+    const chosenLang = chosen.language || detected.language || 'TypeScript';
+    const chosenFramework = chosen.framework || detected.framework || 'Next.js';
+    const chosenTitle = chosen.repoName
+      ? chosen.repoName.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())
+      : chosen.name.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+    const chosenSlug = (chosen.repoName || chosen.name).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const defaultTest = detected.defaultTestCommand || 'npm test';
+
+    setFormData((prev) => ({
+      ...prev,
+      repoUrl: chosen.originalUrl || prev.repoUrl,
+      language: detected.subType || chosenLang,
+      framework: chosenFramework,
+      difficulty: chosen.difficulty || prev.difficulty,
+      title: prev.title && !isNew ? prev.title : chosenTitle,
+      slug: prev.slug && !isNew ? prev.slug : chosenSlug,
+      description:
+        prev.description && !isNew
+          ? prev.description
+          : chosen.description || `Assessment challenge based on ${chosen.name}`,
+      publicTestInfo:
+        prev.publicTestInfo && !isNew ? prev.publicTestInfo : `Run tests locally: ${defaultTest}`,
+    }));
+
+    setDetectedNotice(`⚡ Sub-Repo Type auto-configured: "${detected.subType || chosenLang}" based on repo ${chosen.name}.`);
+  };
+
+  const handleRepoUrlChange = (newUrl: string) => {
+    const detected = detectLanguageFromRepo(newUrl, repos);
+    setFormData((prev) => {
+      const updated = { ...prev, repoUrl: newUrl };
+      if (detected.source !== 'default') {
+        updated.language = detected.subType;
+        if (detected.framework) updated.framework = detected.framework;
+        setDetectedNotice(`✨ Detected Sub-Repo Type: "${detected.subType}" from repository URL.`);
+      }
+      return updated;
+    });
+  };
 
   const testSummary = getTestCaseSummary({
     publicTestInfo: formData.publicTestInfo,
@@ -228,6 +306,47 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                 </div>
               </div>
 
+              {/* Repository Selector from Catalogue (With Language Badge) */}
+              {repos.length > 0 && (
+                <div className="rounded-xl border border-card-border bg-[#0a0d14] p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-slate-200 flex items-center space-x-1.5">
+                      <GitBranch className="h-3.5 w-3.5 text-brand-lime" />
+                      <span>Select Repository from Catalogue</span>
+                    </label>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {repos.length} available
+                    </span>
+                  </div>
+                  <select
+                    value={selectedRepoId}
+                    onChange={handleSelectRepo}
+                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-purple focus:outline-none"
+                  >
+                    <option value="">-- Choose a repository to auto-detect language & settings --</option>
+                    {repos.map((r) => {
+                      const rLang = r.language || 'Multi';
+                      const rName = r.name || r.repoName;
+                      return (
+                        <option key={r.id} value={r.id}>
+                          [{rLang}] {rName} ({r.framework || 'standard'})
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <p className="text-[11px] text-slate-500">
+                    Select any synced repository to automatically populate the primary language, framework, and test commands based on that repo.
+                  </p>
+                </div>
+              )}
+
+              {detectedNotice && (
+                <div className="flex items-center space-x-2 rounded-xl border border-lime-800/40 bg-lime-950/30 px-3 py-2 text-xs font-mono text-brand-lime animate-in fade-in">
+                  <Sparkles className="h-4 w-4 shrink-0 text-brand-lime animate-pulse" />
+                  <span>{detectedNotice}</span>
+                </div>
+              )}
+
               {/* Repo URL */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
@@ -238,47 +357,218 @@ export function AssignmentEditorModal({ assignment, isNew = false }: AssignmentE
                   required
                   placeholder="https://github.com/repohamster/repo-name"
                   value={formData.repoUrl}
-                  onChange={(e) => setFormData({ ...formData, repoUrl: e.target.value })}
+                  onChange={(e) => handleRepoUrlChange(e.target.value)}
                   className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
                 />
               </div>
 
-              {/* Language, Framework, Difficulty */}
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Language</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.language}
-                    onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
-                  />
+              {/* Hierarchical Language & Sub-Repo Type Selection */}
+              <div className="rounded-xl border border-card-border bg-[#0a0d14] p-3.5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-slate-200 flex items-center space-x-1.5">
+                    <FolderTree className="h-3.5 w-3.5 text-brand-lime" />
+                    <span>Language & Sub-Repo Type</span>
+                  </label>
+                  {formData.language && (
+                    <span
+                      className={`inline-flex items-center space-x-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-mono font-semibold ${currentLangStyle.bg} ${currentLangStyle.color} ${currentLangStyle.border}`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${currentLangStyle.dot}`} />
+                      <span>{hierarchy.parent}</span>
+                      <span className="opacity-40">/</span>
+                      <span className="font-bold">{formData.language}</span>
+                    </span>
+                  )}
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Framework</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.framework}
-                    onChange={(e) => setFormData({ ...formData, framework: e.target.value })}
-                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
-                  />
+                {/* Step 1: Parent Language Selector */}
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 block uppercase tracking-wider">
+                    1. Parent Language:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {COMMON_LANGUAGES.map((lang) => {
+                      const isParentSelected =
+                        hierarchy.parent.toLowerCase() === lang.name.toLowerCase();
+                      return (
+                        <button
+                          key={lang.name}
+                          type="button"
+                          onClick={() => {
+                            const firstSub = lang.subTypes[0];
+                            const chosenSub = firstSub ? firstSub.id : `${lang.name}-Standard`;
+                            const chosenFw = firstSub ? firstSub.framework : lang.defaultFramework;
+                            const chosenTest = firstSub ? firstSub.defaultTestCommand : lang.defaultTestCommand;
+                            setFormData({
+                              ...formData,
+                              language: chosenSub,
+                              framework: chosenFw,
+                              publicTestInfo: `Run tests locally: ${chosenTest}`,
+                            });
+                            setIsCustomSubtype(false);
+                            setCustomSubtypeInput('');
+                            setDetectedNotice(`Parent language switched to ${lang.name}. Sub-repo type set to ${chosenSub}.`);
+                          }}
+                          className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono transition border ${
+                            isParentSelected
+                              ? `${lang.bg} ${lang.color} ${lang.border} font-bold ring-1 ring-current shadow-sm`
+                              : 'border-card-border bg-card text-slate-400 hover:text-white hover:border-slate-700'
+                          }`}
+                        >
+                          <span className={`h-1.5 w-1.5 rounded-full ${lang.dot}`} />
+                          <span>{lang.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Difficulty</label>
-                  <select
-                    value={formData.difficulty}
-                    onChange={(e) => setFormData({ ...formData, difficulty: e.target.value as any })}
-                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
-                  >
-                    <option value="BEGINNER">BEGINNER</option>
-                    <option value="INTERMEDIATE">INTERMEDIATE</option>
-                    <option value="ADVANCED">ADVANCED</option>
-                  </select>
+                {/* Step 2: Sub-Repo Types Under Selected Parent Language */}
+                <div className="space-y-1.5 pt-1 border-t border-card-border/60">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase tracking-wider">
+                      2. Sub-Repo Types under {hierarchy.parent}:
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsCustomSubtype(!isCustomSubtype)}
+                      className="text-[10px] font-mono text-brand-lime hover:underline flex items-center space-x-1"
+                    >
+                      <Plus className="h-3 w-3" />
+                      <span>{isCustomSubtype ? 'Close custom' : 'Custom sub-type (e.g. Flash)'}</span>
+                    </button>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {subTypes.map((st) => {
+                      const isSubSelected =
+                        formData.language.toLowerCase() === st.id.toLowerCase() ||
+                        (formData.framework.toLowerCase() === st.framework.toLowerCase() &&
+                          hierarchy.parent.toLowerCase() === st.parentLanguage.toLowerCase());
+
+                      return (
+                        <button
+                          key={st.id}
+                          type="button"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              language: st.id,
+                              framework: st.framework,
+                              publicTestInfo: `Run tests locally: ${st.defaultTestCommand}`,
+                            });
+                            setIsCustomSubtype(false);
+                            setCustomSubtypeInput('');
+                            setDetectedNotice(`Sub-repo type distinctly selected: ${st.id} (${st.framework}).`);
+                          }}
+                          className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono transition border ${
+                            isSubSelected
+                              ? 'border-brand-lime bg-lime-950/50 text-brand-lime font-bold ring-1 ring-brand-lime shadow-sm'
+                              : 'border-card-border bg-card text-slate-300 hover:text-white hover:border-slate-600'
+                          }`}
+                        >
+                          <Tag className="h-3 w-3 opacity-60" />
+                          <span>{st.id}</span>
+                        </button>
+                      );
+                    })}
+
+                    {/* Pre-canned button for custom user request: Python-Flash */}
+                    {hierarchy.parent === 'Python' && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            language: 'Python-Flash',
+                            framework: 'Flash / Flask',
+                            publicTestInfo: 'Run tests locally: pytest',
+                          });
+                          setIsCustomSubtype(false);
+                          setDetectedNotice('Sub-repo type selected: Python-Flash.');
+                        }}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono transition border ${
+                          formData.language === 'Python-Flash'
+                            ? 'border-brand-lime bg-lime-950/50 text-brand-lime font-bold ring-1 ring-brand-lime shadow-sm'
+                            : 'border-card-border bg-card text-slate-300 hover:text-white hover:border-slate-600'
+                        }`}
+                      >
+                        <Tag className="h-3 w-3 opacity-60" />
+                        <span>Python-Flash</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Custom Sub-Type Input Builder */}
+                  {isCustomSubtype && (
+                    <div className="flex items-center space-x-2 pt-2 animate-in fade-in duration-150">
+                      <span className="rounded-lg bg-card border border-card-border px-2.5 py-1.5 text-xs font-mono font-bold text-slate-300 shrink-0">
+                        {hierarchy.parent}-
+                      </span>
+                      <input
+                        type="text"
+                        placeholder="Enter sub-repo type name (e.g. Flash, Tornado, Celery, Express)"
+                        value={customSubtypeInput}
+                        onChange={(e) => {
+                          const val = e.target.value.trim();
+                          setCustomSubtypeInput(val);
+                          const combined = val ? `${hierarchy.parent}-${val}` : hierarchy.parent;
+                          setFormData({
+                            ...formData,
+                            language: combined,
+                            framework: val || formData.framework,
+                          });
+                        }}
+                        className="flex-1 rounded-lg border border-card-border bg-card px-3 py-1.5 text-xs font-mono text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
+                      />
+                    </div>
+                  )}
                 </div>
+
+                {/* Raw Input Overrides */}
+                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-card-border/60">
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Stored Language Identifier
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.language}
+                      onChange={(e) => setFormData({ ...formData, language: e.target.value })}
+                      placeholder="e.g. Python-Django"
+                      className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Framework / Engine
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.framework}
+                      onChange={(e) => setFormData({ ...formData, framework: e.target.value })}
+                      placeholder="e.g. Django, Flask, Next.js"
+                      className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white focus:border-brand-lime focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Difficulty */}
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Difficulty</label>
+                <select
+                  value={formData.difficulty}
+                  onChange={(e) => setFormData({ ...formData, difficulty: e.target.value as any })}
+                  className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white focus:border-brand-lime focus:outline-none"
+                >
+                  <option value="BEGINNER">BEGINNER</option>
+                  <option value="INTERMEDIATE">INTERMEDIATE</option>
+                  <option value="ADVANCED">ADVANCED</option>
+                </select>
               </div>
 
               {/* Time, Threshold, AI Limit, AI Token Limit */}

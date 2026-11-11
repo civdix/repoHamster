@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { CatalogueDetailModal } from './CatalogueDetailModal';
+import { getLanguageStyle, parseLanguageHierarchy } from '@/lib/language-utils';
 
 interface CatalogueRepositoryListProps {
   initialRepositories: any[];
@@ -25,12 +26,45 @@ interface CatalogueRepositoryListProps {
 export function CatalogueRepositoryList({ initialRepositories }: CatalogueRepositoryListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('ALL');
+
+  // Compute distinct language counts
+  const languageCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: initialRepositories.length };
+    initialRepositories.forEach((repo) => {
+      const rawLang = repo.language || 'Unspecified';
+      let cat = rawLang;
+      const lower = rawLang.toLowerCase();
+      if (lower.includes('typescript')) cat = 'TypeScript';
+      else if (lower.includes('javascript')) cat = 'JavaScript';
+      else if (lower.includes('python')) cat = 'Python';
+      else if (lower.includes('java') && !lower.includes('javascript')) cat = 'Java';
+      else if (lower.includes('go')) cat = 'Go';
+      else if (lower.includes('multi')) cat = 'Multi-Language';
+
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    return counts;
+  }, [initialRepositories]);
+
+  const distinctLanguages = useMemo(() => {
+    return Object.keys(languageCounts).filter((k) => k !== 'ALL');
+  }, [languageCounts]);
 
   const filteredRepositories = useMemo(() => {
     return initialRepositories.filter((repo) => {
       // Status filter
       if (selectedStatus !== 'ALL' && repo.importStatus !== selectedStatus) {
         return false;
+      }
+
+      // Language filter
+      if (selectedLanguage !== 'ALL') {
+        const lowerLang = (repo.language || '').toLowerCase();
+        const lowerSelected = selectedLanguage.toLowerCase();
+        if (!lowerLang.includes(lowerSelected)) {
+          return false;
+        }
       }
 
       // Search filter
@@ -46,7 +80,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
 
       return true;
     });
-  }, [initialRepositories, searchQuery, selectedStatus]);
+  }, [initialRepositories, searchQuery, selectedStatus, selectedLanguage]);
 
   const counts = useMemo(() => {
     return {
@@ -133,19 +167,60 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
         </div>
       </div>
 
+      {/* Language Filter Chips (Distinct Selection by Language) */}
+      <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <span className="text-[11px] font-mono text-slate-500 mr-1 shrink-0">Language:</span>
+        <button
+          onClick={() => setSelectedLanguage('ALL')}
+          className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-mono transition shrink-0 border ${
+            selectedLanguage === 'ALL'
+              ? 'border-brand-purple bg-brand-purple text-white font-bold'
+              : 'border-card-border bg-card text-slate-400 hover:text-white'
+          }`}
+        >
+          <span>All ({languageCounts['ALL'] || 0})</span>
+        </button>
+
+        {distinctLanguages.map((lang) => {
+          const style = getLanguageStyle(lang);
+          const isSelected = selectedLanguage === lang;
+          const count = languageCounts[lang] || 0;
+
+          return (
+            <button
+              key={lang}
+              onClick={() => setSelectedLanguage(lang)}
+              className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-mono transition shrink-0 border ${
+                isSelected
+                  ? `${style.bg} ${style.color} ${style.border} font-bold ring-1 ring-current`
+                  : 'border-card-border bg-card text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+              <span>{lang}</span>
+              <span className={`text-[10px] rounded-full px-1 ${isSelected ? 'bg-current/20' : 'bg-slate-800 text-slate-400'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Repositories Grid */}
       <div className="grid grid-cols-1 gap-4">
         {filteredRepositories.length === 0 ? (
           <div className="rounded-xl border border-card-border bg-card p-12 text-center space-y-2">
             <Filter className="mx-auto h-8 w-8 text-slate-600" />
             <p className="text-sm font-semibold text-white">No repositories match your filter</p>
-            <p className="text-xs text-slate-400">Try adjusting your search query or status filter.</p>
+            <p className="text-xs text-slate-400">Try adjusting your search query, status, or language filter.</p>
           </div>
         ) : (
           filteredRepositories.map((repo) => {
             const isReady = repo.importStatus === 'READY_FOR_TESTING';
             const isCloned = !!repo.localPath;
             const hasAssignment = repo.assignments && repo.assignments.length > 0;
+            const hierarchy = parseLanguageHierarchy(repo.language, repo.framework);
+            const langStyle = getLanguageStyle(hierarchy.parent);
 
             return (
               <div
@@ -156,8 +231,14 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
                   {/* Left Column: Details */}
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2 font-mono">
-                      <span className="rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-[11px] text-slate-300">
-                        {repo.language}
+                      {/* Distinct Parent Language & Sub-Repo Type Badge */}
+                      <span
+                        className={`inline-flex items-center space-x-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${langStyle.bg} ${langStyle.color} ${langStyle.border}`}
+                      >
+                        <span className={`h-1.5 w-1.5 rounded-full ${langStyle.dot}`} />
+                        <span>{hierarchy.parent}</span>
+                        <span className="opacity-40">/</span>
+                        <span className="font-bold text-white">{hierarchy.subType}</span>
                       </span>
                       <span className="rounded-full border border-card-border bg-[#0a0d14] px-2.5 py-0.5 text-[11px] text-slate-400">
                         {repo.framework}

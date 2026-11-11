@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { AssignmentEditorModal } from '@/components/admin/AssignmentEditorModal';
 import { AssignmentAdminCard } from '@/components/admin/AssignmentAdminCard';
+import { AssignmentAdminList } from '@/components/admin/AssignmentAdminList';
 import { SyncReposButton } from '@/components/admin/SyncReposButton';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
 
@@ -22,14 +23,37 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminAssignmentsPage() {
   let assignments: any[] = [];
+  let catalogRepositories: any[] = [];
+
   try {
-    assignments = await prisma.assignment.findMany({
-      include: {
-        candidateAssignments: true,
-        pullRequests: true,
-      },
-      orderBy: { createdAt: 'asc' },
-    });
+    const [fetchedAssignments, fetchedCatalog] = await Promise.all([
+      prisma.assignment.findMany({
+        include: {
+          candidateAssignments: true,
+          pullRequests: true,
+        },
+        orderBy: { createdAt: 'asc' },
+      }),
+      prisma.catalogRepository.findMany({
+        select: {
+          id: true,
+          name: true,
+          repoName: true,
+          owner: true,
+          originalUrl: true,
+          language: true,
+          framework: true,
+          difficulty: true,
+          description: true,
+          defaultBranch: true,
+          importStatus: true,
+        },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
+
+    assignments = fetchedAssignments;
+    catalogRepositories = fetchedCatalog;
   } catch (err) {
     console.error('[ADMIN ASSIGNMENTS] Query error:', err);
   }
@@ -60,7 +84,7 @@ export default async function AdminAssignmentsPage() {
 
         <div className="flex flex-wrap items-center gap-3">
           <SyncReposButton />
-          <AssignmentEditorModal isNew={true} />
+          <AssignmentEditorModal isNew={true} catalogRepositories={catalogRepositories} />
         </div>
       </div>
 
@@ -97,18 +121,11 @@ export default async function AdminAssignmentsPage() {
         </div>
       </div>
 
-      {/* Challenge Cards List */}
-      <div className="grid grid-cols-1 gap-4">
-        {assignments.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-card-border p-12 text-center text-slate-400">
-            No debugging assignments found. Click &ldquo;Add New Repository Challenge&rdquo; or run a repository sync.
-          </div>
-        ) : (
-          assignments.map((assignment: any) => (
-            <AssignmentAdminCard key={assignment.id} assignment={assignment} />
-          ))
-        )}
-      </div>
+      {/* Interactive Challenge List with Distinct Language Filters & Search */}
+      <AssignmentAdminList
+        initialAssignments={assignments}
+        catalogRepositories={catalogRepositories}
+      />
     </div>
   );
 }
