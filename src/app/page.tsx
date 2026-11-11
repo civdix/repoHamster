@@ -25,6 +25,7 @@ import {
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { LandingFaq } from '@/components/landing/LandingFaq';
 import { LandingBentoGrid } from '@/components/landing/LandingBentoGrid';
+import { LandingHeroWorkstation } from '@/components/landing/LandingHeroWorkstation';
 import { GitHubRepoCard } from '@/components/github/GitHubRepoCard';
 
 export const dynamic = 'force-dynamic';
@@ -128,33 +129,9 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Hero Workstation Illustration Card */}
+        {/* Hero Workstation Live Showcase Card */}
         <div className="mt-14 mx-auto max-w-4xl">
-          <div className="relative rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 sm:p-10 shadow-2xl backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-4 max-w-lg">
-              <div className="inline-flex items-center space-x-2 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-0.5 text-[11px] font-mono text-[var(--amber-badge-text)] font-semibold">
-                <span className="h-2 w-2 rounded-full bg-[var(--yellow-bright)] animate-ping" />
-                <span>Hamster Workstation v1.0.4</span>
-              </div>
-              <h2 className="text-2xl font-bold text-white font-sans">
-                Real Outages. Real Repositories. Real PRs.
-              </h2>
-              <p className="text-xs sm:text-sm text-[var(--gh-text-muted)] leading-relaxed">
-                Connect directly with your GitHub account. No fake leetcode questions—tackle concurrency race conditions, memory leaks, and broken API contracts in a real multi-file codebase.
-              </p>
-              <div className="flex items-center space-x-3 pt-2 font-mono text-xs">
-                <span className="rounded-md bg-[var(--gh-bg)] border border-[var(--gh-border)] px-2.5 py-1 text-[var(--yellow-bright)]">
-                  codespaces.new/repohamster
-                </span>
-                <span className="text-[var(--gh-text-dim)]">•</span>
-                <span className="text-slate-300">100% Automated Runner</span>
-              </div>
-            </div>
-
-            <div className="flex shrink-0 items-center justify-center p-4 rounded-2xl bg-[var(--gh-bg)] border border-[var(--gh-border)] shadow-[var(--yellow-glow)]">
-              <HamsterMascot variant="normal" size={140} />
-            </div>
-          </div>
+          <LandingHeroWorkstation />
         </div>
       </section>
 
