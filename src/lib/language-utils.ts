@@ -411,10 +411,10 @@ export function parseLanguageHierarchy(languageStr?: string, frameworkStr?: stri
 export function getLanguageStyle(languageStr?: string) {
   if (!languageStr) {
     return {
-      color: 'text-slate-300',
-      border: 'border-slate-700',
-      bg: 'bg-slate-800/60',
-      dot: 'bg-slate-400',
+      color: 'text-[var(--gh-text-secondary)]',
+      border: 'border-[var(--gh-border)]',
+      bg: 'bg-[var(--gh-bg-secondary)]',
+      dot: 'bg-[var(--yellow-bright)]',
     };
   }
 

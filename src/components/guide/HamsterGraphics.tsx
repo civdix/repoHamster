@@ -21,9 +21,9 @@ export function HamsterSpeechCloud({
   badge,
 }: HamsterSpeechCloudProps) {
   const accentBorder = {
-    lime: 'border-[var(--yellow-bright)]/60 shadow-[var(--yellow-glow)] text-slate-100',
-    purple: 'border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] text-slate-100',
-    amber: 'border-[var(--yellow-bright)]/60 shadow-[var(--yellow-glow)] text-slate-100',
+    lime: 'border-[var(--yellow-bright)]/60 shadow-[var(--yellow-glow)] text-[var(--gh-text)]',
+    purple: 'border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] text-[var(--gh-text)]',
+    amber: 'border-[var(--yellow-bright)]/60 shadow-[var(--yellow-glow)] text-[var(--gh-text)]',
   }[accent];
 
   const badgeColor = {
@@ -318,7 +318,7 @@ export function CurvedDrawnArrow({
       {/* Label on the curve */}
       {label && (
         <span
-          className="absolute text-[10px] font-mono font-bold bg-[var(--gh-bg)] px-2 py-0.5 rounded-full border border-[var(--gh-border)] shadow-sm text-slate-200"
+          className="absolute text-[10px] font-mono font-bold bg-[var(--gh-bg)] px-2 py-0.5 rounded-full border border-[var(--gh-border)] shadow-sm text-[var(--gh-text)]"
           style={{ color: strokeColor }}
         >
           {label}
@@ -361,14 +361,14 @@ export function HamsterMascotCallout({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <h4 className="text-sm font-bold text-white tracking-wide">{title}</h4>
+          <h4 className="text-sm font-bold text-[var(--gh-text)] tracking-wide">{title}</h4>
           {highlightText && (
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
               {highlightText}
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs text-slate-300 leading-relaxed font-sans">{message}</p>
+        <p className="mt-1 text-xs text-[var(--gh-text-secondary)] leading-relaxed font-sans">{message}</p>
       </div>
     </div>
   );

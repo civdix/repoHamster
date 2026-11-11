@@ -310,7 +310,7 @@ export function SubmitPRModal({
                         href={result.prUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center space-x-1 font-bold underline text-white hover:text-brand-lime text-xs pt-1"
+                        className="inline-flex items-center space-x-1 font-bold underline text-[var(--gh-text)] hover:text-[var(--yellow-bright)] text-xs pt-1"
                       >
                         <span>View Pull Request on GitHub</span>
                         <ExternalLink className="h-3 w-3" />

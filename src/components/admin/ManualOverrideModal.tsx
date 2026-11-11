@@ -78,11 +78,11 @@ export function ManualOverrideModal({
             <div className="flex items-center justify-between border-b border-[var(--gh-border)] pb-4">
               <div className="flex items-center space-x-2">
                 <ShieldCheck className="h-5 w-5 text-[var(--yellow-bright)]" />
-                <h3 className="font-bold text-white text-base">Manual Evaluation Override</h3>
+                <h3 className="font-bold text-[var(--gh-text)] text-base">Manual Evaluation Override</h3>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-white transition"
+                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -91,10 +91,10 @@ export function ManualOverrideModal({
             <form onSubmit={handleOverride} className="mt-4 space-y-4">
               <div className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 text-xs text-[var(--gh-text-secondary)] space-y-1">
                 <p>
-                  <span className="text-[var(--gh-text-muted)]">Candidate:</span> <strong className="text-white">{candidateName}</strong>
+                  <span className="text-[var(--gh-text-muted)]">Candidate:</span> <strong className="text-[var(--gh-text)]">{candidateName}</strong>
                 </p>
                 <p>
-                  <span className="text-[var(--gh-text-muted)]">Challenge:</span> <strong className="text-white">{assignmentTitle}</strong>
+                  <span className="text-[var(--gh-text-muted)]">Challenge:</span> <strong className="text-[var(--gh-text)]">{assignmentTitle}</strong>
                 </p>
                 <p>
                   <span className="text-[var(--gh-text-muted)]">Current Status:</span>{' '}
@@ -118,7 +118,7 @@ export function ManualOverrideModal({
                     className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
                       markAsPassed
                         ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold'
-                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-white'
+                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                     }`}
                   >
                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -133,8 +133,8 @@ export function ManualOverrideModal({
                     }}
                     className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
                       !markAsPassed
-                        ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-white font-bold'
-                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-white'
+                        ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text)] font-bold'
+                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                     }`}
                   >
                     <AlertCircle className="h-3.5 w-3.5" />
@@ -153,7 +153,7 @@ export function ManualOverrideModal({
                   max="100"
                   value={newScore}
                   onChange={(e) => setNewScore(e.target.value)}
-                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -167,7 +167,7 @@ export function ManualOverrideModal({
                   placeholder="e.g. Solution uses alternative valid locking mechanism that timed out under synthetic test runner; code manually reviewed and verified."
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2.5 text-xs text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -182,7 +182,7 @@ export function ManualOverrideModal({
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-1.5 text-xs font-medium text-[var(--gh-text-secondary)] hover:text-white transition"
+                  className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-1.5 text-xs font-medium text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition"
                 >
                   Cancel
                 </button>

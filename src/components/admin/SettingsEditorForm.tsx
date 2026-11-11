@@ -55,7 +55,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
       <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4">
         <div className="flex items-center space-x-2 border-b border-[var(--gh-border)] pb-3">
           <Sparkles className="h-4 w-4 text-[var(--yellow-bright)]" />
-          <h3 className="font-bold text-white text-sm">RepoHamster AI Credit & Quota Controls</h3>
+          <h3 className="font-bold text-[var(--gh-text)] text-sm">RepoHamster AI Credit &amp; Quota Controls</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
@@ -68,7 +68,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
               min="1"
               value={settings.ai_daily_request_limit}
               onChange={(e) => setSettings({ ...settings, ai_daily_request_limit: e.target.value })}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Max queries per candidate / 24hr window</p>
           </div>
@@ -83,9 +83,9 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
               step="500"
               value={settings.ai_token_limit}
               onChange={(e) => setSettings({ ...settings, ai_token_limit: e.target.value })}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
-            <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Prompt & completion token budget</p>
+            <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Prompt &amp; completion token budget</p>
           </div>
 
           <div>
@@ -97,7 +97,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
               min="100"
               value={settings.ai_max_output_tokens}
               onChange={(e) => setSettings({ ...settings, ai_max_output_tokens: e.target.value })}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Limits response length to ensure hints</p>
           </div>
@@ -108,7 +108,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
       <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4">
         <div className="flex items-center space-x-2 border-b border-[var(--gh-border)] pb-3">
           <Sliders className="h-4 w-4 text-[var(--yellow-bright)]" />
-          <h3 className="font-bold text-white text-sm">Evaluation Engine & Grading Thresholds</h3>
+          <h3 className="font-bold text-[var(--gh-text)] text-sm">Evaluation Engine &amp; Grading Thresholds</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
@@ -122,7 +122,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
               max="100"
               value={settings.passing_threshold_percent}
               onChange={(e) => setSettings({ ...settings, passing_threshold_percent: e.target.value })}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Required test pass % to mark COMPLETED</p>
           </div>
@@ -137,7 +137,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
               max="120"
               value={settings.execution_timeout_sec}
               onChange={(e) => setSettings({ ...settings, execution_timeout_sec: e.target.value })}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Hard timeout killing infinite loops</p>
           </div>
@@ -150,7 +150,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
               type="text"
               value={settings.github_app_slug}
               onChange={(e) => setSettings({ ...settings, github_app_slug: e.target.value })}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-sans">Bot handle referenced on GitHub</p>
           </div>
@@ -162,7 +162,7 @@ export function SettingsEditorForm({ initialSettings }: SettingsEditorFormProps)
           className={`rounded-xl border p-3 text-xs flex items-center space-x-2 ${
             message.type === 'success'
               ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)]'
-              : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-white'
+              : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text)]'
           }`}
         >
           {message.type === 'success' ? (

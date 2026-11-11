@@ -276,23 +276,23 @@ export function CodespacesLaunchModal({
 
             {/* Quota Exceeded High-Visibility Alert */}
             {quotaError && (
-              <div className="mt-4 rounded-xl border border-rose-500/60 bg-rose-950/40 p-4 space-y-3 animate-in fade-in">
-                <div className="flex items-center space-x-2 text-rose-300 font-bold text-xs uppercase font-mono">
-                  <AlertTriangle className="h-4 w-4 text-rose-400 shrink-0" />
+              <div className="mt-4 rounded-xl border border-rose-500/60 bg-rose-500/10 p-4 space-y-3 animate-in fade-in">
+                <div className="flex items-center space-x-2 text-rose-500 font-bold text-xs uppercase font-mono">
+                  <AlertTriangle className="h-4 w-4 text-rose-500 shrink-0" />
                   <span>GitHub Codespaces Free Quota Limit Reached</span>
                 </div>
-                <p className="text-xs text-slate-200 leading-relaxed font-sans">
+                <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed font-sans">
                   GitHub rejected environment creation because your GitHub account has exhausted its included monthly free quota (120 core hours) or spending limit.
                 </p>
-                <div className="rounded-lg border border-rose-800/60 bg-rose-950/70 p-3 text-[11px] font-mono text-rose-200 space-y-1.5">
-                  <div className="font-bold flex items-center space-x-1.5 text-rose-100">
-                    <Sparkles className="h-3.5 w-3.5 text-brand-lime" />
+                <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-[11px] font-mono text-[var(--gh-text)] space-y-1.5">
+                  <div className="font-bold flex items-center space-x-1.5 text-rose-500">
+                    <Sparkles className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                     <span>Future Solutions &amp; Alternatives (Planned):</span>
                   </div>
-                  <p className="text-slate-300 text-[11px]">
+                  <p className="text-[var(--gh-text-secondary)] text-[11px]">
                     We are engineering automated local devcontainer orchestration and sponsored cloud runners so candidates never get blocked by GitHub quota exhaustion.
                   </p>
-                  <p className="text-brand-lime font-bold text-[11px] pt-1">
+                  <p className="text-[var(--yellow-bright)] font-bold text-[11px] pt-1">
                     👉 Immediate Fix: Clone the repository locally using Option 3 below to complete and submit your bugfix without using any Codespaces quota!
                   </p>
                 </div>
@@ -300,13 +300,13 @@ export function CodespacesLaunchModal({
             )}
 
             {generalError && (
-              <div className="mt-4 rounded-lg border border-rose-800/40 bg-rose-950/40 p-3 text-xs text-rose-300 font-mono animate-in fade-in space-y-2">
+              <div className="mt-4 rounded-lg border border-rose-500/40 bg-rose-500/10 p-3 text-xs text-rose-500 font-mono animate-in fade-in space-y-2">
                 <div className="flex items-center space-x-1.5 font-bold">
-                  <AlertTriangle className="h-4 w-4 text-rose-400 shrink-0" />
+                  <AlertTriangle className="h-4 w-4 text-rose-500 shrink-0" />
                   <span>{generalError}</span>
                 </div>
                 {generalError.includes('404') && (
-                  <div className="text-[11px] text-slate-300 font-sans pt-1">
+                  <div className="text-[11px] text-[var(--gh-text-secondary)] font-sans pt-1">
                     💡 <strong>Why this happens:</strong> GitHub returns 404 when your current session token lacks the <code>codespace</code> permission, or if the repository fork is still propagating on GitHub.
                     <div className="flex flex-wrap items-center gap-2 pt-2">
                       <button
@@ -319,7 +319,7 @@ export function CodespacesLaunchModal({
                         href={defaultCodespacesUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded-lg border border-card-border bg-[var(--gh-bg-darkest)] px-3 py-1.5 text-xs text-slate-300 hover:text-[var(--gh-text)] transition"
+                        className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-1.5 text-xs text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition"
                       >
                         Launch Fallback Wizard (codespaces.new)
                       </a>
@@ -330,13 +330,13 @@ export function CodespacesLaunchModal({
             )}
 
             {successInfo && (
-              <div className="mt-4 rounded-lg border border-brand-lime/40 bg-lime-950/40 p-3 text-xs text-brand-lime font-mono animate-in fade-in flex items-center justify-between">
+              <div className="mt-4 rounded-lg border border-[var(--yellow-primary)]/40 bg-[var(--amber-badge-bg)] p-3 text-xs text-[var(--amber-badge-text)] font-mono animate-in fade-in flex items-center justify-between">
                 <span>✅ {successInfo.message}</span>
                 <a
                   href={successInfo.webUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded bg-brand-lime px-2 py-0.5 text-[11px] font-bold text-slate-950 hover:bg-brand-lime-light"
+                  className="rounded bg-[var(--yellow-button-bg)] px-2 py-0.5 text-[11px] font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)]"
                 >
                   Open Codespace
                 </a>
@@ -346,21 +346,21 @@ export function CodespacesLaunchModal({
             {/* Launch Instructions & Workspace Actions */}
             <div className="mt-5 space-y-4">
               {/* Intelligent Codespaces Section */}
-              <div className="rounded-xl border border-purple-600/40 bg-gradient-to-r from-purple-950/40 to-slate-900/60 p-4 space-y-3 shadow-lg">
+              <div className="rounded-xl border border-[var(--yellow-primary)]/40 bg-[var(--amber-badge-bg)]/30 p-4 space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-purple-300 font-mono flex items-center space-x-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-brand-lime" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--yellow-bright)] font-mono flex items-center space-x-1.5">
+                    <Sparkles className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                     <span>Option 1: Direct Cloud Codespace (Zero Setup)</span>
                   </h4>
-                  <span className="text-[10px] font-mono text-lime-400/90 bg-lime-950/60 border border-lime-800/40 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-mono text-[var(--amber-badge-text)] bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] px-2 py-0.5 rounded-full font-bold">
                     Recommended
                   </span>
                 </div>
 
                 {/* Loading inspection */}
                 {isInspecting && (
-                  <div className="flex items-center space-x-2 text-xs text-slate-400 py-2">
-                    <Loader2 className="h-4 w-4 animate-spin text-brand-lime" />
+                  <div className="flex items-center space-x-2 text-xs text-[var(--gh-text-muted)] py-2">
+                    <Loader2 className="h-4 w-4 animate-spin text-[var(--yellow-bright)]" />
                     <span>Checking existing active Codespaces for {repo}...</span>
                   </div>
                 )}
@@ -368,23 +368,23 @@ export function CodespacesLaunchModal({
                 {/* 3 Choices when existing codespaces exist */}
                 {!isInspecting && hasCheckedExisting && existingCodespaces.length > 0 && primaryExistingCodespace && (
                   <div className="space-y-3 pt-1">
-                    <div className="rounded-lg border border-amber-500/40 bg-amber-950/30 p-3 text-xs text-amber-200">
+                    <div className="rounded-lg border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-3 text-xs text-[var(--amber-badge-text)]">
                       <div className="flex items-center space-x-2 font-bold mb-1">
-                        <Clock className="h-3.5 w-3.5 text-amber-400" />
+                        <Clock className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                         <span>Previous Codespace Detected:</span>
-                        <code className="text-white font-mono">{primaryExistingCodespace.name}</code>
+                        <code className="text-[var(--gh-text)] font-mono">{primaryExistingCodespace.name}</code>
                       </div>
-                      <p className="text-[11px] text-slate-300">
-                        Status: <span className="font-mono text-brand-lime">{primaryExistingCodespace.state}</span>
+                      <p className="text-[11px] text-[var(--gh-text-secondary)]">
+                        Status: <span className="font-mono text-[var(--yellow-bright)]">{primaryExistingCodespace.state}</span>
                         {primaryExistingCodespace.lastUsedAt && (
-                          <span className="text-slate-400 ml-2">
+                          <span className="text-[var(--gh-text-muted)] ml-2">
                             • Last active {new Date(primaryExistingCodespace.lastUsedAt).toLocaleString()}
                           </span>
                         )}
                       </p>
                     </div>
 
-                    <div className="text-xs font-semibold text-slate-200">
+                    <div className="text-xs font-semibold text-[var(--gh-text)]">
                       Choose how you want to proceed with this challenge environment:
                     </div>
 
@@ -393,74 +393,74 @@ export function CodespacesLaunchModal({
                       <button
                         onClick={() => handleExecuteCodespaceAction('continue', primaryExistingCodespace)}
                         disabled={!!executingAction}
-                        className="flex items-center justify-between rounded-xl border border-brand-lime/40 bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-brand-lime hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
+                        className="flex items-center justify-between rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-[var(--yellow-primary)] hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-950 border border-lime-800 text-brand-lime group-hover:scale-105 transition">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--yellow-bright)] group-hover:scale-105 transition">
                             <Play className="h-4 w-4" />
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-white group-hover:text-brand-lime transition">
+                            <div className="text-xs font-bold text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)] transition">
                               1. Continue to old Codespace for {repo}
                             </div>
-                            <div className="text-[11px] text-slate-400">
+                            <div className="text-[11px] text-[var(--gh-text-muted)]">
                               Resume your previous environment with all unstaged progress and files intact.
                             </div>
                           </div>
                         </div>
-                        <ArrowUpRight className="h-4 w-4 text-slate-400 group-hover:text-brand-lime transition" />
+                        <ArrowUpRight className="h-4 w-4 text-[var(--gh-text-muted)] group-hover:text-[var(--yellow-bright)] transition" />
                       </button>
 
                       {/* Choice 2: Create new codespace and keep the old one */}
                       <button
                         onClick={() => handleExecuteCodespaceAction('create_keep', primaryExistingCodespace)}
                         disabled={!!executingAction}
-                        className="flex items-center justify-between rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-purple-500 hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
+                        className="flex items-center justify-between rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-[var(--yellow-primary)] hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-950 border border-purple-800 text-brand-purple-light group-hover:scale-105 transition">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--yellow-bright)] group-hover:scale-105 transition">
                             {executingAction === 'create_keep' ? (
-                              <Loader2 className="h-4 w-4 animate-spin text-white" />
+                              <Loader2 className="h-4 w-4 animate-spin text-[var(--yellow-bright)]" />
                             ) : (
                               <Layers className="h-4 w-4" />
                             )}
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-white group-hover:text-brand-purple-light transition">
+                            <div className="text-xs font-bold text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)] transition">
                               2. Create new Codespace and keep the old one
                             </div>
-                            <div className="text-[11px] text-slate-400">
+                            <div className="text-[11px] text-[var(--gh-text-muted)]">
                               Spin up a fresh isolated cloud workspace while keeping your previous Codespace active.
                             </div>
                           </div>
                         </div>
-                        <Zap className="h-4 w-4 text-slate-400 group-hover:text-brand-purple-light transition" />
+                        <Zap className="h-4 w-4 text-[var(--gh-text-muted)] group-hover:text-[var(--yellow-bright)] transition" />
                       </button>
 
                       {/* Choice 3: Create new codespace and delete previous codespace */}
                       <button
                         onClick={() => handleExecuteCodespaceAction('create_delete', primaryExistingCodespace)}
                         disabled={!!executingAction}
-                        className="flex items-center justify-between rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-rose-500 hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
+                        className="flex items-center justify-between rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-rose-500 hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-950 border border-rose-800 text-rose-400 group-hover:scale-105 transition">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-500 group-hover:scale-105 transition">
                             {executingAction === 'create_delete' ? (
-                              <Loader2 className="h-4 w-4 animate-spin text-white" />
+                              <Loader2 className="h-4 w-4 animate-spin text-rose-500" />
                             ) : (
                               <Trash2 className="h-4 w-4" />
                             )}
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-white group-hover:text-rose-400 transition">
+                            <div className="text-xs font-bold text-[var(--gh-text)] group-hover:text-rose-500 transition">
                               3. Create new Codespace and delete the previous Codespace
                             </div>
-                            <div className="text-[11px] text-slate-400">
+                            <div className="text-[11px] text-[var(--gh-text-muted)]">
                               Provisions a fresh clean workspace and safely cleans up old instance to save your free quota.
                             </div>
                           </div>
                         </div>
-                        <RotateCw className="h-4 w-4 text-slate-400 group-hover:text-rose-400 transition" />
+                        <RotateCw className="h-4 w-4 text-[var(--gh-text-muted)] group-hover:text-rose-500 transition" />
                       </button>
                     </div>
                   </div>
@@ -469,21 +469,21 @@ export function CodespacesLaunchModal({
                 {/* Fresh creation when NO existing codespace exists */}
                 {!isInspecting && hasCheckedExisting && existingCodespaces.length === 0 && (
                   <div className="space-y-3">
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-[var(--gh-text-secondary)]">
                       Creates a dedicated GitHub Codespace directly for{' '}
-                      <code className="text-brand-lime font-mono">{candidateGithubUsername || owner}/{repo}</code> and redirects directly to your active browser IDE.
+                      <code className="text-[var(--yellow-bright)] font-mono">{candidateGithubUsername || owner}/{repo}</code> and redirects directly to your active browser IDE.
                     </p>
 
                     <div className="flex flex-wrap items-center gap-3 pt-1">
                       <button
                         onClick={() => handleExecuteCodespaceAction('create')}
                         disabled={!!executingAction}
-                        className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-brand-purple to-purple-600 px-4 py-2.5 text-xs font-bold text-white hover:brightness-110 transition shadow-glow-purple active:scale-95 disabled:opacity-50"
+                        className="flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-4 py-2.5 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-[var(--yellow-glow)] active:scale-95 disabled:opacity-50"
                       >
                         {executingAction === 'create' ? (
-                          <Loader2 className="h-4 w-4 animate-spin text-white" />
+                          <Loader2 className="h-4 w-4 animate-spin text-current" />
                         ) : (
-                          <Zap className="h-4 w-4 text-brand-lime" />
+                          <Zap className="h-4 w-4 text-current" />
                         )}
                         <span>
                           {executingAction === 'create'
@@ -497,10 +497,10 @@ export function CodespacesLaunchModal({
                         href={defaultCodespacesUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
+                        className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3.5 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition active:scale-95"
                         title="Fallback: Open codespaces.new creation screen on GitHub"
                       >
-                        <Terminal className="h-3.5 w-3.5 text-brand-lime" />
+                        <Terminal className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                         <span>Fallback Wizard</span>
                         <ExternalLink className="h-3 w-3" />
                       </a>
@@ -510,14 +510,14 @@ export function CodespacesLaunchModal({
               </div>
 
               {/* Option 2: VS Code Desktop & Direct Upstream */}
-              <div className="rounded-xl border border-brand-lime/30 bg-lime-950/20 p-4 space-y-3">
+              <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-brand-lime font-mono flex items-center space-x-1.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--yellow-bright)] font-mono flex items-center space-x-1.5">
                     <Monitor className="h-3.5 w-3.5" />
                     <span>Option 2: Local VS Code Desktop</span>
                   </h4>
                 </div>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-[var(--gh-text-secondary)]">
                   Open the repository in your local VS Code editor via desktop protocol.
                 </p>
 
@@ -528,7 +528,7 @@ export function CodespacesLaunchModal({
                       setVsCodeLaunched(true);
                       setTimeout(() => setVsCodeLaunched(false), 6000);
                     }}
-                    className="flex items-center space-x-2 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition shadow-glow-lime active:scale-95"
+                    className="flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-[var(--yellow-glow)] active:scale-95"
                   >
                     <Code2 className="h-3.5 w-3.5" />
                     <span>Open in VS Code (Desktop)</span>
@@ -538,45 +538,45 @@ export function CodespacesLaunchModal({
                     href={cleanUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-card px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
+                    className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition active:scale-95"
                   >
-                    <GitFork className="h-3.5 w-3.5 text-brand-purple" />
+                    <GitFork className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                     <span>View Upstream on GitHub</span>
                   </a>
                 </div>
 
                 {vsCodeLaunched && (
-                  <div className="rounded-lg border border-brand-lime/40 bg-lime-950/40 p-2.5 text-xs text-brand-lime font-mono animate-in fade-in duration-150">
+                  <div className="rounded-lg border border-[var(--yellow-primary)]/40 bg-[var(--amber-badge-bg)] p-2.5 text-xs text-[var(--amber-badge-text)] font-mono animate-in fade-in duration-150">
                     Launching VS Code Desktop protocol... If your browser prompted for permission, click &ldquo;Open Visual Studio Code&rdquo;. Alternatively, copy the Git Clone command below.
                   </div>
                 )}
               </div>
 
               {/* Option 3: Local CLI */}
-              <div className="rounded-xl border border-card-border bg-card p-4">
+              <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--gh-text-muted)] font-mono">
                     Option 3: Terminal / Manual Git Workflow (Zero Quota Used)
                   </h4>
                   <button
                     onClick={() => handleCopy(gitCommands.join('\n'), 99)}
-                    className="flex items-center space-x-1 text-[11px] font-mono text-brand-lime hover:underline"
+                    className="flex items-center space-x-1 text-[11px] font-mono text-[var(--yellow-bright)] hover:underline"
                   >
                     {copiedIndex === 99 ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                     <span>{copiedIndex === 99 ? 'Copied' : 'Copy Commands'}</span>
                   </button>
                 </div>
 
-                <div className="rounded-lg bg-[var(--gh-bg-code)] p-3 font-mono text-xs text-slate-300 space-y-1 overflow-x-auto border border-card-border">
+                <div className="rounded-lg bg-[var(--gh-bg-code)] p-3 font-mono text-xs text-[var(--gh-text)] space-y-1 overflow-x-auto border border-[var(--gh-border)]">
                   {gitCommands.map((cmd, i) => (
                     <div key={i} className="flex items-center justify-between group">
-                      <span className={cmd.startsWith('#') ? 'text-slate-500' : 'text-brand-lime-light'}>{cmd}</span>
+                      <span className={cmd.startsWith('#') ? 'text-[var(--gh-text-muted)]' : 'text-[var(--yellow-bright)] font-semibold'}>{cmd}</span>
                       {!cmd.startsWith('#') && (
                         <button
                           onClick={() => handleCopy(cmd, i)}
-                          className="opacity-0 group-hover:opacity-100 p-0.5 text-slate-500 hover:text-white transition"
+                          className="opacity-0 group-hover:opacity-100 p-0.5 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition"
                         >
-                          {copiedIndex === i ? <Check className="h-3 w-3 text-brand-lime" /> : <Copy className="h-3 w-3" />}
+                          {copiedIndex === i ? <Check className="h-3 w-3 text-[var(--yellow-bright)]" /> : <Copy className="h-3 w-3" />}
                         </button>
                       )}
                     </div>
@@ -585,15 +585,15 @@ export function CodespacesLaunchModal({
               </div>
 
               {/* PR Submission Instructions */}
-              <div className="rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] p-3 text-xs text-slate-400 font-mono">
-                <span className="font-semibold text-white">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-brand-lime font-mono">{branch}</code>. RepoHamster&apos;s webhook automatically runs public and hidden test suites in an isolated sandbox.
+              <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 text-xs text-[var(--gh-text-secondary)] font-mono">
+                <span className="font-semibold text-[var(--gh-text)]">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-[var(--yellow-bright)] font-mono">{branch}</code>. RepoHamster&apos;s webhook automatically runs public and hidden test suites in an isolated sandbox.
               </div>
             </div>
 
             <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl border border-card-border bg-card px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] transition"
               >
                 Close
               </button>

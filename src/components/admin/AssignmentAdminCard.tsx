@@ -134,7 +134,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
               <span>{hierarchy.parent}</span>
               <span className="opacity-40">/</span>
-              <span className="font-bold text-white">{hierarchy.subType}</span>
+              <span className="font-bold text-[var(--amber-badge-text)]">{hierarchy.subType}</span>
             </span>
             <span className="rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--amber-badge-text)] font-semibold">
               {assignment.difficulty}
@@ -166,7 +166,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             )}
           </div>
 
-          <h3 className="font-bold text-white text-base flex items-center space-x-2">
+          <h3 className="font-bold text-[var(--gh-text)] text-base flex items-center space-x-2">
             <span>{assignment.title}</span>
             <span className="text-xs font-mono font-normal text-[var(--gh-text-muted)]">
               ({assignment.slug})
@@ -186,7 +186,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             title={assignment.isActive ? 'Hide challenge from candidates' : 'Make challenge active'}
             className={`flex items-center space-x-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${
               assignment.isActive
-                ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white hover:border-[var(--yellow-primary)]'
+                ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]'
                 : 'border-[var(--yellow-primary)] bg-[var(--yellow-primary)] text-black font-bold'
             }`}
           >
@@ -243,7 +243,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             href={assignment.repoUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-white transition active:scale-95"
+            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition active:scale-95"
             title="Open GitHub Repository"
           >
             <ExternalLink className="h-3.5 w-3.5" />
@@ -255,13 +255,13 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex items-center space-x-1 rounded-xl bg-[var(--gh-border)] border border-[var(--gh-border-active)] px-2.5 py-1.5 text-xs font-bold text-white hover:text-[var(--yellow-bright)] transition active:scale-95"
+                className="flex items-center space-x-1 rounded-xl bg-[var(--gh-border)] border border-[var(--gh-border-active)] px-2.5 py-1.5 text-xs font-bold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] transition active:scale-95"
               >
                 {isDeleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <span>Confirm Delete</span>}
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white"
+                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]"
               >
                 Cancel
               </button>
@@ -269,7 +269,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           ) : (
             <button
               onClick={() => setConfirmDelete(true)}
-              className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--gh-border-active)] transition active:scale-95"
+              className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border-active)] transition active:scale-95"
               title="Remove Challenge"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -360,7 +360,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           <span className="text-[var(--gh-text-muted)] block text-[10px] uppercase font-bold tracking-wider">
             Candidate Submissions
           </span>
-          <div className="mt-1 text-white font-semibold">
+          <div className="mt-1 text-[var(--gh-text)] font-semibold">
             {completedCount} / {totalAttempts} passed
           </div>
           <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">

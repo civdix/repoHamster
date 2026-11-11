@@ -103,7 +103,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
             className={`rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 ${
               selectedStatus === 'ALL'
                 ? 'bg-[var(--yellow-primary)] text-black font-bold shadow-[var(--yellow-glow)]'
-                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
             }`}
           >
             All Repositories ({counts.all})
@@ -125,7 +125,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
             className={`rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 ${
               selectedStatus === 'INSPECTED'
                 ? 'bg-[var(--gh-bg)] border border-[var(--yellow-primary)] text-[var(--yellow-bright)] font-bold'
-                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
             }`}
           >
             Inspected ({counts.inspected})
@@ -136,7 +136,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
             className={`rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 ${
               selectedStatus === 'NEEDS_CONFIGURATION'
                 ? 'bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--amber-badge-text)] font-bold'
-                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
             }`}
           >
             Needs Config ({counts.needsConfig})
@@ -147,7 +147,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
             className={`rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 ${
               selectedStatus === 'NOT_COMPATIBLE'
                 ? 'bg-[var(--gh-bg)] border border-[var(--gh-border-active)] text-[var(--gh-text-muted)] font-bold'
-                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-muted)] hover:text-white'
+                : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
             }`}
           >
             Not Compatible ({counts.notCompatible})
@@ -162,7 +162,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
             placeholder="Search by name, framework, or language..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-4 py-1.5 text-xs font-mono text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
+            className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-4 py-1.5 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
           />
         </div>
       </div>
@@ -175,7 +175,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
           className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-mono transition shrink-0 border ${
             selectedLanguage === 'ALL'
               ? 'border-[var(--yellow-primary)] bg-[var(--yellow-primary)] text-black font-bold'
-              : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+              : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
           }`}
         >
           <span>All ({languageCounts['ALL'] || 0})</span>
@@ -192,7 +192,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
               className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-mono transition shrink-0 border ${
                 isSelected
                   ? 'border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)]'
-                  : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                  : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
               }`}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
@@ -210,7 +210,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
         {filteredRepositories.length === 0 ? (
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-12 text-center space-y-2">
             <Filter className="mx-auto h-8 w-8 text-[var(--gh-text-muted)]" />
-            <p className="text-sm font-semibold text-white">No repositories match your filter</p>
+            <p className="text-sm font-semibold text-[var(--gh-text)]">No repositories match your filter</p>
             <p className="text-xs text-[var(--gh-text-muted)]">Try adjusting your search query, status, or language filter.</p>
           </div>
         ) : (
@@ -234,7 +234,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
                         <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
                         <span>{hierarchy.parent}</span>
                         <span className="opacity-40">/</span>
-                        <span className="font-bold text-white">{hierarchy.subType}</span>
+                        <span className="font-bold text-[var(--amber-badge-text)]">{hierarchy.subType}</span>
                       </span>
                       <span className="rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-0.5 text-[11px] text-[var(--gh-text-secondary)]">
                         {repo.framework}
@@ -252,7 +252,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
                           repo.importStatus === 'READY_FOR_TESTING'
                             ? 'border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)]'
                             : repo.importStatus === 'INSPECTED'
-                            ? 'border border-[var(--gh-border)] bg-[var(--gh-bg)] text-white'
+                            ? 'border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text)]'
                             : 'border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)]'
                         }`}
                       >
@@ -280,12 +280,12 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-base font-bold text-white tracking-tight">{repo.name}</h3>
+                      <h3 className="text-base font-bold text-[var(--gh-text)] tracking-tight">{repo.name}</h3>
                       <a
                         href={repo.originalUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[var(--gh-text-muted)] hover:text-white transition"
+                        className="text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition"
                         title="Open GitHub source"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
@@ -315,7 +315,7 @@ export function CatalogueRepositoryList({ initialRepositories }: CatalogueReposi
                       href={repo.originalUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1 text-xs font-mono text-[var(--gh-text-secondary)] hover:text-white hover:border-[var(--gh-border-active)] transition"
+                      className="flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1 text-xs font-mono text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border-active)] transition"
                     >
                       <ExternalLink className="h-3 w-3" />
                       <span>GitHub</span>

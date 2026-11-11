@@ -172,7 +172,7 @@ export function AIChatDrawer({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center space-x-2 rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] hover:border-[var(--yellow-bright)] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition active:scale-95"
+        className="flex items-center space-x-2 rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] hover:border-[var(--yellow-bright)] px-3.5 py-1.5 text-xs font-semibold text-[var(--gh-text)] shadow-sm transition active:scale-95"
       >
         <span className="flex h-5 w-5 items-center justify-center">
           <HamsterMascot variant="normal" size={20} />
@@ -193,7 +193,7 @@ export function AIChatDrawer({
                   <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm flex items-center space-x-1.5 font-sans">
+                  <h3 className="font-bold text-[var(--gh-text)] text-sm flex items-center space-x-1.5 font-sans">
                     <span>Hamster AI</span>
                     <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)] animate-pulse" />
                   </h3>
@@ -207,7 +207,7 @@ export function AIChatDrawer({
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1.5 text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-tertiary)] transition"
+                className="rounded-lg p-1.5 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-tertiary)] transition"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -248,7 +248,7 @@ export function AIChatDrawer({
                   <div
                     className={`rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-[90%] ${
                       msg.role === 'user'
-                        ? 'bg-[var(--gh-bg-tertiary)] text-white border border-[var(--gh-border)] rounded-tr-none whitespace-pre-wrap'
+                        ? 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text)] border border-[var(--gh-border)] rounded-tr-none whitespace-pre-wrap'
                         : 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text)] rounded-tl-none font-sans'
                     }`}
                   >
@@ -312,7 +312,7 @@ export function AIChatDrawer({
                       : 'Daily AI credit budget exhausted'
                   }
                   disabled={loading || remainingRequests <= 0}
-                  className="w-full resize-none rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 pr-12 text-xs text-white placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none disabled:opacity-50 font-mono"
+                  className="w-full resize-none rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 pr-12 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none disabled:opacity-50 font-mono"
                 />
                 <button
                   type="submit"

@@ -150,7 +150,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
               className={`flex items-center space-x-1.5 rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 ${
                 selectedParentLang === 'ALL'
                   ? 'bg-[var(--yellow-primary)] text-black font-bold shadow-[var(--yellow-glow)]'
-                  : 'border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
+                  : 'border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
               }`}
             >
               <span>All Languages</span>
@@ -173,7 +173,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
                   className={`flex items-center space-x-1.5 rounded-xl px-3 py-1.5 text-xs font-mono font-medium transition shrink-0 border ${
                     isSelected
                       ? 'border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)]'
-                      : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
+                      : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                   }`}
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
@@ -198,7 +198,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
               placeholder="Search by repo, sub-type, or title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-4 py-1.5 text-xs font-mono text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-4 py-1.5 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
           </div>
         </div>
@@ -216,7 +216,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
               className={`rounded-lg px-2.5 py-1 text-[11px] font-mono transition shrink-0 border ${
                 selectedSubType === 'ALL'
                   ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold'
-                  : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
+                  : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
               }`}
             >
               All {selectedParentLang} ({parentCounts[selectedParentLang] || 0})
@@ -231,7 +231,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
                   className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-[11px] font-mono transition shrink-0 border ${
                     isSelected
                       ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)]'
-                      : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white'
+                      : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                   }`}
                 >
                   <span>{st.id}</span>
@@ -255,7 +255,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
           <span>
             Showing {filteredAssignments.length} of {initialAssignments.length} challenges
             {selectedParentLang !== 'ALL' && (
-              <> under <strong className="text-white">{selectedParentLang}</strong></>
+              <> under <strong className="text-[var(--gh-text)]">{selectedParentLang}</strong></>
             )}
             {selectedSubType !== 'ALL' && (
               <> (sub-repo type: <strong className="text-[var(--yellow-bright)]">{selectedSubType}</strong>)</>
@@ -280,7 +280,7 @@ export function AssignmentAdminList({ initialAssignments, catalogRepositories = 
         {filteredAssignments.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-[var(--gh-border)] p-12 text-center space-y-2">
             <Filter className="mx-auto h-8 w-8 text-[var(--gh-text-muted)]" />
-            <p className="text-sm font-semibold text-white">No repository challenges found</p>
+            <p className="text-sm font-semibold text-[var(--gh-text)]">No repository challenges found</p>
             <p className="text-xs text-[var(--gh-text-muted)]">
               {selectedSubType !== 'ALL'
                 ? `No challenges found for sub-repo type "${selectedSubType}".`

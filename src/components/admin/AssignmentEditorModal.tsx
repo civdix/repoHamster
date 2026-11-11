@@ -219,7 +219,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-white transition active:scale-95"
+          className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition active:scale-95"
           title="Edit Assignment Information"
         >
           <Edit3 className="h-3.5 w-3.5" />
@@ -235,7 +235,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   <Layers className="h-4 w-4 text-[var(--yellow-bright)]" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">
+                  <h3 className="font-bold text-[var(--gh-text)] text-base">
                     {isNew ? 'Connect New Debugging Repository Challenge' : 'Edit Challenge Platform Information'}
                   </h3>
                   <p className="text-xs text-[var(--gh-text-muted)] font-mono">
@@ -245,7 +245,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-white transition"
+                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -285,7 +285,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   />
                 </div>
 
@@ -298,7 +298,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                     required
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   />
                 </div>
               </div>
@@ -307,7 +307,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
               {repos.length > 0 && (
                 <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-white flex items-center space-x-1.5">
+                    <label className="text-xs font-semibold text-[var(--gh-text)] flex items-center space-x-1.5">
                       <GitBranch className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                       <span>Select Repository from Catalogue</span>
                     </label>
@@ -318,7 +318,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   <select
                     value={selectedRepoId}
                     onChange={handleSelectRepo}
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   >
                     <option value="">-- Choose a repository to auto-detect language & settings --</option>
                     {repos.map((r) => {
@@ -355,14 +355,14 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   placeholder="https://github.com/repohamster/repo-name"
                   value={formData.repoUrl}
                   onChange={(e) => handleRepoUrlChange(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
               {/* Hierarchical Language & Sub-Repo Type Selection */}
               <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3.5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-white flex items-center space-x-1.5">
+                  <label className="text-xs font-semibold text-[var(--gh-text)] flex items-center space-x-1.5">
                     <FolderTree className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                     <span>Language & Sub-Repo Type</span>
                   </label>
@@ -373,7 +373,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
                       <span>{hierarchy.parent}</span>
                       <span className="opacity-40">/</span>
-                      <span className="font-bold text-white">{formData.language}</span>
+                      <span className="font-bold text-[var(--amber-badge-text)]">{formData.language}</span>
                     </span>
                   )}
                 </div>
@@ -409,7 +409,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                           className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono transition border ${
                             isParentSelected
                               ? 'border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)] shadow-sm'
-                              : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                              : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                           }`}
                         >
                           <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)]" />
@@ -461,7 +461,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                           className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono transition border ${
                             isSubSelected
                               ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)] shadow-sm'
-                              : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                              : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                           }`}
                         >
                           <Tag className="h-3 w-3 opacity-60" />
@@ -487,7 +487,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                         className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono transition border ${
                           formData.language === 'Python-Flash'
                             ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold ring-1 ring-[var(--yellow-primary)] shadow-sm'
-                            : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                            : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                         }`}
                       >
                         <Tag className="h-3 w-3 opacity-60" />
@@ -499,7 +499,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   {/* Custom Sub-Type Input Builder */}
                   {isCustomSubtype && (
                     <div className="flex items-center space-x-2 pt-2 animate-in fade-in duration-150">
-                      <span className="rounded-lg bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] px-2.5 py-1.5 text-xs font-mono font-bold text-white shrink-0">
+                      <span className="rounded-lg bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] px-2.5 py-1.5 text-xs font-mono font-bold text-[var(--gh-text)] shrink-0">
                         {hierarchy.parent}-
                       </span>
                       <input
@@ -516,7 +516,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                             framework: val || formData.framework,
                           });
                         }}
-                        className="flex-1 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
+                        className="flex-1 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
                       />
                     </div>
                   )}
@@ -534,7 +534,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                       value={formData.language}
                       onChange={(e) => setFormData({ ...formData, language: e.target.value })}
                       placeholder="e.g. Python-Django"
-                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                     />
                   </div>
 
@@ -548,7 +548,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                       value={formData.framework}
                       onChange={(e) => setFormData({ ...formData, framework: e.target.value })}
                       placeholder="e.g. Django REST"
-                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -564,7 +564,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   required
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -577,7 +577,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   <select
                     value={formData.difficulty}
                     onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   >
                     <option value="BEGINNER">BEGINNER</option>
                     <option value="INTERMEDIATE">INTERMEDIATE</option>
@@ -598,7 +598,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                         estimatedTimeMinutes: parseInt(e.target.value, 10) || 45,
                       })
                     }
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   />
                 </div>
 
@@ -615,7 +615,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                         passingThresholdPercent: parseFloat(e.target.value) || 100,
                       })
                     }
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   />
                 </div>
 
@@ -632,7 +632,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                         aiRequestLimit: parseInt(e.target.value, 10) || 15,
                       })
                     }
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                   />
                 </div>
               </div>
@@ -646,7 +646,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   rows={4}
                   value={formData.instructions}
                   onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -659,7 +659,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   rows={2}
                   value={formData.publicTestInfo}
                   onChange={(e) => setFormData({ ...formData, publicTestInfo: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -674,7 +674,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   onChange={(e) =>
                     setFormData({ ...formData, aiTokenLimit: parseInt(e.target.value, 10) || 10000 })
                   }
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -687,7 +687,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   rows={4}
                   value={formData.hiddenTestSpecStr}
                   onChange={(e) => setFormData({ ...formData, hiddenTestSpecStr: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs font-mono text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                 />
               </div>
 
@@ -700,7 +700,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                     ) : (
                       <EyeOff className="h-4 w-4 text-[var(--gh-text-muted)]" />
                     )}
-                    <span className="text-xs font-bold text-white">
+                    <span className="text-xs font-bold text-[var(--gh-text)]">
                       {formData.isActive ? 'Active (Visible on Candidate Dashboard)' : 'Hidden (Staff Only)'}
                     </span>
                   </div>
@@ -716,7 +716,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
                   className={`rounded-xl px-3 py-1.5 text-xs font-bold font-mono transition active:scale-95 ${
                     formData.isActive
-                      ? 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-white'
+                      ? 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                       : 'border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)]'
                   }`}
                 >
@@ -737,7 +737,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                       type="button"
                       disabled={deleting}
                       onClick={handleDelete}
-                      className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-semibold text-[var(--gh-text-muted)] hover:text-white transition active:scale-95"
+                      className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-semibold text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition active:scale-95"
                     >
                       {deleting ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -753,7 +753,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2 text-xs font-medium text-[var(--gh-text-secondary)] hover:text-white transition active:scale-95"
+                    className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2 text-xs font-medium text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition active:scale-95"
                   >
                     Cancel
                   </button>

@@ -225,7 +225,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                 className={`flex items-center space-x-1.5 py-1 pr-2 rounded text-xs font-mono cursor-pointer transition select-none ${
                   isSelected
                     ? 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold'
-                    : 'text-[var(--gh-text-secondary)] hover:bg-[var(--gh-bg)] hover:text-white'
+                    : 'text-[var(--gh-text-secondary)] hover:bg-[var(--gh-bg)] hover:text-[var(--gh-text)]'
                 }`}
               >
                 {isDir ? (
@@ -270,7 +270,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
             loadTree();
           }
         }}
-        className="flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1 text-xs font-mono text-[var(--gh-text-secondary)] hover:border-[var(--yellow-primary)] hover:text-white transition"
+        className="flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1 text-xs font-mono text-[var(--gh-text-secondary)] hover:border-[var(--yellow-primary)] hover:text-[var(--gh-text)] transition"
       >
         <FolderTree className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
         <span>Inspect & Tree</span>
@@ -287,7 +287,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h2 className="text-base font-bold text-white tracking-tight">{repo.name}</h2>
+                    <h2 className="text-base font-bold text-[var(--gh-text)] tracking-tight">{repo.name}</h2>
                     <span className="rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2 py-0.5 text-[10px] font-mono text-[var(--gh-text-secondary)]">
                       {repo.language}
                     </span>
@@ -320,7 +320,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg p-1.5 text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg)] transition"
+                  className="rounded-lg p-1.5 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg)] transition"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -333,7 +333,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                 className={`px-6 py-2 text-xs font-mono flex items-center justify-between border-b ${
                   statusMessage.type === 'success'
                     ? 'bg-[var(--amber-badge-bg)] border-[var(--amber-badge-border)] text-[var(--yellow-bright)]'
-                    : 'bg-[var(--gh-bg)] border-[var(--gh-border)] text-white'
+                    : 'bg-[var(--gh-bg)] border-[var(--gh-border)] text-[var(--gh-text)]'
                 }`}
               >
                 <span>{statusMessage.text}</span>
@@ -353,8 +353,8 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                   onClick={() => setActiveTab('INSPECTION')}
                   className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition flex items-center space-x-2 ${
                     activeTab === 'INSPECTION'
-                      ? 'border-[var(--yellow-primary)] text-white'
-                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-white'
+                      ? 'border-[var(--yellow-primary)] text-[var(--yellow-bright)] font-bold'
+                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                   }`}
                 >
                   <FileCode2 className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
@@ -365,8 +365,8 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                   onClick={() => setActiveTab('VALIDATION')}
                   className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition flex items-center space-x-2 ${
                     activeTab === 'VALIDATION'
-                      ? 'border-[var(--yellow-primary)] text-white'
-                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-white'
+                      ? 'border-[var(--yellow-primary)] text-[var(--yellow-bright)] font-bold'
+                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                   }`}
                 >
                   <ShieldCheck className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
@@ -385,8 +385,8 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                   }}
                   className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition flex items-center space-x-2 ${
                     activeTab === 'EXPLORER'
-                      ? 'border-[var(--yellow-primary)] text-white'
-                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-white'
+                      ? 'border-[var(--yellow-primary)] text-[var(--yellow-bright)] font-bold'
+                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                   }`}
                 >
                   <FolderTree className="h-3.5 w-3.5 text-[var(--yellow-primary)]" />
@@ -400,8 +400,8 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                   onClick={() => setActiveTab('CONVERT')}
                   className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition flex items-center space-x-2 ${
                     activeTab === 'CONVERT'
-                      ? 'border-[var(--yellow-primary)] text-white'
-                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-white'
+                      ? 'border-[var(--yellow-primary)] text-[var(--yellow-bright)] font-bold'
+                      : 'border-transparent text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
                   }`}
                 >
                   <Zap className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
@@ -427,7 +427,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                   <button
                     onClick={handleImportClone}
                     disabled={isImporting}
-                    className="flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-1.5 text-xs font-mono font-medium text-[var(--gh-text-secondary)] hover:text-white hover:border-[var(--yellow-primary)] transition disabled:opacity-50"
+                    className="flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-1.5 text-xs font-mono font-medium text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)] transition disabled:opacity-50"
                   >
                     {isImporting ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -447,7 +447,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                 <div className="space-y-6 max-w-4xl">
                   {/* Summary Overview */}
                   <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-3">
-                    <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+                    <h3 className="text-sm font-bold text-[var(--gh-text)] flex items-center space-x-2">
                       <FileCode2 className="h-4 w-4 text-[var(--yellow-bright)]" />
                       <span>Repository Inspection & Architectural Profile</span>
                     </h3>
@@ -456,11 +456,11 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-xs">
                       <div className="rounded-lg bg-[var(--gh-bg)] p-2.5 border border-[var(--gh-border)]">
                         <span className="text-[10px] text-[var(--gh-text-muted)] block uppercase">Source Type</span>
-                        <span className="font-semibold text-white">{repo.sourceType}</span>
+                        <span className="font-semibold text-[var(--gh-text)]">{repo.sourceType}</span>
                       </div>
                       <div className="rounded-lg bg-[var(--gh-bg)] p-2.5 border border-[var(--gh-border)]">
                         <span className="text-[10px] text-[var(--gh-text-muted)] block uppercase">License</span>
-                        <span className="font-semibold text-white">{repo.license}</span>
+                        <span className="font-semibold text-[var(--gh-text)]">{repo.license}</span>
                       </div>
                       <div className="rounded-lg bg-[var(--gh-bg)] p-2.5 border border-[var(--gh-border)]">
                         <span className="text-[10px] text-[var(--gh-text-muted)] block uppercase">Commercial Use</span>
@@ -477,7 +477,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
 
                   {/* Bugs & Defect Profile */}
                   <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-3">
-                    <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider flex items-center space-x-2">
+                    <h4 className="text-xs font-bold text-[var(--gh-text)] uppercase font-mono tracking-wider flex items-center space-x-2">
                       <AlertTriangle className="h-3.5 w-3.5 text-[var(--yellow-primary)]" />
                       <span>Intentionally Introduced Bugs & Defect Scenarios</span>
                     </h4>
@@ -525,7 +525,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
 
                   {/* Commercial Risk & Recommendation */}
                   <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-3">
-                    <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider">
+                    <h4 className="text-xs font-bold text-[var(--gh-text)] uppercase font-mono tracking-wider">
                       Commercial Assessment Suitability & Staff Recommendation
                     </h4>
                     <div className="space-y-2 text-xs">
@@ -535,7 +535,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                       </div>
 
                       <div className="rounded-lg bg-[var(--gh-bg)] border border-[var(--gh-border)] p-3 text-[var(--gh-text-secondary)] leading-relaxed font-mono">
-                        <strong className="text-white block mb-1">Architect Recommendation:</strong>
+                        <strong className="text-[var(--gh-text)] block mb-1">Architect Recommendation:</strong>
                         {inspection.recommendation || 'Verified ready for test harness injection.'}
                       </div>
                     </div>
@@ -552,7 +552,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         <div className="flex items-center justify-between border-b border-[var(--gh-border)] pb-3">
                           <div className="flex items-center space-x-2">
                             <ShieldCheck className="h-5 w-5 text-[var(--yellow-bright)]" />
-                            <h3 className="text-sm font-bold text-white">Automated Compatibility Results</h3>
+                            <h3 className="text-sm font-bold text-[var(--gh-text)]">Automated Compatibility Results</h3>
                           </div>
                           <span className="text-[10px] font-mono text-[var(--gh-text-muted)]">
                             Validated: {new Date(validation.validatedAt).toLocaleString()}
@@ -576,14 +576,14 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                           </div>
                           <div className="rounded-lg bg-[var(--gh-bg)] p-3 border border-[var(--gh-border)]">
                             <span className="text-[10px] text-[var(--gh-text-muted)] block uppercase">Reproducibility</span>
-                            <span className="font-semibold text-white">{validation.reproducibilityRating}</span>
+                            <span className="font-semibold text-[var(--gh-text)]">{validation.reproducibilityRating}</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Runtimes Detected */}
                       <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 space-y-3">
-                        <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider">
+                        <h4 className="text-xs font-bold text-[var(--gh-text)] uppercase font-mono tracking-wider">
                           Detected Language & Runtime Environments
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -593,7 +593,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                               className="rounded-lg bg-[var(--gh-bg)] p-2.5 border border-[var(--gh-border)] flex items-center justify-between text-xs font-mono"
                             >
                               <div>
-                                <span className="font-bold text-white">{rt.name}</span>
+                                <span className="font-bold text-[var(--gh-text)]">{rt.name}</span>
                                 <span className="text-[10px] text-[var(--gh-text-muted)] block">{rt.version}</span>
                               </div>
                               <span className="rounded bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--amber-badge-text)] px-2 py-0.5 text-[10px] font-bold">
@@ -606,7 +606,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
 
                       {/* Security & Commercial Flags */}
                       <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 space-y-3">
-                        <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider">
+                        <h4 className="text-xs font-bold text-[var(--gh-text)] uppercase font-mono tracking-wider">
                           Security & Dependency Audit Flags
                         </h4>
                         {validation.securityAudit?.flaggedPatterns?.length > 0 ? (
@@ -635,7 +635,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         <ShieldCheck className="h-6 w-6 text-[var(--gh-text-muted)]" />
                       </div>
                       <div className="space-y-1">
-                        <h3 className="text-sm font-bold text-white">No Validation Run Yet</h3>
+                        <h3 className="text-sm font-bold text-[var(--gh-text)]">No Validation Run Yet</h3>
                         <p className="text-xs text-[var(--gh-text-secondary)] max-w-sm mx-auto">
                           Click below to execute the compatibility validator engine across package manifests, language runtimes, test frameworks, and sandbox constraints.
                         </p>
@@ -660,13 +660,13 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                       {/* Left: Tree Pane */}
                       <div className="md:col-span-4 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 flex flex-col overflow-hidden">
                         <div className="flex items-center justify-between border-b border-[var(--gh-border)] pb-2 mb-2 shrink-0">
-                          <span className="text-xs font-mono font-bold text-white flex items-center space-x-1.5">
+                          <span className="text-xs font-mono font-bold text-[var(--gh-text)] flex items-center space-x-1.5">
                             <FolderTree className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                             <span>Workspace Files</span>
                           </span>
                           <button
                             onClick={loadTree}
-                            className="text-[10px] font-mono text-[var(--gh-text-muted)] hover:text-white"
+                            className="text-[10px] font-mono text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]"
                           >
                             Refresh
                           </button>
@@ -745,7 +745,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         <Download className="h-6 w-6 text-[var(--yellow-bright)]" />
                       </div>
                       <div className="space-y-1">
-                        <h3 className="text-sm font-bold text-white">Repository Not Cloned Locally</h3>
+                        <h3 className="text-sm font-bold text-[var(--gh-text)]">Repository Not Cloned Locally</h3>
                         <p className="text-xs text-[var(--gh-text-secondary)] max-w-md mx-auto">
                           Clone this repository into the RepoHamster local developer workspace (<code className="text-[var(--yellow-bright)]">catalogue-sources/{repo.id}</code>) to preview directory trees, inspect source files, and test runtimes without modifying upstream GitHub.
                         </p>
@@ -772,7 +772,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         <span>Quality Gate: Not Ready For Testing</span>
                       </div>
                       <p className="text-[var(--amber-badge-text)] leading-relaxed">
-                        This repository is currently marked as <strong className="text-white">&quot;{repo.importStatus}&quot;</strong>.
+                        This repository is currently marked as <strong className="text-[var(--gh-text)]">&quot;{repo.importStatus}&quot;</strong>.
                         To protect candidate assessment integrity, only repositories marked <strong className="text-[var(--yellow-bright)]">READY_FOR_TESTING</strong> can be activated as candidate challenges.
                       </p>
                       <p className="text-[var(--gh-text-muted)] text-[11px]">
@@ -783,7 +783,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
 
                   <form onSubmit={handleConvert} className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 space-y-4">
                     <div className="border-b border-[var(--gh-border)] pb-3">
-                      <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+                      <h3 className="text-sm font-bold text-[var(--gh-text)] flex items-center space-x-2">
                         <Zap className="h-4 w-4 text-[var(--yellow-bright)]" />
                         <span>Publish Candidate Debugging Challenge</span>
                       </h3>
@@ -800,7 +800,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                           required
                           value={convertForm.title}
                           onChange={(e) => setConvertForm({ ...convertForm, title: e.target.value })}
-                          className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-semibold text-white focus:border-[var(--yellow-primary)] focus:outline-none"
+                          className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-semibold text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
                         />
                       </div>
 
@@ -873,7 +873,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                       <button
                         type="button"
                         onClick={() => setIsOpen(false)}
-                        className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-white transition"
+                        className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition"
                       >
                         Cancel
                       </button>

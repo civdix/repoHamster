@@ -138,7 +138,7 @@ export function HowToUseHamsterGuide() {
             className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition ${
               !viewAll
                 ? 'bg-[var(--yellow-primary)] text-black font-bold shadow-[var(--yellow-glow)]'
-                : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-white'
+                : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
             }`}
           >
             Step-by-Step Interactive View
@@ -148,7 +148,7 @@ export function HowToUseHamsterGuide() {
             className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition ${
               viewAll
                 ? 'bg-[var(--yellow-primary)] text-black font-bold shadow-[var(--yellow-glow)]'
-                : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-white'
+                : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
             }`}
           >
             View Full Visual Roadmap (All 5 Steps)
@@ -168,7 +168,7 @@ export function HowToUseHamsterGuide() {
                   onClick={() => setActiveStep(step.id)}
                   className={`relative flex items-center justify-center gap-2 p-3 rounded-xl text-left transition-all ${
                     isActive
-                      ? 'bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] text-white'
+                      ? 'bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] text-[var(--gh-text)]'
                       : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg)]/40'
                   }`}
                 >
@@ -229,7 +229,7 @@ export function HowToUseHamsterGuide() {
                     <button
                       disabled={activeStep === 1}
                       onClick={() => setActiveStep((prev) => Math.max(1, prev - 1))}
-                      className="p-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white disabled:opacity-30 disabled:pointer-events-none transition"
+                      className="p-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] disabled:opacity-30 disabled:pointer-events-none transition"
                     >
                       <ArrowLeft className="h-4 w-4" />
                     </button>
@@ -298,7 +298,7 @@ export function HowToUseHamsterGuide() {
                         <li className="flex items-start gap-2">
                           <span className="font-mono text-[var(--yellow-bright)] font-bold">1.</span>
                           <span>
-                            Click <strong className="text-white">Start Debugging</strong> on the top right
+                            Click <strong className="text-[var(--gh-text)]">Start Debugging</strong> on the top right
                             to sign in via GitHub or preview with a Project Review Passcode.
                           </span>
                         </li>
@@ -315,7 +315,7 @@ export function HowToUseHamsterGuide() {
                         <li className="flex items-start gap-2">
                           <span className="font-mono text-[var(--yellow-bright)] font-bold">3.</span>
                           <span>
-                            Open <strong className="text-white">Still & Form</strong> from the challenge list.
+                            Open <strong className="text-[var(--gh-text)]">Still & Form</strong> from the challenge list.
                           </span>
                         </li>
                       </ol>
@@ -342,7 +342,7 @@ export function HowToUseHamsterGuide() {
                           <span className="font-mono text-[var(--yellow-bright)] font-bold">3.</span>
                           <span>
                             Prefer your local editor? Click{' '}
-                            <strong className="text-white">VS Code Desktop</strong> or clone via git terminal.
+                            <strong className="text-[var(--gh-text)]">VS Code Desktop</strong> or clone via git terminal.
                           </span>
                         </li>
                       </ol>
@@ -405,7 +405,7 @@ export function HowToUseHamsterGuide() {
                           <span>
                             Open a Pull Request on GitHub targeting base{' '}
                             <code className="text-[var(--yellow-bright)] font-mono">repohamster/Still-Form</code> on{' '}
-                            <code className="text-white font-mono">main</code>.
+                            <code className="text-[var(--gh-text)] font-mono">main</code>.
                           </span>
                         </li>
                       </ol>
@@ -479,7 +479,7 @@ export function HowToUseHamsterGuide() {
                             </span>
                           </div>
 
-                          <h4 className="text-lg font-bold text-white mt-3">
+                          <h4 className="text-lg font-bold text-[var(--gh-text)] mt-3">
                             Still & Form: Commerce API & React Storefront
                           </h4>
                           <p className="text-xs text-[var(--gh-text-secondary)] mt-1 leading-relaxed">
@@ -527,7 +527,7 @@ export function HowToUseHamsterGuide() {
                               <Laptop className="h-5 w-5" />
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-white">
+                              <h4 className="text-sm font-bold text-[var(--gh-text)]">
                                 Instant Cloud Development Environment
                               </h4>
                               <p className="text-xs text-[var(--gh-text-muted)]">
@@ -543,7 +543,7 @@ export function HowToUseHamsterGuide() {
                             </div>
                             <div className="flex items-center justify-between text-xs font-mono">
                               <span className="text-[var(--gh-text-muted)]">Dependencies</span>
-                              <span className="text-white">Express 5 + React 19 + Vitest</span>
+                              <span className="text-[var(--gh-text)]">Express 5 + React 19 + Vitest</span>
                             </div>
                             <div className="flex items-center justify-between text-xs font-mono">
                               <span className="text-[var(--gh-text-muted)]">RAM / Cores</span>
@@ -578,7 +578,7 @@ export function HowToUseHamsterGuide() {
                             onClick={() =>
                               copyToClipboard('git clone https://github.com/repohamster/Still-Form.git')
                             }
-                            className="ml-2 text-[var(--yellow-bright)] hover:text-white transition flex items-center gap-1"
+                            className="ml-2 text-[var(--yellow-bright)] hover:text-[var(--gh-text)] transition flex items-center gap-1"
                           >
                             {copiedCmd ===
                             'git clone https://github.com/repohamster/Still-Form.git' ? (
@@ -607,7 +607,7 @@ export function HowToUseHamsterGuide() {
                             </button>
                           </div>
 
-                          <div className="text-white">
+                          <div className="text-[var(--gh-text)]">
                             $ <span className="text-[var(--yellow-bright)] font-bold">npm test</span>
                           </div>
                           <div className="text-[var(--gh-text-muted)]">RUN Vitest v2.1.8 in Still-Form</div>
@@ -681,7 +681,7 @@ export function HowToUseHamsterGuide() {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <GitPullRequest className="h-5 w-5 text-[var(--yellow-bright)]" />
-                              <span className="text-sm font-bold text-white">
+                              <span className="text-sm font-bold text-[var(--gh-text)]">
                                 Open a pull request
                               </span>
                             </div>
@@ -692,10 +692,10 @@ export function HowToUseHamsterGuide() {
                             <span className="text-[var(--gh-text-muted)]">base repository:</span>
                             <span className="text-[var(--yellow-bright)] font-bold">repohamster/Still-Form</span>
                             <span className="text-[var(--gh-text-muted)]">base:</span>
-                            <span className="text-white font-bold">main</span>
+                            <span className="text-[var(--gh-text)] font-bold">main</span>
                             <span className="text-[var(--gh-text-muted)]">←</span>
                             <span className="text-[var(--gh-text-muted)]">head repository:</span>
-                            <span className="text-white">your-user/Still-Form</span>
+                            <span className="text-[var(--gh-text)]">your-user/Still-Form</span>
                           </div>
 
                           <div className="flex items-center justify-end pt-2">
@@ -721,7 +721,7 @@ export function HowToUseHamsterGuide() {
                               </div>
                               <div>
                                 <div className="flex items-center gap-2">
-                                  <h4 className="text-base font-bold text-white">
+                                  <h4 className="text-base font-bold text-[var(--gh-text)]">
                                     Evaluation Passed
                                   </h4>
                                   <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)]">
@@ -787,7 +787,7 @@ export function HowToUseHamsterGuide() {
             <span>Ready to test your engineering mettle?</span>
           </div>
 
-          <h3 className="text-3xl sm:text-4xl font-extrabold text-white">
+          <h3 className="text-3xl sm:text-4xl font-extrabold text-[var(--gh-text)]">
             Start Your First Challenge in Under 60 Seconds
           </h3>
           <p className="text-sm text-[var(--gh-text-secondary)] leading-relaxed font-sans">
@@ -806,7 +806,7 @@ export function HowToUseHamsterGuide() {
 
             <Link
               href="/dashboard"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-white font-semibold text-sm transition"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] font-semibold text-sm transition"
             >
               <span>View Candidate Dashboard</span>
             </Link>

@@ -44,7 +44,7 @@ export function SyncReposButton() {
       <button
         onClick={handleSync}
         disabled={syncing}
-        className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3.5 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-white hover:border-[var(--yellow-primary)]/50 transition active:scale-95 disabled:opacity-50"
+        className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3.5 py-2 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 transition active:scale-95 disabled:opacity-50"
       >
         {syncing ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--yellow-bright)]" />
@@ -59,7 +59,7 @@ export function SyncReposButton() {
           className={`text-xs font-mono px-2.5 py-1 rounded-lg flex items-center space-x-1 animate-in fade-in ${
             status === 'success'
               ? 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]'
-              : 'bg-[var(--gh-bg)] text-white border border-[var(--gh-border)]'
+              : 'bg-[var(--gh-bg)] text-[var(--gh-text)] border border-[var(--gh-border)]'
           }`}
         >
           {status === 'success' ? (

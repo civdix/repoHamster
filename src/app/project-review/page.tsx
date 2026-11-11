@@ -83,7 +83,7 @@ function ProjectReviewForm() {
             <Eye className="h-3.5 w-3.5" />
             <span>Active Project Review Session</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--gh-text)]">
             Welcome, Project Reviewer
           </h1>
           <p className="mt-2 text-xs text-[var(--gh-text-secondary)] leading-relaxed">
@@ -102,7 +102,7 @@ function ProjectReviewForm() {
                 <Layers className="h-4 w-4" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-white group-hover:text-[var(--yellow-bright)] transition">Candidate Challenges &amp; Submissions</p>
+                <p className="text-xs font-bold text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)] transition">Candidate Challenges &amp; Submissions</p>
                 <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">Explore available debugging assignments &amp; workspace views</p>
               </div>
             </div>
@@ -118,7 +118,7 @@ function ProjectReviewForm() {
                 <LayoutDashboard className="h-4 w-4" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-white group-hover:text-[var(--yellow-bright)] transition">Staff Administration Console</p>
+                <p className="text-xs font-bold text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)] transition">Staff Administration Console</p>
                 <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">Inspect candidate evaluation matrix, overrides, &amp; metrics</p>
               </div>
             </div>
@@ -134,7 +134,7 @@ function ProjectReviewForm() {
                 <FolderGit2 className="h-4 w-4" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-white group-hover:text-[var(--yellow-bright)] transition">Repository Catalogue (10 Repos)</p>
+                <p className="text-xs font-bold text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)] transition">Repository Catalogue (10 Repos)</p>
                 <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">Review real-world challenges from @repohamster</p>
               </div>
             </div>
@@ -146,7 +146,7 @@ function ProjectReviewForm() {
         <div className="flex items-center justify-between pt-4 border-t border-[var(--gh-border)]">
           <button
             onClick={() => signOut({ callbackUrl: '/project-review' })}
-            className="inline-flex items-center space-x-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white font-mono transition"
+            className="inline-flex items-center space-x-1.5 text-xs text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] font-mono transition"
           >
             <LogOut className="h-3.5 w-3.5" />
             <span>End Review Session</span>
@@ -173,7 +173,7 @@ function ProjectReviewForm() {
           <Eye className="h-3.5 w-3.5" />
           <span>Project Review Passcode Access</span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center justify-center space-x-1.5">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--gh-text)] flex items-center justify-center space-x-1.5">
           <span>Repo</span>
           <span className="text-[var(--yellow-bright)]">Hamster</span>
         </h1>
@@ -187,7 +187,7 @@ function ProjectReviewForm() {
         <div className="mb-5 rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/60 p-3.5 text-xs text-[var(--amber-badge-text)] flex items-start space-x-2.5 animate-in fade-in duration-150">
           <AlertCircle className="h-4 w-4 text-[var(--yellow-bright)] shrink-0 mt-0.5" />
           <div className="flex-1 space-y-1">
-            <p className="font-semibold text-white">Access Denied</p>
+            <p className="font-semibold text-[var(--gh-text)]">Access Denied</p>
             <p className="text-[11px] leading-relaxed text-[var(--amber-badge-text)]">{errorMessage}</p>
           </div>
         </div>
@@ -217,7 +217,7 @@ function ProjectReviewForm() {
               placeholder="Enter passcode (e.g. repohamster2026)"
               required
               autoFocus
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-10 pr-4 py-3 text-xs text-white placeholder-[var(--gh-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--yellow-primary)] focus:border-[var(--yellow-primary)] font-mono transition"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-10 pr-4 py-3 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--yellow-primary)] focus:border-[var(--yellow-primary)] font-mono transition"
             />
           </div>
         </div>
@@ -256,7 +256,7 @@ function ProjectReviewForm() {
       <div className="mt-4 text-center">
         <Link
           href="/auth/signin"
-          className="text-[11px] font-mono text-[var(--gh-text-muted)] hover:text-white transition"
+          className="text-[11px] font-mono text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] transition"
         >
           ← Regular Developer / Admin Sign In
         </Link>
