@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, Check, ExternalLink, Share2 } from 'lucide-react';
+import { Copy, Check, Share2 } from 'lucide-react';
 
 interface ShareProfileBarProps {
   username: string;
@@ -109,16 +109,6 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
               </>
             )}
           </button>
-
-          <a
-            href={`/@${username}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center space-x-1 rounded-lg border border-card-border bg-card px-2.5 py-1.5 text-xs text-slate-300 hover:text-white hover:border-slate-600 transition"
-          >
-            <span>Preview</span>
-            <ExternalLink className="h-3 w-3" />
-          </a>
 
           <button
             onClick={shareOnTwitter}

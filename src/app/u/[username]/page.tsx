@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
@@ -148,6 +149,11 @@ export default async function PublicProfilePage({ params }: PublicProfileProps) 
 
   const displayHandle = user.username || user.githubUsername || rawUsername;
   const isOwner = session?.user?.email?.toLowerCase() === user.email.toLowerCase();
+
+  // If the visitor is the user themselves, show their personal profile view (/profile)
+  if (isOwner) {
+    redirect('/profile');
+  }
 
   // Statistics
   const completedAssignments = user.assignments.filter((a) => a.status === 'COMPLETED');
