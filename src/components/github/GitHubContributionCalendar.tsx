@@ -109,7 +109,7 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
       {/* Calendar Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-sm font-semibold text-white flex items-center space-x-2">
+          <h3 className="text-sm font-semibold text-[var(--gh-text)] flex items-center space-x-2">
             <CalendarIcon className="h-4 w-4 text-[var(--yellow-bright)]" />
             <span>
               {totalContributions.toLocaleString()} contributions in the last year
@@ -187,7 +187,7 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
             <Flame className="h-3.5 w-3.5" />
             <span>Active Contributor</span>
           </span>
-          <span className="flex items-center space-x-1.5 text-slate-300">
+          <span className="flex items-center space-x-1.5 text-[var(--gh-text-secondary)]">
             <Trophy className="h-3.5 w-3.5 text-[var(--yellow-primary)]" />
             <span>Daily streaks verified</span>
           </span>

@@ -42,7 +42,7 @@ export function LandingBentoGrid() {
           </div>
 
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-white font-sans tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[var(--gh-text)] font-sans tracking-tight">
               1-Click GitHub Codespaces Workspace
             </h3>
             <p className="mt-2 text-xs sm:text-sm text-[var(--gh-text-muted)] leading-relaxed max-w-2xl font-sans">
@@ -61,7 +61,7 @@ export function LandingBentoGrid() {
               </div>
               <span className="text-[var(--yellow-bright)]">branch: fix/race-condition</span>
             </div>
-            <div className="space-y-1 text-slate-300">
+            <div className="space-y-1 text-[var(--gh-text)]">
               <p className="text-[var(--gh-text-dim)]"># Clone fork, checkout atomic branch &amp; verify failure</p>
               <p>
                 <span className="text-[var(--yellow-bright)]">$</span> git checkout -b fix/solution
@@ -81,7 +81,7 @@ export function LandingBentoGrid() {
 
         <div className="mt-6 pt-4 border-t border-[var(--gh-border-subtle)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[var(--gh-text-muted)]">
           <div className="flex items-center space-x-3">
-            <span className="text-white font-bold">&lt;&gt; Code</span>
+            <span className="text-[var(--gh-text)] font-bold">&lt;&gt; Code</span>
             <span>•</span>
             <span>Local VS Code Protocol</span>
             <span>•</span>
@@ -109,7 +109,7 @@ export function LandingBentoGrid() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold text-white font-sans tracking-tight">
+            <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans tracking-tight">
               Hamster AI: Coaches, Never Cheats
             </h3>
             <p className="mt-1 text-xs text-[var(--gh-text-muted)] leading-relaxed">
@@ -125,7 +125,7 @@ export function LandingBentoGrid() {
                 Hamster Coder
               </span>
             </div>
-            <p className="text-slate-300 font-sans text-xs italic leading-relaxed">
+            <p className="text-[var(--gh-text-secondary)] font-sans text-xs italic leading-relaxed">
               &quot;Notice how the mutex is unlocked before writing to the dirty cache line. If two threads read simultaneously, what happens to the eviction cursor?&quot;
             </p>
           </div>
@@ -151,7 +151,7 @@ export function LandingBentoGrid() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold text-white font-sans tracking-tight">
+            <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans tracking-tight">
               Authoritative Hidden Test Harness
             </h3>
             <p className="mt-1 text-xs text-[var(--gh-text-muted)] leading-relaxed">
@@ -162,7 +162,7 @@ export function LandingBentoGrid() {
           {/* Verification breakdown */}
           <div className="space-y-2 font-mono text-xs">
             <div className="flex items-center justify-between rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2">
-              <span className="text-slate-300">Public Tests (Repo)</span>
+              <span className="text-[var(--gh-text)]">Public Tests (Repo)</span>
               <span className="text-[var(--yellow-bright)] font-bold">2/2 Passed</span>
             </div>
             <div className="flex items-center justify-between rounded-lg border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-2">
@@ -174,7 +174,7 @@ export function LandingBentoGrid() {
 
         <div className="mt-6 pt-3 border-t border-[var(--gh-border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--gh-text-muted)]">
           <span>Score: <strong className="text-[var(--yellow-bright)]">100%</strong></span>
-          <span className="text-white font-semibold">Race-Condition Proof</span>
+          <span className="text-[var(--gh-text)] font-semibold">Race-Condition Proof</span>
         </div>
       </div>
 
@@ -194,7 +194,7 @@ export function LandingBentoGrid() {
           </div>
 
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-white font-sans tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[var(--gh-text)] font-sans tracking-tight">
               Verified Developer Profile &amp; 52-Week Heatmap
             </h3>
             <p className="mt-1 text-xs sm:text-sm text-[var(--gh-text-muted)] leading-relaxed max-w-2xl">
@@ -205,7 +205,7 @@ export function LandingBentoGrid() {
           {/* Mini 52-Week Heatmap Mockup in Yellow + Dark */}
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-4 space-y-3">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-white font-bold flex items-center space-x-1.5">
+              <span className="text-[var(--gh-text)] font-bold flex items-center space-x-1.5">
                 <Flame className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                 <span>142 Contributions in the last year</span>
               </span>
@@ -244,7 +244,7 @@ export function LandingBentoGrid() {
             <span>•</span>
             <span>Python &amp; TypeScript Solves</span>
           </div>
-          <Link href="/profile" className="text-white hover:text-[var(--yellow-bright)] hover:underline flex items-center space-x-1">
+          <Link href="/profile" className="text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:underline flex items-center space-x-1">
             <span>Explore Developer Profiles</span>
             <ExternalLink className="h-3 w-3" />
           </Link>
@@ -262,7 +262,7 @@ export function LandingBentoGrid() {
           </span>
 
           <div>
-            <h3 className="text-xl font-bold text-white font-sans tracking-tight">
+            <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans tracking-tight">
               Real Multi-File Repositories, Not Leetcode
             </h3>
             <p className="mt-1 text-xs text-[var(--gh-text-muted)] leading-relaxed">
@@ -306,7 +306,7 @@ export function LandingBentoGrid() {
           </span>
 
           <div>
-            <h3 className="text-xl font-bold text-white font-sans tracking-tight">
+            <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans tracking-tight">
               Commit SHA Idempotency &amp; Instant Webhooks
             </h3>
             <p className="mt-1 text-xs text-[var(--gh-text-muted)] leading-relaxed">
@@ -316,7 +316,7 @@ export function LandingBentoGrid() {
 
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 space-y-2 font-mono text-xs">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-white font-bold">Webhook: pull_request.opened</span>
+              <span className="text-[var(--gh-text)] font-bold">Webhook: pull_request.opened</span>
               <span className="text-[var(--yellow-bright)]">200 OK (38ms)</span>
             </div>
             <p className="text-[11px] text-[var(--gh-text-muted)]">

@@ -24,8 +24,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] antialiased selection:bg-[var(--yellow-primary)]/30 selection:text-white flex flex-col">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.getItem('theme') === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
+      <body className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] antialiased selection:bg-[var(--yellow-primary)]/30 selection:text-inherit flex flex-col transition-colors duration-200">
         <SessionProvider>
           <Suspense fallback={null}>
             <NavigationProgressBar />
@@ -33,14 +48,14 @@ export default function RootLayout({
           <Navbar />
           <ReviewerModeBanner />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] py-8 text-xs text-[var(--gh-text-muted)]">
+          <footer className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] py-8 text-xs text-[var(--gh-text-muted)] transition-colors">
             <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--gh-bg)] border border-[var(--gh-border)]">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--gh-bg)] border border-[var(--gh-border)] shadow-sm">
                   <HamsterMascot variant="avatar" size={22} />
                 </div>
                 <div className="flex items-baseline space-x-2">
-                  <span className="font-bold text-white font-sans">
+                  <span className="font-bold text-[var(--gh-text)] font-sans">
                     Repo<span className="text-[var(--yellow-bright)]">Hamster</span>
                   </span>
                   <span className="text-[11px] text-[var(--gh-text-muted)] font-mono">— Break Bugs. Ship Fixes.</span>
@@ -49,7 +64,7 @@ export default function RootLayout({
 
               <div className="flex items-center space-x-6 text-[11px] font-mono text-[var(--gh-text-secondary)]">
                 <Link href="/dashboard" className="hover:text-[var(--yellow-bright)] transition">Challenges</Link>
-                <Link href="/admin" className="hover:text-white transition">Admin Console</Link>
+                <Link href="/admin" className="hover:text-[var(--gh-text)] transition">Admin Console</Link>
                 <span>Automated Hidden Test Engine</span>
                 <span className="text-[var(--gh-text-muted)]">© 2026 RepoHamster Inc.</span>
               </div>

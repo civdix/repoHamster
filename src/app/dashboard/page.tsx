@@ -173,7 +173,7 @@ export default async function CandidateDashboardPage() {
 
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-2xl font-bold tracking-tight text-white font-sans">
+                <h1 className="text-2xl font-bold tracking-tight text-[var(--gh-text)] font-sans">
                   Welcome back, {displayName}!
                 </h1>
                 <Link
@@ -209,7 +209,7 @@ export default async function CandidateDashboardPage() {
             <span>Total Challenges</span>
             <Layers className="h-4 w-4 text-[var(--gh-text-dim)]" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-white">{totalAssignments}</div>
+          <div className="mt-2 text-2xl font-bold text-[var(--gh-text)]">{totalAssignments}</div>
           <div className="mt-1 text-[11px] text-[var(--gh-text-muted)]">{availableCount} available to solve</div>
         </div>
 
@@ -237,7 +237,7 @@ export default async function CandidateDashboardPage() {
             <Bot className="h-4 w-4 text-[var(--yellow-bright)]" />
           </div>
           <div className="mt-2 flex items-baseline space-x-1.5">
-            <span className="text-2xl font-bold text-white">{remainingRequests}</span>
+            <span className="text-2xl font-bold text-[var(--gh-text)]">{remainingRequests}</span>
             <span className="text-xs text-[var(--gh-text-muted)]">/ {dailyRequestLimit} queries</span>
           </div>
           <div className="w-full h-1.5 rounded-full bg-[var(--gh-bg-tertiary)] overflow-hidden mt-1">
@@ -253,7 +253,7 @@ export default async function CandidateDashboardPage() {
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--gh-border-subtle)] pb-4">
           <div>
-            <h2 className="text-lg font-bold text-white flex items-center space-x-2 font-sans">
+            <h2 className="text-lg font-bold text-[var(--gh-text)] flex items-center space-x-2 font-sans">
               <BookMarked className="h-5 w-5 text-[var(--yellow-bright)]" />
               <span>Repository Debugging Challenges</span>
             </h2>
@@ -307,7 +307,7 @@ export default async function CandidateDashboardPage() {
                   </div>
 
                   {/* Title & Description */}
-                  <h3 className="font-bold text-white text-base group-hover:text-[var(--yellow-bright)] transition line-clamp-1">
+                  <h3 className="font-bold text-[var(--gh-text)] text-base group-hover:text-[var(--yellow-bright)] transition line-clamp-1">
                     {assignment.title}
                   </h3>
                   <p className="mt-1.5 text-xs text-[var(--gh-text-muted)] line-clamp-2 leading-relaxed">
@@ -318,7 +318,7 @@ export default async function CandidateDashboardPage() {
                   <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] font-mono text-[var(--gh-text-muted)] border-t border-[var(--gh-border-subtle)] pt-3">
                     <div className="flex items-center space-x-1.5">
                       <span className="h-2 w-2 rounded-full bg-[var(--yellow-bright)] inline-block" />
-                      <span className="truncate text-slate-300">{assignment.language} • {assignment.framework || 'Standard'}</span>
+                      <span className="truncate text-[var(--gh-text-secondary)]">{assignment.language} • {assignment.framework || 'Standard'}</span>
                     </div>
                     <div className="flex items-center space-x-1.5 justify-end">
                       <Timer className="h-3.5 w-3.5 text-[var(--gh-text-dim)]" />
@@ -362,7 +362,7 @@ export default async function CandidateDashboardPage() {
                     href={`/assignments/${assignment.slug}`}
                     className={`flex w-full items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-semibold transition active:scale-95 ${
                       isCompleted
-                        ? 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-slate-200 hover:text-white hover:border-[var(--yellow-primary)]/50'
+                        ? 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50'
                         : 'bg-[var(--yellow-button-bg)] text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] shadow-[var(--yellow-glow)] font-bold'
                     }`}
                   >
@@ -386,7 +386,7 @@ export default async function CandidateDashboardPage() {
       <section className="space-y-4">
         <div className="flex items-center justify-between border-b border-[var(--gh-border-subtle)] pb-4">
           <div>
-            <h2 className="text-lg font-bold text-white flex items-center space-x-2 font-sans">
+            <h2 className="text-lg font-bold text-[var(--gh-text)] flex items-center space-x-2 font-sans">
               <GitPullRequest className="h-5 w-5 text-[var(--yellow-bright)]" />
               <span>Recent Pull Requests &amp; Evaluations</span>
             </h2>
@@ -399,7 +399,7 @@ export default async function CandidateDashboardPage() {
         {recentSubmissions.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 p-10 text-center space-y-3">
             <HamsterMascot variant="mercy" size={80} className="mx-auto" />
-            <p className="text-sm font-semibold text-white">No Submissions Recorded Yet</p>
+            <p className="text-sm font-semibold text-[var(--gh-text)]">No Submissions Recorded Yet</p>
             <p className="text-xs text-[var(--gh-text-muted)] max-w-md mx-auto font-mono">
               Launch a challenge above via Codespaces, fix the bugs, and submit a PR to initiate automated test runner evaluations.
             </p>
@@ -429,7 +429,7 @@ export default async function CandidateDashboardPage() {
 
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="font-semibold text-white text-sm">
+                          <span className="font-semibold text-[var(--gh-text)] text-sm">
                             {sub.candidateAssignment.assignment.title}
                           </span>
                           {sub.pullRequest && (
@@ -475,7 +475,7 @@ export default async function CandidateDashboardPage() {
 
                       <Link
                         href={`/assignments/${sub.candidateAssignment.assignment.slug}`}
-                        className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text-muted)] hover:text-white transition"
+                        className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] transition"
                         title="View details"
                       >
                         <ChevronRight className="h-4 w-4" />

@@ -89,7 +89,7 @@ export function GitHubProfileSidebar({
         </div>
 
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white font-sans">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--gh-text)] font-sans">
             {displayName}
           </h1>
           <p className="text-sm font-mono text-[var(--yellow-bright)] font-semibold">
@@ -122,7 +122,7 @@ export function GitHubProfileSidebar({
           {isOwner ? (
             <Link
               href="/profile"
-              className="w-full flex items-center justify-center space-x-2 rounded-xl bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)] px-4 py-2 text-xs font-bold text-slate-200 hover:text-white hover:border-[var(--yellow-primary)]/60 transition active:scale-95 shadow-sm"
+              className="w-full flex items-center justify-center space-x-2 rounded-xl bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)] px-4 py-2 text-xs font-bold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95 shadow-sm"
             >
               <span>Edit Profile &amp; Handle</span>
             </Link>
@@ -133,7 +133,7 @@ export function GitHubProfileSidebar({
             className={`w-full flex items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 shadow-sm ${
               copied
                 ? 'bg-[var(--amber-badge-bg)] border border-[var(--yellow-bright)] text-[var(--amber-badge-text)] shadow-[var(--yellow-glow-lg)]'
-                : 'bg-[var(--yellow-primary)] hover:bg-[var(--yellow-bright)] text-slate-950 shadow-[var(--yellow-glow-lg)]'
+                : 'bg-[var(--yellow-primary)] hover:bg-[var(--yellow-bright)] text-[var(--yellow-button-text)] shadow-[var(--yellow-glow-lg)]'
             }`}
           >
             {copied ? (
@@ -154,7 +154,7 @@ export function GitHubProfileSidebar({
       {/* 2. Meta Info (GitHub style) */}
       <div className="space-y-2 text-xs font-mono text-[var(--gh-text-muted)] border-t border-[var(--gh-border-subtle)] pt-4">
         {user.githubUsername && (
-          <div className="flex items-center space-x-2 text-slate-300">
+          <div className="flex items-center space-x-2 text-[var(--gh-text-secondary)]">
             <ExternalLink className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
             <a
               href={`https://github.com/${user.githubUsername}`}
@@ -188,7 +188,7 @@ export function GitHubProfileSidebar({
               <Zap className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold text-white truncate">Bug Hunter</p>
+              <p className="text-[11px] font-bold text-[var(--gh-text)] truncate">Bug Hunter</p>
               <p className="text-[9px] font-mono text-[var(--amber-badge-text)] truncate">{stats?.solvedCount || 0} Solved</p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export function GitHubProfileSidebar({
               <Flame className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold text-white truncate">Pull Shark</p>
+              <p className="text-[11px] font-bold text-[var(--gh-text)] truncate">Pull Shark</p>
               <p className="text-[9px] font-mono text-[var(--amber-badge-text)] truncate">{stats?.submissionsCount || 0} PRs</p>
             </div>
           </div>

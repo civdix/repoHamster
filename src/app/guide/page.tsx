@@ -38,7 +38,7 @@ export default function GuidePage() {
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
             Documentation &amp; Reference
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 font-sans tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--gh-text)] mt-2 font-sans tracking-tight">
             The Complete Beginner&apos;s Playbook
           </h2>
           <p className="mt-3 text-xs sm:text-sm text-[var(--gh-text-muted)] leading-relaxed font-sans">
@@ -54,14 +54,14 @@ export default function GuidePage() {
               <Laptop className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white font-sans">
+              <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans">
                 1. Prerequisites &amp; Codespaces vs Local Setup
               </h3>
               <p className="text-xs text-[var(--gh-text-muted)] font-mono">Zero machine requirements with GitHub Codespaces</p>
             </div>
           </div>
 
-          <div className="text-sm text-slate-300 space-y-4 leading-relaxed font-sans">
+          <div className="text-sm text-[var(--gh-text)] space-y-4 leading-relaxed font-sans">
             <p>
               RepoHamster is designed so you can code directly from any device—even a Chromebook or tablet—using{' '}
               <strong className="text-[var(--yellow-bright)]">GitHub Codespaces</strong>. Every repository includes a{' '}
@@ -90,7 +90,7 @@ export default function GuidePage() {
                 </div>
                 <p className="text-xs text-[var(--gh-text-muted)] leading-relaxed">
                   Clone your fork locally:
-                  <code className="block mt-1 p-2 rounded bg-[var(--gh-bg-code)] text-slate-200 font-mono text-[11px] border border-[var(--gh-border)]">
+                  <code className="block mt-1 p-2 rounded bg-[var(--gh-bg-code)] text-[var(--gh-text)] font-mono text-[11px] border border-[var(--gh-border)]">
                     git clone https://github.com/repohamster/Still-Form.git
                   </code>
                   Ensure you have Node.js 20+ installed, run <code className="text-[var(--yellow-bright)] font-mono">npm install</code> and{' '}
@@ -108,14 +108,14 @@ export default function GuidePage() {
               <Code2 className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white font-sans">
+              <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans">
                 2. Anatomy of the Still &amp; Form Challenge
               </h3>
               <p className="text-xs text-[var(--gh-text-muted)] font-mono">What bugs are you tasked with fixing?</p>
             </div>
           </div>
 
-          <div className="text-sm text-slate-300 space-y-4 leading-relaxed font-sans">
+          <div className="text-sm text-[var(--gh-text)] space-y-4 leading-relaxed font-sans">
             <p>
               Still &amp; Form is a modern React 19 storefront paired with an Express 5 commerce API. It simulates a small-batch home goods business.
               The repository contains 3 critical problem areas:
@@ -166,33 +166,33 @@ export default function GuidePage() {
               <Shield className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white font-sans">
+              <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans">
                 3. How the Automated Evaluator Works
               </h3>
               <p className="text-xs text-[var(--gh-text-muted)] font-mono">Zero human intervention • HMAC-signed webhooks • Isolated sandbox</p>
             </div>
           </div>
 
-          <div className="text-sm text-slate-300 space-y-4 leading-relaxed font-sans">
+          <div className="text-sm text-[var(--gh-text)] space-y-4 leading-relaxed font-sans">
             <p>
               When you open a Pull Request targeting <code className="text-[var(--yellow-bright)] font-mono">repohamster/Still-Form:main</code>, here is what happens behind the scenes:
             </p>
 
             <ol className="list-decimal list-inside space-y-3 text-xs text-[var(--gh-text-muted)] font-sans">
               <li>
-                <strong className="text-white">GitHub Webhook Dispatch:</strong> GitHub signs the payload with our secret key and pings RepoHamster at <code className="text-[var(--yellow-bright)] font-mono">/api/webhooks/github</code>.
+                <strong className="text-[var(--gh-text)]">GitHub Webhook Dispatch:</strong> GitHub signs the payload with our secret key and pings RepoHamster at <code className="text-[var(--yellow-bright)] font-mono">/api/webhooks/github</code>.
               </li>
               <li>
-                <strong className="text-white">Sandbox Worker Spawn:</strong> An isolated test worker clones your exact PR commit SHA in a clean container with stripped environment variables and network egress restrictions.
+                <strong className="text-[var(--gh-text)]">Sandbox Worker Spawn:</strong> An isolated test worker clones your exact PR commit SHA in a clean container with stripped environment variables and network egress restrictions.
               </li>
               <li>
-                <strong className="text-white">Public Tests Execution:</strong> The runner executes all 4 public test suites to verify that standard behavior remains intact.
+                <strong className="text-[var(--gh-text)]">Public Tests Execution:</strong> The runner executes all 4 public test suites to verify that standard behavior remains intact.
               </li>
               <li>
-                <strong className="text-white">Authoritative Hidden Tests Execution:</strong> The runner injects our proprietary hidden assertions (verifying atomic cart bounds, concurrent checkout tokens, and coupon invariants).
+                <strong className="text-[var(--gh-text)]">Authoritative Hidden Tests Execution:</strong> The runner injects our proprietary hidden assertions (verifying atomic cart bounds, concurrent checkout tokens, and coupon invariants).
               </li>
               <li>
-                <strong className="text-white">Live Scorecard &amp; Profile Sync:</strong> If your code satisfies 100% of the assertions, the PR status is marked Passed, your scorecard updates with Grade A+, and the badge appears on your profile.
+                <strong className="text-[var(--gh-text)]">Live Scorecard &amp; Profile Sync:</strong> If your code satisfies 100% of the assertions, the PR status is marked Passed, your scorecard updates with Grade A+, and the badge appears on your profile.
               </li>
             </ol>
           </div>
@@ -205,16 +205,16 @@ export default function GuidePage() {
               <HelpCircle className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white font-sans">
+              <h3 className="text-xl font-bold text-[var(--gh-text)] font-sans">
                 4. Frequently Asked Questions by Beginners
               </h3>
               <p className="text-xs text-[var(--gh-text-muted)] font-mono">Common questions and troubleshooting</p>
             </div>
           </div>
 
-          <div className="space-y-4 text-xs font-sans text-slate-300">
+          <div className="space-y-4 text-xs font-sans text-[var(--gh-text)]">
             <div className="p-4 rounded-xl bg-[var(--gh-bg)] border border-[var(--gh-border)] space-y-1.5">
-              <h4 className="font-bold text-white text-sm">
+              <h4 className="font-bold text-[var(--gh-text)] text-sm">
                 Q: What if I don&apos;t have a GitHub Codespaces allowance?
               </h4>
               <p className="text-[var(--gh-text-muted)] leading-relaxed">
@@ -223,7 +223,7 @@ export default function GuidePage() {
             </div>
 
             <div className="p-4 rounded-xl bg-[var(--gh-bg)] border border-[var(--gh-border)] space-y-1.5">
-              <h4 className="font-bold text-white text-sm">
+              <h4 className="font-bold text-[var(--gh-text)] text-sm">
                 Q: Can I push multiple commits to improve my score?
               </h4>
               <p className="text-[var(--gh-text-muted)] leading-relaxed">
@@ -232,7 +232,7 @@ export default function GuidePage() {
             </div>
 
             <div className="p-4 rounded-xl bg-[var(--gh-bg)] border border-[var(--gh-border)] space-y-1.5">
-              <h4 className="font-bold text-white text-sm">
+              <h4 className="font-bold text-[var(--gh-text)] text-sm">
                 Q: Why did the Hamster AI Mentor refuse to write the code for me?
               </h4>
               <p className="text-[var(--gh-text-muted)] leading-relaxed">

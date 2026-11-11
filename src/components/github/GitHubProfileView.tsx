@@ -145,7 +145,7 @@ export function GitHubProfileView({
             <div className="space-y-6 animate-in fade-in duration-200">
               {/* Pinned Challenges Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-white flex items-center space-x-2">
+                <h2 className="text-sm font-semibold text-[var(--gh-text)] flex items-center space-x-2">
                   <BookMarked className="h-4 w-4 text-[var(--yellow-bright)]" />
                   <span>Pinned Coding Challenges</span>
                 </h2>
@@ -160,13 +160,13 @@ export function GitHubProfileView({
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)]">
                     <HamsterMascot variant="normal" size={40} />
                   </div>
-                  <h3 className="text-sm font-bold text-white">No Pinned Challenges Yet</h3>
+                  <h3 className="text-sm font-bold text-[var(--gh-text)]">No Pinned Challenges Yet</h3>
                   <p className="text-xs font-mono text-[var(--gh-text-muted)] max-w-sm mx-auto">
                     Candidate is currently gearing up to break and fix their first repository bug.
                   </p>
                   <Link
                     href="/dashboard"
-                    className="inline-flex items-center rounded-xl bg-[var(--yellow-primary)] px-4 py-2 text-xs font-bold text-slate-950 hover:bg-[var(--yellow-bright)] transition shadow-[var(--yellow-glow-lg)]"
+                    className="inline-flex items-center rounded-xl bg-[var(--yellow-primary)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-bright)] transition shadow-[var(--yellow-glow-lg)]"
                   >
                     Explore Challenges
                   </Link>
@@ -211,7 +211,7 @@ export function GitHubProfileView({
                         <CheckCircle2 className="h-4 w-4" />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-white">
+                        <p className="text-xs font-semibold text-[var(--gh-text)]">
                           Solved {completedAssignments.length} repository challenge{completedAssignments.length === 1 ? '' : 's'}
                         </p>
                         <p className="text-[11px] font-mono text-[var(--gh-text-muted)]">
@@ -231,7 +231,7 @@ export function GitHubProfileView({
                           <GitPullRequest className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-semibold text-white">
+                          <p className="text-xs font-semibold text-[var(--gh-text)]">
                             Opened {pullRequests.length} pull request{pullRequests.length === 1 ? '' : 's'} across repositories
                           </p>
                           <p className="text-[11px] font-mono text-[var(--gh-text-muted)]">
@@ -259,7 +259,7 @@ export function GitHubProfileView({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Find a challenge by title, language, or concept..."
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-10 pr-4 py-2.5 text-xs text-white placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none font-mono"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-10 pr-4 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none font-mono"
                 />
               </div>
 
@@ -298,7 +298,7 @@ export function GitHubProfileView({
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)]">
                     <GitPullRequest className="h-6 w-6 text-[var(--yellow-bright)]" />
                   </div>
-                  <h3 className="text-sm font-bold text-white">No Pull Requests Recorded</h3>
+                  <h3 className="text-sm font-bold text-[var(--gh-text)]">No Pull Requests Recorded</h3>
                   <p className="text-xs font-mono text-[var(--gh-text-muted)] max-w-sm mx-auto">
                     Submit code fixes through Codespaces or the PR modal to trigger automated test evaluations.
                   </p>
@@ -313,14 +313,14 @@ export function GitHubProfileView({
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center space-x-2">
-                            <span className="text-xs font-mono font-bold text-white">
+                            <span className="text-xs font-mono font-bold text-[var(--gh-text)]">
                               PR #{pr.prNumber}
                             </span>
                             <span
                               className={`rounded-full px-2 py-0.5 text-[10px] font-mono uppercase font-semibold ${
                                 pr.state === 'MERGED'
                                   ? 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)]'
-                                  : 'bg-[var(--gh-bg-tertiary)] text-slate-300 border border-[var(--gh-border)]'
+                                  : 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-muted)] border border-[var(--gh-border)]'
                               }`}
                             >
                               {pr.state}
@@ -363,7 +363,7 @@ export function GitHubProfileView({
                       <Zap className="h-6 w-6" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm">Bug Hunter</h4>
+                      <h4 className="font-bold text-[var(--gh-text)] text-sm">Bug Hunter</h4>
                       <p className="text-xs text-[var(--yellow-bright)] font-mono">Tier II Unlocked</p>
                     </div>
                   </div>
@@ -378,7 +378,7 @@ export function GitHubProfileView({
                       <Flame className="h-6 w-6" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm">Pull Shark</h4>
+                      <h4 className="font-bold text-[var(--gh-text)] text-sm">Pull Shark</h4>
                       <p className="text-xs text-[var(--yellow-bright)] font-mono">{pullRequests.length} Submissions</p>
                     </div>
                   </div>
@@ -393,7 +393,7 @@ export function GitHubProfileView({
                       <Award className="h-6 w-6" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm">Harness Master</h4>
+                      <h4 className="font-bold text-[var(--gh-text)] text-sm">Harness Master</h4>
                       <p className="text-xs text-[var(--yellow-bright)] font-mono">{passRate}% Pass Rate</p>
                     </div>
                   </div>
@@ -408,7 +408,7 @@ export function GitHubProfileView({
                       <CheckCircle2 className="h-6 w-6" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm">Socratic Integrity</h4>
+                      <h4 className="font-bold text-[var(--gh-text)] text-sm">Socratic Integrity</h4>
                       <p className="text-xs text-[var(--yellow-bright)] font-mono">AI Guardrails Adherent</p>
                     </div>
                   </div>

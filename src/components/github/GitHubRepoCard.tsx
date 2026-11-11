@@ -58,7 +58,7 @@ export function GitHubRepoCard({
           {/* Yellow Dot + Language */}
           <div className="flex items-center space-x-1.5">
             <span className="h-3 w-3 rounded-full bg-[var(--yellow-bright)] inline-block shadow-[0_0_5px_var(--yellow-glow)]" />
-            <span className="text-slate-300">{language || 'TypeScript'}</span>
+            <span className="text-[var(--gh-text-secondary)]">{language || 'TypeScript'}</span>
           </div>
 
           {/* Difficulty Tag (Variables) */}

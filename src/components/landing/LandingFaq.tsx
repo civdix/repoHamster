@@ -54,7 +54,7 @@ export function LandingFaq() {
           >
             <button
               onClick={() => toggle(i)}
-              className="flex w-full items-center justify-between p-4 sm:p-5 text-left text-sm font-semibold text-white focus:outline-none"
+              className="flex w-full items-center justify-between p-4 sm:p-5 text-left text-sm font-semibold text-[var(--gh-text)] focus:outline-none"
             >
               <span>{faq.question}</span>
               <ChevronDown
@@ -64,7 +64,7 @@ export function LandingFaq() {
               />
             </button>
             {isOpen && (
-              <div className="border-t border-[var(--gh-border-subtle)] bg-[var(--gh-bg)] p-4 sm:p-5 text-xs text-slate-300 leading-relaxed font-sans">
+              <div className="border-t border-[var(--gh-border-subtle)] bg-[var(--gh-bg)] p-4 sm:p-5 text-xs text-[var(--gh-text-secondary)] leading-relaxed font-sans">
                 {faq.answer}
               </div>
             )}

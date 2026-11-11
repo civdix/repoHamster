@@ -111,7 +111,7 @@ export default async function PublicProfilePage({ params }: PublicProfileProps) 
         <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-3xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] shadow-[var(--yellow-glow-lg)] mb-6 p-4">
           <HamsterMascot variant="mercy" size={80} />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2 font-mono">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--gh-text)] mb-2 font-mono">
           Developer Not Found
         </h1>
         <p className="text-xs sm:text-sm font-mono text-[var(--gh-text-muted)] mb-6 max-w-md mx-auto">
@@ -126,7 +126,7 @@ export default async function PublicProfilePage({ params }: PublicProfileProps) 
           </Link>
           <Link
             href="/"
-            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-semibold text-[var(--gh-text)] hover:text-white transition"
+            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-semibold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] transition"
           >
             Back to Home
           </Link>

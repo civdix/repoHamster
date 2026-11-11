@@ -22,7 +22,7 @@ export default async function AdminSettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-base font-bold text-white">System, AI & Runner Governance</h2>
+        <h2 className="text-base font-bold text-[var(--gh-text)]">System, AI & Runner Governance</h2>
         <p className="text-xs text-[var(--gh-text-secondary)]">
           Configure platform-wide limits, AI token allocations, passing thresholds, and webhook parameters.
         </p>

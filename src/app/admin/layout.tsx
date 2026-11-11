@@ -64,7 +64,7 @@ export default async function AdminLayout({
           </a>
           <Link
             href="/dashboard"
-            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono font-medium text-[var(--gh-text-secondary)] hover:text-white hover:border-[var(--gh-border-active)] transition"
+            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono font-medium text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border-active)] transition"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Candidate View</span>
@@ -76,28 +76,28 @@ export default async function AdminLayout({
       <div className="flex items-center space-x-2 overflow-x-auto border-b border-[var(--gh-border)]/60 pb-2">
         <Link
           href="/admin"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-white border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] hover:border-[var(--gh-border-active)] transition"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text)] border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] hover:border-[var(--gh-border-active)] transition"
         >
           <LayoutDashboard className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
           <span>Dashboard Overview</span>
         </Link>
         <Link
           href="/admin/catalogue"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-white hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
         >
           <FolderGit2 className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
           <span>Repository Catalogue (10)</span>
         </Link>
         <Link
           href="/admin/assignments"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-white hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
         >
           <Layers className="h-3.5 w-3.5 text-[var(--yellow-primary)]" />
           <span>Active Challenges</span>
         </Link>
         <Link
           href="/admin/settings"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-white hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
+          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
         >
           <Settings className="h-3.5 w-3.5 text-[var(--gh-text-muted)]" />
           <span>System & AI Settings</span>

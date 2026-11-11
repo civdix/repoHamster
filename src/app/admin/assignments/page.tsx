@@ -71,7 +71,7 @@ export default async function AdminAssignmentsPage() {
       {/* Header with Title & Action Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-bold text-white flex items-center space-x-2">
+          <h2 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
             <span>Debugging Assessment Repositories</span>
             <span className="rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-0.5 text-xs font-mono text-[var(--gh-text-secondary)]">
               {assignments.length} Total
@@ -92,7 +92,7 @@ export default async function AdminAssignmentsPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3.5">
           <span className="text-[11px] font-mono text-[var(--gh-text-muted)] block">Total Challenges</span>
-          <span className="text-xl font-bold font-mono text-white mt-1 block">{assignments.length}</span>
+          <span className="text-xl font-bold font-mono text-[var(--gh-text)] mt-1 block">{assignments.length}</span>
           <span className="text-[10px] text-[var(--gh-text-muted)] font-mono">Platform catalogue</span>
         </div>
 
@@ -116,7 +116,7 @@ export default async function AdminAssignmentsPage() {
 
         <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3.5">
           <span className="text-[11px] font-mono text-[var(--gh-text-muted)] block">Total Test Cases</span>
-          <span className="text-xl font-bold font-mono text-white mt-1 block">{totalTestsAcrossAll}</span>
+          <span className="text-xl font-bold font-mono text-[var(--gh-text)] mt-1 block">{totalTestsAcrossAll}</span>
           <span className="text-[10px] text-[var(--gh-text-muted)] font-mono">Across all test suites</span>
         </div>
       </div>

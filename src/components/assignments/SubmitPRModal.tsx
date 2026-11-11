@@ -175,7 +175,7 @@ export function SubmitPRModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center space-x-2 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-tertiary)] hover:border-[var(--yellow-primary)]/60 hover:text-white px-3.5 py-1.5 text-xs font-semibold text-[var(--gh-text-muted)] transition active:scale-95 shadow-sm"
+        className="flex items-center space-x-2 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-tertiary)] hover:border-[var(--yellow-primary)]/60 hover:text-[var(--gh-text)] px-3.5 py-1.5 text-xs font-semibold text-[var(--gh-text-muted)] transition active:scale-95 shadow-sm"
       >
         <GitPullRequest className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
         <span>Submit PR</span>
@@ -191,30 +191,30 @@ export function SubmitPRModal({
                   <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Submit Assessment Solution</h3>
+                  <h3 className="font-bold text-[var(--gh-text)] text-base">Submit Assessment Solution</h3>
                   <p className="text-xs text-[var(--gh-text-muted)]">Trigger isolated public and hidden test evaluation</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-tertiary)] transition"
+                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-tertiary)] transition"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Mode Tabs */}
-            <div className="mt-4 flex rounded-xl border border-card-border bg-[var(--gh-bg-code)] p-1 font-mono text-xs">
+            <div className="mt-4 flex rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-1 font-mono text-xs">
               <button
                 type="button"
                 onClick={() => setActiveTab('auto')}
                 className={`flex-1 flex items-center justify-center space-x-1.5 rounded-lg py-1.5 transition ${
                   activeTab === 'auto'
-                    ? 'bg-brand-purple text-white font-bold shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[var(--yellow-button-bg)] text-[var(--yellow-button-text)] font-bold shadow-sm'
+                    : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                 }`}
               >
-                <Sparkles className="h-3.5 w-3.5 text-brand-lime" />
+                <Sparkles className="h-3.5 w-3.5" />
                 <span>1-Click Auto PR &amp; Test</span>
               </button>
 
@@ -223,11 +223,11 @@ export function SubmitPRModal({
                 onClick={() => setActiveTab('manual')}
                 className={`flex-1 flex items-center justify-center space-x-1.5 rounded-lg py-1.5 transition ${
                   activeTab === 'manual'
-                    ? 'bg-card text-white font-bold border border-card-border shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[var(--gh-bg)] text-[var(--gh-text)] font-bold border border-[var(--gh-border)] shadow-sm'
+                    : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                 }`}
               >
-                <Sliders className="h-3.5 w-3.5 text-slate-400" />
+                <Sliders className="h-3.5 w-3.5 text-[var(--gh-text-dim)]" />
                 <span>Manual Runner</span>
               </button>
             </div>
@@ -235,24 +235,24 @@ export function SubmitPRModal({
             {/* Mode A: 1-Click Auto Open PR & Run Evaluation */}
             {activeTab === 'auto' && (
               <form onSubmit={handleAutoCreatePRAndEvaluate} className="mt-4 space-y-4">
-                <div className="rounded-xl border border-brand-purple/40 bg-purple-950/20 p-3 text-xs text-purple-200/90 font-mono space-y-1">
-                  <div className="flex items-center justify-between text-brand-lime font-bold">
+                <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-3 text-xs text-[var(--amber-badge-text)] font-mono space-y-1">
+                  <div className="flex items-center justify-between text-[var(--yellow-bright)] font-bold">
                     <span className="flex items-center space-x-1.5">
                       <Sparkles className="h-3.5 w-3.5" />
                       <span>Automatic Pull Request Engine</span>
                     </span>
                     {candidateGithubUsername && (
-                      <span className="text-[10px] text-purple-300">@{candidateGithubUsername}</span>
+                      <span className="text-[10px] text-[var(--amber-badge-text)]">@{candidateGithubUsername}</span>
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                  <p className="text-[11px] text-[var(--amber-badge-text)] leading-relaxed">
                     RepoHamster will automatically open a Pull Request from your fork on GitHub to the upstream challenge repository and execute the full public and authoritative hidden test suite.
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 font-mono flex items-center space-x-1">
-                    <GitBranch className="h-3 w-3 text-brand-lime" />
+                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono flex items-center space-x-1">
+                    <GitBranch className="h-3 w-3 text-[var(--yellow-bright)]" />
                     <span>Your Fork Branch Name</span>
                   </label>
                   <input
@@ -260,16 +260,16 @@ export function SubmitPRModal({
                     placeholder="main or fix/solution"
                     value={branchName}
                     onChange={(e) => setBranchName(e.target.value)}
-                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none"
                     required
                   />
-                  <span className="text-[10px] text-slate-500 font-mono mt-0.5 block">
-                    Branch on your fork containing the bugfix (default: <code className="text-slate-400">main</code>)
+                  <span className="text-[10px] text-[var(--gh-text-dim)] font-mono mt-0.5 block">
+                    Branch on your fork containing the bugfix (default: <code className="text-[var(--gh-text-muted)]">main</code>)
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 font-mono">
+                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
                     PR Title (Optional)
                   </label>
                   <input
@@ -277,7 +277,7 @@ export function SubmitPRModal({
                     placeholder="e.g. fix: resolve inventory race condition and rounding"
                     value={prTitle}
                     onChange={(e) => setPrTitle(e.target.value)}
-                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none"
                   />
                 </div>
 
@@ -319,18 +319,18 @@ export function SubmitPRModal({
                   </div>
                 )}
 
-                <div className="mt-6 flex items-center justify-end space-x-3 border-t border-card-border pt-4">
+                <div className="mt-6 flex items-center justify-end space-x-3 border-t border-[var(--gh-border)] pt-4">
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    className="rounded-xl border border-card-border bg-card px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+                    className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-medium text-[var(--gh-text)] hover:bg-[var(--gh-bg-tertiary)] transition"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={autoPrLoading}
-                    className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-brand-purple to-purple-600 px-5 py-2.5 text-xs font-bold text-white hover:brightness-110 transition disabled:opacity-50 shadow-glow-purple active:scale-95"
+                    className="flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-5 py-2.5 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition disabled:opacity-50 shadow-[var(--yellow-glow)] active:scale-95"
                   >
                     {autoPrLoading ? (
                       <>
@@ -339,7 +339,7 @@ export function SubmitPRModal({
                       </>
                     ) : (
                       <>
-                        <Send className="h-3.5 w-3.5 text-brand-lime" />
+                        <Send className="h-3.5 w-3.5" />
                         <span>🚀 1-Click Open PR &amp; Evaluate</span>
                       </>
                     )}
@@ -351,18 +351,18 @@ export function SubmitPRModal({
             {/* Mode B: Manual Evaluation Trigger */}
             {activeTab === 'manual' && (
               <form onSubmit={handleManualSubmit} className="mt-4 space-y-4">
-                <div className="rounded-xl border border-brand-purple/40 bg-purple-950/20 p-3 text-xs text-purple-200/90 font-mono space-y-1">
-                  <div className="flex items-center space-x-1.5 text-brand-lime font-bold">
+                <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-3 text-xs text-[var(--amber-badge-text)] font-mono space-y-1">
+                  <div className="flex items-center space-x-1.5 text-[var(--yellow-bright)] font-bold">
                     <CheckCircle2 className="h-3.5 w-3.5" />
                     <span>Sandbox Evaluation Runner Active</span>
                   </div>
-                  <p className="text-[11px] text-slate-300">
+                  <p className="text-[11px] text-[var(--amber-badge-text)]">
                     Directly execute the isolated test harness against a specific commit SHA or PR number.
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 font-mono">
+                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
                     Commit SHA (Leave blank to generate test run)
                   </label>
                   <input
@@ -370,13 +370,13 @@ export function SubmitPRModal({
                     placeholder="e.g. 7c34b10b892a4f4e56cd81234..."
                     value={commitSha}
                     onChange={(e) => setCommitSha(e.target.value)}
-                    className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1 font-mono">
+                    <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
                       GitHub PR Number
                     </label>
                     <input
@@ -384,12 +384,12 @@ export function SubmitPRModal({
                       placeholder="e.g. 1"
                       value={prNumber}
                       onChange={(e) => setPrNumber(e.target.value)}
-                      className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
+                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1 font-mono">
+                    <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
                       Commit Message
                     </label>
                     <input
@@ -397,7 +397,7 @@ export function SubmitPRModal({
                       placeholder="e.g. fix: resolve race condition"
                       value={commitMessage}
                       onChange={(e) => setCommitMessage(e.target.value)}
-                      className="w-full rounded-xl border border-card-border bg-card px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-brand-lime focus:outline-none"
+                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-dim)] focus:border-[var(--yellow-bright)] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -419,18 +419,18 @@ export function SubmitPRModal({
                   </div>
                 )}
 
-                <div className="mt-6 flex items-center justify-end space-x-3 border-t border-card-border pt-4">
+                <div className="mt-6 flex items-center justify-end space-x-3 border-t border-[var(--gh-border)] pt-4">
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    className="rounded-xl border border-card-border bg-card px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+                    className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-medium text-[var(--gh-text)] hover:bg-[var(--gh-bg-tertiary)] transition"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={manualLoading}
-                    className="flex items-center space-x-2 rounded-xl bg-brand-lime px-4 py-2 text-xs font-bold text-slate-950 hover:bg-brand-lime-light transition disabled:opacity-50 shadow-glow-lime active:scale-95"
+                    className="flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition disabled:opacity-50 shadow-[var(--yellow-glow)] active:scale-95"
                   >
                     {manualLoading ? (
                       <>

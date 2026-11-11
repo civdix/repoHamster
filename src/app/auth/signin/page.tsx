@@ -46,7 +46,7 @@ function SignInForm() {
         <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/50 shadow-[var(--yellow-glow)] mb-4 p-1">
           <HamsterMascot variant="normal" size={52} />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center justify-center space-x-1.5 font-sans">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--gh-text)] flex items-center justify-center space-x-1.5 font-sans">
           <span>Repo</span>
           <span className="text-[var(--yellow-bright)]">Hamster</span>
           <span className="text-[10px] rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-0.5 text-[var(--gh-text-muted)] font-mono">
@@ -74,11 +74,11 @@ function SignInForm() {
         <button
           onClick={handleGitHubSignIn}
           disabled={loading !== null}
-          className="flex w-full items-center justify-center space-x-3 rounded-xl bg-white px-4 py-3.5 text-xs font-bold text-slate-950 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-[var(--yellow-bright)] disabled:opacity-60 shadow-md active:scale-[0.98]"
+          className="flex w-full items-center justify-center space-x-3 rounded-xl bg-[var(--gh-text)] px-4 py-3.5 text-xs font-bold text-[var(--gh-bg)] transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--yellow-bright)] disabled:opacity-60 shadow-md active:scale-[0.98]"
         >
           {loading === 'github' ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin text-slate-950" />
+              <Loader2 className="h-4 w-4 animate-spin text-[var(--gh-bg)]" />
               <span>Redirecting to GitHub...</span>
             </>
           ) : (
@@ -100,7 +100,7 @@ function SignInForm() {
                 <Eye className="h-3.5 w-3.5" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-200 group-hover:text-[var(--yellow-bright)] transition">
+                <p className="text-xs font-semibold text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)] transition">
                   Have a Project Review Passcode?
                 </p>
                 <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">

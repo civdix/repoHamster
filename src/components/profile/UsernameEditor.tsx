@@ -60,7 +60,7 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
                 value={username}
                 onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                 placeholder="choose-unique-username"
-                className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-7 pr-3 py-1.5 text-xs font-mono text-white focus:border-[var(--yellow-bright)] focus:outline-none"
+                className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-7 pr-3 py-1.5 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-bright)] focus:outline-none"
               />
             </div>
 
@@ -81,7 +81,7 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
                   setIsEditing(false);
                   setError(null);
                 }}
-                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white"
+                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]"
               >
                 Cancel
               </button>
@@ -114,7 +114,7 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
 
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center space-x-1 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1 text-[11px] font-mono text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--yellow-primary)]/50 transition active:scale-95"
+            className="flex items-center space-x-1 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1 text-[11px] font-mono text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 transition active:scale-95"
           >
             <Edit2 className="h-3 w-3" />
             <span>Change Handle</span>
@@ -133,7 +133,7 @@ export function UsernameEditor({ initialUsername, userId }: UsernameEditorProps)
       <div className="text-[10px] font-mono text-[var(--gh-text-dim)] flex items-center space-x-1">
         <span>System ID:</span>
         <code className="text-[var(--gh-text-muted)] select-all">{userId}</code>
-        <span className="text-slate-600">• Permanent Identity</span>
+        <span className="text-[var(--gh-text-dim)]">• Permanent Identity</span>
       </div>
     </div>
   );

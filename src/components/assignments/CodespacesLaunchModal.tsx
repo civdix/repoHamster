@@ -215,7 +215,7 @@ export function CodespacesLaunchModal({
     <>
       <button
         onClick={handleOpenModal}
-        className="flex items-center space-x-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-slate-950 px-3.5 py-1.5 text-xs font-extrabold transition shadow-[0_0_15px_rgba(234,179,8,0.25)] active:scale-95"
+        className="flex items-center space-x-2 rounded-lg bg-[var(--yellow-button-bg)] hover:bg-[var(--yellow-button-hover)] text-[var(--yellow-button-text)] px-3.5 py-1.5 text-xs font-extrabold transition shadow-[var(--yellow-glow)] active:scale-95"
       >
         <Terminal className="h-3.5 w-3.5 stroke-[2.5]" />
         <span>&lt;&gt; Code</span>
@@ -232,42 +232,42 @@ export function CodespacesLaunchModal({
                   <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Launch Assessment Workspace</h3>
+                  <h3 className="font-bold text-[var(--gh-text)] text-base">Launch Assessment Workspace</h3>
                   <p className="text-xs text-[var(--gh-text-muted)] font-mono">{cleanUrl}</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-tertiary)] transition"
+                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-tertiary)] transition"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* AI Integrity & Guardrails Notice (Yellow + Dark) */}
-            <div className="mt-4 rounded-xl border border-yellow-700/50 bg-yellow-950/30 p-3 flex items-start space-x-3 text-xs">
-              <ShieldAlert className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
+            <div className="mt-4 rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-3 flex items-start space-x-3 text-xs">
+              <ShieldAlert className="h-4 w-4 text-[var(--yellow-bright)] shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-semibold text-yellow-300">Assessment AI Integrity Guardrails:</span>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Inline code autocompletion (Copilot Ghost Text) is disabled in this environment for assessment integrity. You can ask for conceptual debugging help using the <strong className="text-yellow-400">RepoHamster AI Mentor</strong>. All questions asked to the AI are recorded in your assessment audit log for reviewer evaluation.
+                <span className="font-semibold text-[var(--amber-badge-text)]">Assessment AI Integrity Guardrails:</span>
+                <p className="text-[var(--amber-badge-text)] text-[11px] leading-relaxed">
+                  Inline code autocompletion (Copilot Ghost Text) is disabled in this environment for assessment integrity. You can ask for conceptual debugging help using the <strong className="text-[var(--yellow-bright)]">RepoHamster AI Mentor</strong>. All questions asked to the AI are recorded in your assessment audit log for reviewer evaluation.
                 </p>
               </div>
             </div>
 
             {/* Missing Codespace Permission Callout */}
             {missingScope && (
-              <div className="mt-4 rounded-xl border border-amber-600/50 bg-amber-950/30 p-3.5 space-y-2 text-xs">
-                <div className="flex items-center space-x-2 text-amber-300 font-bold font-mono">
-                  <AlertTriangle className="h-4 w-4 text-amber-400" />
+              <div className="mt-4 rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-3.5 space-y-2 text-xs">
+                <div className="flex items-center space-x-2 text-[var(--amber-badge-text)] font-bold font-mono">
+                  <AlertTriangle className="h-4 w-4 text-[var(--yellow-bright)]" />
                   <span>Codespace Permission Required</span>
                 </div>
-                <p className="text-slate-300 text-[11px]">
+                <p className="text-[var(--amber-badge-text)] text-[11px]">
                   Your GitHub session needs authorization to manage Codespaces. Click below to grant Codespace permissions.
                 </p>
                 <button
                   onClick={() => signIn('github', { callbackUrl: window.location.href })}
-                  className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-slate-950 hover:bg-amber-400 transition"
+                  className="rounded-lg bg-[var(--yellow-button-bg)] px-3 py-1.5 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition"
                 >
                   Authorize GitHub Codespaces Permission
                 </button>
@@ -311,7 +311,7 @@ export function CodespacesLaunchModal({
                     <div className="flex flex-wrap items-center gap-2 pt-2">
                       <button
                         onClick={() => signIn('github', { callbackUrl: window.location.href })}
-                        className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-slate-950 hover:bg-amber-400 transition"
+                        className="rounded-lg bg-[var(--yellow-button-bg)] px-3 py-1.5 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition"
                       >
                         Re-Authenticate with GitHub (Authorize Codespaces)
                       </button>
@@ -319,7 +319,7 @@ export function CodespacesLaunchModal({
                         href={defaultCodespacesUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded-lg border border-card-border bg-[var(--gh-bg-darkest)] px-3 py-1.5 text-xs text-slate-300 hover:text-white transition"
+                        className="rounded-lg border border-card-border bg-[var(--gh-bg-darkest)] px-3 py-1.5 text-xs text-slate-300 hover:text-[var(--gh-text)] transition"
                       >
                         Launch Fallback Wizard (codespaces.new)
                       </a>

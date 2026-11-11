@@ -33,7 +33,7 @@ export default async function AdminCataloguePage() {
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-bold text-white flex items-center space-x-2">
+          <h2 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
             <FolderGit2 className="h-4 w-4 text-[var(--yellow-bright)]" />
             <span>Public Repository Catalogue</span>
           </h2>
@@ -47,7 +47,7 @@ export default async function AdminCataloguePage() {
       <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 p-4 text-xs font-mono text-[var(--amber-badge-text)] flex items-start space-x-3">
         <Info className="h-4 w-4 text-[var(--yellow-bright)] shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-bold text-white">Temporary Development & Assessment Integration Phase</p>
+          <p className="font-bold text-[var(--gh-text)]">Temporary Development & Assessment Integration Phase</p>
           <p className="text-[var(--gh-text-secondary)] leading-relaxed text-[11px]">
             Repositories below were inspected across codebases, defects, test harnesses, and commercial licenses. Repositories marked{' '}
             <span className="text-[var(--yellow-bright)] font-bold">READY_FOR_TESTING</span> can be cloned into isolated local workspaces and published as active candidate assessment challenges.
@@ -62,7 +62,7 @@ export default async function AdminCataloguePage() {
             <span className="text-[11px] font-mono uppercase">Catalogue Repos</span>
             <FolderGit2 className="h-4 w-4 text-[var(--yellow-bright)]" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">{repositories.length}</div>
+          <div className="text-2xl font-bold font-mono text-[var(--gh-text)]">{repositories.length}</div>
           <div className="text-[10px] text-[var(--gh-text-muted)] font-mono">10 Multi-Stack Sources</div>
         </div>
 
@@ -89,7 +89,7 @@ export default async function AdminCataloguePage() {
             <span className="text-[11px] font-mono uppercase">Cloned Locally</span>
             <Sparkles className="h-4 w-4 text-[var(--yellow-bright)]" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">{clonedCount}</div>
+          <div className="text-2xl font-bold font-mono text-[var(--gh-text)]">{clonedCount}</div>
           <div className="text-[10px] text-[var(--gh-text-muted)] font-mono">In catalogue-sources/</div>
         </div>
       </div>

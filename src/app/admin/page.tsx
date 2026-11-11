@@ -102,7 +102,7 @@ export default async function AdminOverviewPage({
         <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 p-4 text-xs font-mono text-[var(--amber-badge-text)] flex items-start space-x-3">
           <AlertCircle className="h-4 w-4 text-[var(--yellow-bright)] shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-bold text-white">Database Synchronization Notice</p>
+            <p className="font-bold text-[var(--gh-text)]">Database Synchronization Notice</p>
             <p className="text-[var(--amber-badge-text)]">{dbError}</p>
             <p className="text-[var(--gh-text-muted)] text-[11px]">Run <code>npm run db:push</code> and <code>npm run db:seed</code> on your server to sync tables.</p>
           </div>
@@ -167,7 +167,7 @@ export default async function AdminOverviewPage({
             <Webhook className="h-4 w-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-white">GitHub Webhook & Codespaces Engine Active</h4>
+            <h4 className="text-xs font-bold text-[var(--gh-text)]">GitHub Webhook & Codespaces Engine Active</h4>
             <p className="text-[11px] text-[var(--gh-text-secondary)] font-mono">
               Payload URL: <code className="text-[var(--yellow-bright)] bg-[var(--yellow-primary)]/15 border border-[var(--yellow-primary)]/25 px-1 py-0.5 rounded font-mono">/api/webhooks/github</code> • HMAC SHA-256 Enabled
             </p>
@@ -184,7 +184,7 @@ export default async function AdminOverviewPage({
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-bold text-white">Registered Candidates ({candidates.length})</h2>
+            <h2 className="text-base font-bold text-[var(--gh-text)]">Registered Candidates ({candidates.length})</h2>
             <p className="text-xs text-[var(--gh-text-secondary)]">
               Click a candidate to inspect their submitted PRs, commit SHAs, test results, and AI queries.
             </p>
@@ -197,7 +197,7 @@ export default async function AdminOverviewPage({
               name="q"
               defaultValue={query}
               placeholder="Search by name, email, or GitHub..."
-              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-3 py-1.5 text-xs text-white placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-3 py-1.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"
             />
           </form>
         </div>
@@ -229,7 +229,7 @@ export default async function AdminOverviewPage({
                           className="h-7 w-7 rounded-full ring-1 ring-[var(--gh-border)]"
                         />
                         <div>
-                          <p className="font-semibold text-white">{candidate.name || 'Candidate'}</p>
+                          <p className="font-semibold text-[var(--gh-text)]">{candidate.name || 'Candidate'}</p>
                           <p className="text-[11px] font-mono text-[var(--gh-text-muted)]">@{candidate.githubUsername || 'candidate'}</p>
                         </div>
                       </div>
@@ -269,7 +269,7 @@ export default async function AdminOverviewPage({
       {/* Recent Submissions & Evaluations Audit Trail */}
       <section className="space-y-4">
         <div>
-          <h2 className="text-base font-bold text-white">Submissions & Test Execution Stream</h2>
+          <h2 className="text-base font-bold text-[var(--gh-text)]">Submissions & Test Execution Stream</h2>
           <p className="text-xs text-[var(--gh-text-secondary)]">
             Real-time evaluation outcomes with administrative override controls.
           </p>
@@ -317,7 +317,7 @@ export default async function AdminOverviewPage({
                     </td>
 
                     <td className="px-4 py-3.5">
-                      <p className="font-medium text-white">{candidate.name}</p>
+                      <p className="font-medium text-[var(--gh-text)]">{candidate.name}</p>
                       <p className="text-[11px] font-mono text-[var(--gh-text-muted)]">@{candidate.githubUsername}</p>
                     </td>
 

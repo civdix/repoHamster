@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { Code2, Shield, User, LogOut, CheckCircle2, BookOpen, Eye } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -24,7 +25,7 @@ export function Navbar() {
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <span className="font-bold tracking-tight text-white text-lg font-sans">
+                <span className="font-bold tracking-tight text-[var(--gh-text)] text-lg font-sans">
                   Repo<span className="text-[var(--yellow-bright)]">Hamster</span>
                 </span>
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)] animate-pulse" />
@@ -42,7 +43,7 @@ export function Navbar() {
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 pathname === '/dashboard' || pathname?.startsWith('/assignments')
                   ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] border border-[var(--gh-border)]'
-                  : 'text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-secondary)]/60'
+                  : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)]/60'
               }`}
             >
               <Code2 className="h-4 w-4" />
@@ -54,7 +55,7 @@ export function Navbar() {
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 pathname === '/guide'
                   ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] border border-[var(--gh-border)]'
-                  : 'text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-secondary)]/60'
+                  : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)]/60'
               }`}
             >
               <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
@@ -104,7 +105,7 @@ export function Navbar() {
 
               <Link
                 href="/profile"
-                className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 hover:text-white transition active:scale-95 group"
+                className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 hover:text-[var(--yellow-bright)] transition active:scale-95 group"
                 title="View Coding Profile"
               >
                 {session.user.image ? (
@@ -119,7 +120,7 @@ export function Navbar() {
                   </div>
                 )}
                 <div className="hidden sm:block text-left">
-                  <p className="font-semibold text-white truncate max-w-[120px]">{session.user.name || 'Developer'}</p>
+                  <p className="font-semibold text-[var(--gh-text)] truncate max-w-[120px]">{session.user.name || 'Developer'}</p>
                   <p className="text-[10px] text-[var(--yellow-bright)] font-mono">
                     @{((session.user as any).username || (session.user as any).githubUsername || 'coder')}
                   </p>
@@ -144,6 +145,9 @@ export function Navbar() {
               </Link>
             </div>
           )}
+
+          {/* Theme Switcher Toggle (Default White / Dark) */}
+          <ThemeToggle />
         </div>
       </div>
     </header>

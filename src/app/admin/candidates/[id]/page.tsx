@@ -85,7 +85,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
             />
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-2xl font-bold text-white">{candidate.name || 'Candidate'}</h1>
+                <h1 className="text-2xl font-bold text-[var(--gh-text)]">{candidate.name || 'Candidate'}</h1>
                 <span className="rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-0.5 text-xs font-mono text-[var(--gh-text-secondary)]">
                   @{candidate.githubUsername || 'candidate'}
                 </span>
@@ -108,7 +108,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
             </div>
             <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 text-center min-w-[100px]">
               <p className="text-[10px] text-[var(--gh-text-muted)] uppercase">Total Tokens</p>
-              <p className="text-xl font-bold text-white">{totalTokens.toLocaleString()}</p>
+              <p className="text-xl font-bold text-[var(--gh-text)]">{totalTokens.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
 
       {/* Assigned Challenges & Submissions Breakdown */}
       <section className="space-y-4">
-        <h2 className="text-base font-bold text-white">Assigned Challenges & Evaluations</h2>
+        <h2 className="text-base font-bold text-[var(--gh-text)]">Assigned Challenges & Evaluations</h2>
 
         {candidate.assignments.length === 0 ? (
           <div className="rounded-xl border border-dashed border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/40 p-8 text-center text-xs text-[var(--gh-text-muted)] space-y-2">
@@ -139,7 +139,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--gh-border)] pb-3 gap-2">
                     <div>
                       <div className="flex items-center space-x-2">
-                        <h3 className="font-bold text-white text-base">{ca.assignment.title}</h3>
+                        <h3 className="font-bold text-[var(--gh-text)] text-base">{ca.assignment.title}</h3>
                         <span className="rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2 py-0.5 text-[10px] font-mono text-[var(--gh-text-secondary)]">
                           {ca.assignment.language} • {ca.assignment.framework}
                         </span>
@@ -177,7 +177,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-xs font-mono">
                         <span className="text-[var(--gh-text-muted)]">
-                          Commit: <code className="text-white">{latestSub.commitSha.slice(0, 7)}</code>
+                          Commit: <code className="text-[var(--gh-text)]">{latestSub.commitSha.slice(0, 7)}</code>
                           {latestSub.pullRequest && (
                             <a
                               href={latestSub.pullRequest.prUrl}
@@ -243,7 +243,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-white flex items-center space-x-2">
+            <h2 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
               <Bot className="h-4 w-4 text-[var(--yellow-bright)]" />
               <span>AI Assistance Interaction History</span>
             </h2>
@@ -268,7 +268,7 @@ export default async function CandidateInspectorPage({ params }: Props) {
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center space-x-2">
                       <Bot className="h-4 w-4 text-[var(--yellow-bright)]" />
-                      <span className="font-semibold text-white">
+                      <span className="font-semibold text-[var(--gh-text)]">
                         {usage.assignment?.title || 'General Inquest'}
                       </span>
                     </div>

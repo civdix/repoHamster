@@ -34,15 +34,47 @@ export default async function HomePage() {
   const session = await getServerSession(authOptions);
 
   let assignments: any[] = [];
+  let vishakhaUser: { name: string | null; avatarUrl: string | null } | null = null;
+  let civdixUser: { name: string | null; avatarUrl: string | null } | null = null;
+
   try {
-    assignments = await prisma.assignment.findMany({
-      where: { isActive: true },
-      take: 6,
-      orderBy: { createdAt: 'asc' },
-    });
+    const [fetchedAssignments, u1, u2] = await Promise.all([
+      prisma.assignment.findMany({
+        where: { isActive: true },
+        take: 6,
+        orderBy: { createdAt: 'asc' },
+      }),
+      prisma.user.findFirst({
+        where: {
+          OR: [
+            { username: { contains: 'vishakha', mode: 'insensitive' } },
+            { name: { contains: 'vishakha', mode: 'insensitive' } },
+            { email: { contains: 'vishakha', mode: 'insensitive' } },
+          ],
+        },
+        select: { name: true, avatarUrl: true },
+      }),
+      prisma.user.findFirst({
+        where: {
+          OR: [
+            { username: { contains: 'civdix', mode: 'insensitive' } },
+            { name: { contains: 'civdix', mode: 'insensitive' } },
+          ],
+        },
+        select: { name: true, avatarUrl: true },
+      }),
+    ]);
+    assignments = fetchedAssignments;
+    vishakhaUser = u1;
+    civdixUser = u2;
   } catch (err) {
-    // fallback
+    // fallback gracefully
   }
+
+  const vishakhaAvatar =
+    vishakhaUser?.avatarUrl || 'https://avatars.githubusercontent.com/u/184405638?v=4';
+  const civdixAvatar =
+    civdixUser?.avatarUrl || 'https://avatars.githubusercontent.com/u/113282955?v=4';
 
   return (
     <div className="relative overflow-hidden bg-dev-grid text-[var(--gh-text)] min-h-screen">
@@ -63,7 +95,7 @@ export default async function HomePage() {
           </div>
 
           {/* Main Headline (Yellow + Dark) */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-sans">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--gh-text)] leading-[1.1] font-sans">
             The Code Has Bugs.{' '}
             <span className="text-[var(--yellow-bright)] drop-shadow-[0_0_25px_var(--yellow-glow)]">
               Let&apos;s Find Them.
@@ -89,7 +121,7 @@ export default async function HomePage() {
                 </Link>
                 <Link
                   href="/guide"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-6 py-3.5 text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-white transition active:scale-95"
+                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-6 py-3.5 text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-[var(--yellow-bright)]" />
                   <span>How to Use Guide</span>
@@ -106,7 +138,7 @@ export default async function HomePage() {
                 </Link>
                 <Link
                   href="/guide"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-6 py-3.5 text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-white transition active:scale-95"
+                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-6 py-3.5 text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-[var(--yellow-bright)]" />
                   <span>How to Use Guide</span>
@@ -141,7 +173,7 @@ export default async function HomePage() {
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
             Platform Architecture &amp; Capabilities
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--gh-text)] tracking-tight">
             Engineered Like GitHub. Built for Craft.
           </h2>
           <p className="text-xs sm:text-sm text-[var(--gh-text-muted)] leading-relaxed">
@@ -160,7 +192,7 @@ export default async function HomePage() {
             <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
               Curriculum Catalog
             </span>
-            <h2 className="text-3xl font-extrabold text-white mt-1">Explore Debugging Challenges</h2>
+            <h2 className="text-3xl font-extrabold text-[var(--gh-text)] mt-1">Explore Debugging Challenges</h2>
             <p className="mt-1.5 text-xs sm:text-sm text-[var(--gh-text-muted)] max-w-xl">
               Each repository represents a real production bug or vulnerability. Pass all hidden assertions to prove mastery.
             </p>
@@ -168,7 +200,7 @@ export default async function HomePage() {
 
           <Link
             href="/dashboard"
-            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:border-[var(--yellow-primary)]/50 transition"
+            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-semibold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50 transition"
           >
             <span>View All Challenges</span>
             <ArrowRight className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
@@ -197,7 +229,7 @@ export default async function HomePage() {
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
             Developer Experience
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--gh-text)]">
             Built for Engineers Who Care About Craft
           </h2>
           <p className="text-xs sm:text-sm text-[var(--gh-text-muted)]">
@@ -206,56 +238,80 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm">
+          {/* Card 1: Vishakha Chaudhary */}
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
             <div className="flex items-center space-x-1 text-[var(--yellow-bright)]">
               {'★'.repeat(5)}
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed italic">
-              &quot;The Codespaces integration is seamless. I didn&apos;t have to spend 2 hours configuring local Go and Python runtimes; I clicked launch, reproduced the race condition, and opened a PR.&quot;
+            <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed italic">
+              &quot;The instant 1-Click Codespaces setup is incredible. I didn&apos;t waste hours configuring runtimes; within 30 seconds I had the codebase running, traced the concurrency race condition, used Hamster AI for Socratic invariant hints, and shipped a passing PR.&quot;
             </p>
-            <div className="flex items-center space-x-3 pt-2 border-t border-[var(--gh-border-subtle)]">
-              <div className="h-8 w-8 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center font-bold text-xs text-[var(--amber-badge-text)]">
-                SC
-              </div>
+            <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={vishakhaAvatar}
+                alt="Vishakha Chaudhary"
+                className="h-10 w-10 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
+              />
               <div>
-                <p className="text-xs font-semibold text-white">Sarah Connor</p>
-                <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">Senior Distributed Systems Engineer</p>
+                <p className="text-xs font-bold text-[var(--gh-text)] flex items-center space-x-1">
+                  <span>Vishakha Chaudhary</span>
+                  <span className="text-[10px] text-[var(--yellow-bright)]">✓</span>
+                </p>
+                <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">
+                  @vishakhaa05 • Full-Stack Engineer
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm">
+          {/* Card 2: Shivam Dixit (civdix) */}
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
             <div className="flex items-center space-x-1 text-[var(--yellow-bright)]">
               {'★'.repeat(5)}
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed italic">
-              &quot;Finally an assessment platform that evaluates real engineering judgment. The hidden test suite caught a subtle edge case in our rate limiter that traditional tests completely missed.&quot;
+            <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed italic">
+              &quot;RepoHamster mirrors real-life software engineering far better than leetcode puzzles. The hidden test harnesses catch actual production edge cases, memory leaks, and rate-limiting bugs that standard unit tests overlook.&quot;
             </p>
-            <div className="flex items-center space-x-3 pt-2 border-t border-[var(--gh-border-subtle)]">
-              <div className="h-8 w-8 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center font-bold text-xs text-[var(--amber-badge-text)]">
-                AC
-              </div>
+            <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={civdixAvatar}
+                alt="Shivam Dixit"
+                className="h-10 w-10 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
+              />
               <div>
-                <p className="text-xs font-semibold text-white">Alex Chen</p>
-                <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">Full-Stack Architect</p>
+                <p className="text-xs font-bold text-[var(--gh-text)] flex items-center space-x-1">
+                  <span>Shivam Dixit</span>
+                  <span className="text-[10px] text-[var(--yellow-bright)]">✓</span>
+                </p>
+                <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">
+                  @civdix • Core Systems &amp; Backend
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm">
+          {/* Card 3: Anonymous Review */}
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
             <div className="flex items-center space-x-1 text-[var(--yellow-bright)]">
               {'★'.repeat(5)}
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed italic">
-              &quot;The developer profile and 52-week contribution calendar give me complete visibility into how engineers think, their commit history, test results, and their AI queries.&quot;
+            <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed italic">
+              &quot;The developer profile and 52-week streak calendar give genuine proof-of-work. In tech hiring, seeing a candidate systematically isolate regressions, review CI logs, and commit clean fixes is 10x more informative than any synthetic whiteboard interview.&quot;
             </p>
-            <div className="flex items-center space-x-3 pt-2 border-t border-[var(--gh-border-subtle)]">
-              <div className="h-8 w-8 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center font-bold text-xs text-[var(--amber-badge-text)]">
-                MV
+            <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
+              <div className="h-10 w-10 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center p-1.5 shadow-sm">
+                <HamsterMascot variant="normal" size={24} />
               </div>
               <div>
-                <p className="text-xs font-semibold text-white">Marcus Vance</p>
-                <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">VP of Engineering</p>
+                <p className="text-xs font-bold text-[var(--gh-text)] flex items-center space-x-1">
+                  <span>Verified Engineer</span>
+                  <span className="text-[10px] text-[var(--yellow-bright)]">✓</span>
+                </p>
+                <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">
+                  @anonymous • Staff Infrastructure (FAANG)
+                </p>
               </div>
             </div>
           </div>
@@ -268,7 +324,7 @@ export default async function HomePage() {
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
             Got Questions?
           </span>
-          <h2 className="text-3xl font-extrabold text-white">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-extrabold text-[var(--gh-text)]">Frequently Asked Questions</h2>
         </div>
 
         <LandingFaq />
@@ -281,10 +337,10 @@ export default async function HomePage() {
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--gh-bg-secondary)] border border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] p-1">
               <HamsterMascot variant="normal" size={44} />
             </div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight font-sans">
+            <h2 className="text-3xl font-extrabold text-[var(--gh-text)] tracking-tight font-sans">
               Ready to break bugs and ship fixes?
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+            <p className="text-xs sm:text-sm text-[var(--gh-text-secondary)] leading-relaxed font-sans">
               Sign in with your GitHub account, launch Codespaces in seconds, and prove your real-world debugging prowess with RepoHamster.
             </p>
             <div className="pt-2">

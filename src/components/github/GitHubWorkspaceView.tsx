@@ -110,7 +110,7 @@ export function GitHubWorkspaceView({
                   <FileCode className="h-5 w-5" />
                 </span>
                 <div>
-                  <h1 className="text-base font-bold text-white font-mono">
+                  <h1 className="text-base font-bold text-[var(--gh-text)] font-mono">
                     {assignment.title}
                   </h1>
                   <p className="text-xs text-[var(--gh-text-muted)] font-mono mt-0.5">
@@ -132,7 +132,7 @@ export function GitHubWorkspaceView({
             {/* GitHub README Box Layout */}
             <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-sm">
               <div className="border-b border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-slate-200">
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-[var(--gh-text)]">
                   <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
                   <span>README.md</span>
                 </div>
@@ -141,7 +141,7 @@ export function GitHubWorkspaceView({
                 </span>
               </div>
 
-              <div className="p-6 text-slate-300 leading-relaxed font-sans prose prose-invert max-w-none">
+              <div className="p-6 text-[var(--gh-text)] leading-relaxed font-sans max-w-none">
                 <MarkdownRenderer content={assignment.instructions || assignment.description} />
               </div>
             </div>
@@ -153,7 +153,7 @@ export function GitHubWorkspaceView({
                   <Terminal className="h-4 w-4" />
                   <span>Public Test Cases (Included in Repository)</span>
                 </h3>
-                <p className="text-xs text-slate-300 font-mono leading-relaxed">
+                <p className="text-xs text-[var(--gh-text-secondary)] font-mono leading-relaxed">
                   {assignment.publicTestInfo}
                 </p>
               </div>
@@ -167,7 +167,7 @@ export function GitHubWorkspaceView({
             <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-6 space-y-6">
               <div className="flex items-center justify-between border-b border-[var(--gh-border-subtle)] pb-4">
                 <div>
-                  <h3 className="text-base font-bold text-white flex items-center space-x-2">
+                  <h3 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
                     <CheckCircle2 className="h-5 w-5 text-[var(--yellow-bright)]" />
                     <span>Automated Evaluation Harness</span>
                   </h3>
@@ -195,7 +195,7 @@ export function GitHubWorkspaceView({
                   <div className="grid grid-cols-3 gap-3 font-mono">
                     <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 text-center">
                       <p className="text-[11px] text-[var(--gh-text-muted)] uppercase">Total Tests</p>
-                      <p className="text-2xl font-bold text-white mt-1">{latestEvaluation.totalTests}</p>
+                      <p className="text-2xl font-bold text-[var(--gh-text)] mt-1">{latestEvaluation.totalTests}</p>
                     </div>
                     <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] p-4 text-center">
                       <p className="text-[11px] text-[var(--amber-badge-text)] uppercase">Passed</p>
@@ -213,7 +213,7 @@ export function GitHubWorkspaceView({
                       <HamsterMascot variant="normal" size={56} />
                       <div>
                         <h4 className="text-sm font-bold text-[var(--amber-badge-text)]">All Tests Passed! 🎉</h4>
-                        <p className="text-xs text-slate-300 font-mono mt-0.5">
+                        <p className="text-xs text-[var(--amber-badge-text)] font-mono mt-0.5">
                           Both public testcases and isolated hidden harness assertions passed with flying colors.
                         </p>
                       </div>
@@ -223,7 +223,7 @@ export function GitHubWorkspaceView({
                       <HamsterMascot variant="angry" size={56} />
                       <div>
                         <h4 className="text-sm font-bold text-[var(--yellow-bright)]">Assertions Failed</h4>
-                        <p className="text-xs text-slate-300 font-mono mt-0.5">
+                        <p className="text-xs text-[var(--amber-badge-text)] font-mono mt-0.5">
                           The hamster found failing assertions in your patch. Check the test logs below to debug!
                         </p>
                       </div>
@@ -248,7 +248,7 @@ export function GitHubWorkspaceView({
                               ) : (
                                 <AlertTriangle className="h-4 w-4 text-[var(--yellow-primary)] shrink-0" />
                               )}
-                              <span className="text-slate-200 truncate">{t.testName}</span>
+                              <span className="text-[var(--gh-text)] truncate">{t.testName}</span>
                             </div>
                             <span className="text-[var(--gh-text-dim)] text-[11px] shrink-0">{t.executionTimeMs}ms</span>
                           </div>
@@ -260,7 +260,7 @@ export function GitHubWorkspaceView({
                   {/* Hidden Test Suite Status */}
                   <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-1">
                     <div className="flex items-center justify-between font-mono text-xs">
-                      <span className="text-slate-300 font-semibold">Hidden Test Suite (Adversarial Edge Cases):</span>
+                      <span className="text-[var(--gh-text)] font-semibold">Hidden Test Suite (Adversarial Edge Cases):</span>
                       <span className="text-[var(--yellow-bright)] font-bold">
                         {hiddenPassCount}/{hiddenTotalCount} Passed
                       </span>
@@ -286,7 +286,7 @@ export function GitHubWorkspaceView({
                 <div className="rounded-xl border border-dashed border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 p-10 text-center space-y-4">
                   <HamsterMascot variant="mercy" size={72} className="mx-auto" />
                   <div>
-                    <h4 className="text-sm font-bold text-white">No Evaluation Triggered Yet</h4>
+                    <h4 className="text-sm font-bold text-[var(--gh-text)]">No Evaluation Triggered Yet</h4>
                     <p className="text-xs font-mono text-[var(--gh-text-muted)] max-w-md mx-auto mt-1">
                       Launch Codespaces via the <strong className="text-[var(--yellow-bright)]">&lt;&gt; Code</strong> button above, apply your fix, and submit a PR to initiate the runner.
                     </p>
@@ -311,7 +311,7 @@ export function GitHubWorkspaceView({
             <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-6 space-y-4">
               <div className="flex items-center justify-between border-b border-[var(--gh-border-subtle)] pb-4">
                 <div>
-                  <h3 className="text-base font-bold text-white flex items-center space-x-2">
+                  <h3 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
                     <GitPullRequest className="h-5 w-5 text-[var(--yellow-bright)]" />
                     <span>Pull Request Submissions</span>
                   </h3>
@@ -338,7 +338,7 @@ export function GitHubWorkspaceView({
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center space-x-2">
-                            <span className="text-xs font-mono font-bold text-white">
+                            <span className="text-xs font-mono font-bold text-[var(--gh-text)]">
                               Commit: {sub.commitSha.slice(0, 7)}
                             </span>
                             <span
@@ -362,7 +362,7 @@ export function GitHubWorkspaceView({
                           href={sub.pullRequest.prUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-[var(--yellow-bright)] hover:text-white hover:border-[var(--yellow-primary)]/60 transition flex items-center space-x-1"
+                          className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-[var(--yellow-bright)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 transition flex items-center space-x-1"
                         >
                           <span>View on GitHub</span>
                         </a>
@@ -373,7 +373,7 @@ export function GitHubWorkspaceView({
               ) : (
                 <div className="rounded-xl border border-dashed border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 p-8 text-center space-y-2">
                   <HamsterMascot variant="normal" size={52} className="mx-auto" />
-                  <p className="text-xs font-medium text-slate-200">No PRs submitted yet</p>
+                  <p className="text-xs font-medium text-[var(--gh-text-secondary)]">No PRs submitted yet</p>
                   <p className="text-[11px] font-mono text-[var(--gh-text-muted)]">
                     Once you push your code to your GitHub fork or click &quot;Submit PR&quot;, your submission will appear here.
                   </p>
@@ -387,11 +387,11 @@ export function GitHubWorkspaceView({
         {activeTab === 'guardrails' && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-6 space-y-4">
-              <h3 className="text-base font-bold text-white flex items-center space-x-2">
+              <h3 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
                 <ShieldCheck className="h-5 w-5 text-[var(--yellow-bright)]" />
                 <span>RepoHamster AI Guardrails &amp; Socratic Policy</span>
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed font-mono">
+              <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed font-mono">
                 To guarantee assessment integrity, all AI interactions are bounded to platform queries, repo access instructions, and testcase verification.
               </p>
 
@@ -400,7 +400,7 @@ export function GitHubWorkspaceView({
                   <h4 className="text-xs font-mono font-bold text-[var(--yellow-bright)] uppercase">
                     Controlled Socratic Tutoring
                   </h4>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed">
                     Hamster AI points out architectural invariants, concurrency race patterns, and testing boundaries without leaking complete solution code.
                   </p>
                 </div>
@@ -409,7 +409,7 @@ export function GitHubWorkspaceView({
                   <h4 className="text-xs font-mono font-bold text-[var(--yellow-bright)] uppercase">
                     Zero Full-Codebase Token Burn
                   </h4>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed">
                     The platform never indexes or leaks private production files into open LLM training pipelines, keeping token costs minimal.
                   </p>
                 </div>

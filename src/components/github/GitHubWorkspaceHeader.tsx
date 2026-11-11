@@ -66,7 +66,7 @@ export function GitHubWorkspaceHeader({
             <div className="flex items-baseline space-x-1.5 text-base sm:text-lg min-w-0">
               <span className="text-[var(--gh-text-muted)] font-mono">repohamster</span>
               <span className="text-[var(--gh-text-dim)]">/</span>
-              <span className="font-bold text-white truncate font-mono">
+              <span className="font-bold text-[var(--gh-text)] truncate font-mono">
                 {assignment.slug}
               </span>
             </div>
@@ -94,7 +94,7 @@ export function GitHubWorkspaceHeader({
               className={`flex items-center space-x-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${
                 starred
                   ? 'border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] shadow-[var(--yellow-glow)]'
-                  : 'border-[var(--gh-border)] bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--gh-border-subtle)]'
+                  : 'border-[var(--gh-border)] bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border-subtle)]'
               }`}
             >
               <Star className={`h-3.5 w-3.5 ${starred ? 'fill-[var(--yellow-bright)] text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />
@@ -128,8 +128,8 @@ export function GitHubWorkspaceHeader({
             onClick={() => onTabChange('code')}
             className={`flex items-center space-x-2 py-2.5 px-2 border-b-2 text-xs sm:text-sm font-medium transition whitespace-nowrap ${
               activeTab === 'code'
-                ? 'border-[var(--yellow-bright)] text-white font-semibold'
-                : 'border-transparent text-[var(--gh-text-muted)] hover:text-slate-200 hover:border-[var(--gh-border)]'
+                ? 'border-[var(--yellow-bright)] text-[var(--gh-text)] font-semibold'
+                : 'border-transparent text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border)]'
             }`}
           >
             <Code2 className={`h-4 w-4 ${activeTab === 'code' ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />
@@ -140,8 +140,8 @@ export function GitHubWorkspaceHeader({
             onClick={() => onTabChange('tests')}
             className={`flex items-center space-x-2 py-2.5 px-2 border-b-2 text-xs sm:text-sm font-medium transition whitespace-nowrap ${
               activeTab === 'tests'
-                ? 'border-[var(--yellow-bright)] text-white font-semibold'
-                : 'border-transparent text-[var(--gh-text-muted)] hover:text-slate-200 hover:border-[var(--gh-border)]'
+                ? 'border-[var(--yellow-bright)] text-[var(--gh-text)] font-semibold'
+                : 'border-transparent text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border)]'
             }`}
           >
             <CheckCircle2 className={`h-4 w-4 ${activeTab === 'tests' ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />
@@ -152,8 +152,8 @@ export function GitHubWorkspaceHeader({
             onClick={() => onTabChange('pull-requests')}
             className={`flex items-center space-x-2 py-2.5 px-2 border-b-2 text-xs sm:text-sm font-medium transition whitespace-nowrap ${
               activeTab === 'pull-requests'
-                ? 'border-[var(--yellow-bright)] text-white font-semibold'
-                : 'border-transparent text-[var(--gh-text-muted)] hover:text-slate-200 hover:border-[var(--gh-border)]'
+                ? 'border-[var(--yellow-bright)] text-[var(--gh-text)] font-semibold'
+                : 'border-transparent text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border)]'
             }`}
           >
             <GitPullRequest className={`h-4 w-4 ${activeTab === 'pull-requests' ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />
@@ -164,8 +164,8 @@ export function GitHubWorkspaceHeader({
             onClick={() => onTabChange('guardrails')}
             className={`flex items-center space-x-2 py-2.5 px-2 border-b-2 text-xs sm:text-sm font-medium transition whitespace-nowrap ${
               activeTab === 'guardrails'
-                ? 'border-[var(--yellow-bright)] text-white font-semibold'
-                : 'border-transparent text-[var(--gh-text-muted)] hover:text-slate-200 hover:border-[var(--gh-border)]'
+                ? 'border-[var(--yellow-bright)] text-[var(--gh-text)] font-semibold'
+                : 'border-transparent text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border)]'
             }`}
           >
             <ShieldCheck className={`h-4 w-4 ${activeTab === 'guardrails' ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />

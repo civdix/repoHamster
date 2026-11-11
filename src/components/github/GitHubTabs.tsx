@@ -53,8 +53,8 @@ export function GitHubTabs({ activeTab, onTabChange, counts }: GitHubTabsProps) 
               onClick={() => onTabChange(tab.id)}
               className={`flex items-center space-x-2 py-3 px-3 border-b-2 text-xs sm:text-sm font-medium transition whitespace-nowrap active:scale-95 ${
                 isActive
-                  ? 'border-[var(--yellow-bright)] text-white font-semibold'
-                  : 'border-transparent text-[var(--gh-text-muted)] hover:text-slate-200 hover:border-slate-600'
+                  ? 'border-[var(--yellow-bright)] text-[var(--gh-text)] font-semibold'
+                  : 'border-transparent text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--gh-border)]'
               }`}
             >
               <Icon className={`h-4 w-4 ${isActive ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />

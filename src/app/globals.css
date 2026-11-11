@@ -4,9 +4,76 @@
 
 :root {
   /* ==========================================================================
-     GitHub Yellow + Dark Theme Design System Variables
+     GitHub Design System Variables - DEFAULT WHITE BACKGROUND
      ========================================================================== */
   
+  /* Canvas & Light Backgrounds (Default White) */
+  --gh-bg: #ffffff;
+  --gh-bg-secondary: #f6f8fa;
+  --gh-bg-tertiary: #eaeef2;
+  --gh-bg-darkest: #ffffff;
+  --gh-bg-code: #f6f8fa;
+
+  /* Borders & Dividers */
+  --gh-border: #d0d7de;
+  --gh-border-subtle: #eaeef2;
+  --gh-border-muted: #d8dee4;
+  --gh-border-active: #ca8a04;
+
+  /* Typography / Content Colors */
+  --gh-text: #1f2328;
+  --gh-text-secondary: #656d76;
+  --gh-text-muted: #656d76;
+  --gh-text-dim: #8c959f;
+
+  /* Yellow & Golden Accents */
+  --yellow-primary: #ca8a04;
+  --yellow-bright: #b45309;
+  --yellow-dark: #854d0e;
+  --yellow-deep: #713f12;
+  --yellow-glow: rgba(202, 138, 4, 0.18);
+  --yellow-glow-lg: 0 0 25px -5px rgba(202, 138, 4, 0.22);
+
+  /* Amber Badge / Tag Palette */
+  --amber-badge-bg: #fef9c3;
+  --amber-badge-bg-hover: #fef08a;
+  --amber-badge-border: #fde047;
+  --amber-badge-text: #713f12;
+
+  /* 52-Week GitHub Contribution Calendar Levels (Default White Theme) */
+  --contrib-0: #ebedf0;
+  --contrib-1: #fef08a;
+  --contrib-2: #facc15;
+  --contrib-3: #eab308;
+  --contrib-4: #ca8a04;
+
+  /* Button & Interactive Elements */
+  --yellow-button-text: #000000;
+  --yellow-button-bg: #eab308;
+  --yellow-button-hover: #ca8a04;
+  --yellow-border-subtle: rgba(202, 138, 4, 0.35);
+  --yellow-bg-subtle: rgba(254, 249, 195, 0.7);
+  --yellow-bg-glow: rgba(234, 179, 8, 0.12);
+
+  /* Status & Notification Colors */
+  --status-success: #1a7f37;
+  --status-warning: #9a6700;
+  --status-error: #cf222e;
+  --status-error-bg: #ffebe9;
+  --status-error-border: #ff8182;
+
+  /* Legacy aliases for platform backwards compatibility */
+  --background: var(--gh-bg);
+  --foreground: var(--gh-text);
+  --brand-lime: var(--yellow-bright);
+  --brand-purple: var(--yellow-primary);
+}
+
+.dark {
+  /* ==========================================================================
+     GitHub Yellow + Dark Theme Design System Variables (Dark Mode)
+     ========================================================================== */
+
   /* Canvas & Dark Backgrounds */
   --gh-bg: #0d1117;
   --gh-bg-secondary: #161b22;
@@ -18,9 +85,11 @@
   --gh-border: #30363d;
   --gh-border-subtle: #21262d;
   --gh-border-muted: #1b1f24;
+  --gh-border-active: #eab308;
 
   /* Typography / Content Colors */
   --gh-text: #f0f6fc;
+  --gh-text-secondary: #8b949e;
   --gh-text-muted: #8b949e;
   --gh-text-dim: #484f58;
 
@@ -38,7 +107,7 @@
   --amber-badge-border: #713f12;
   --amber-badge-text: #fef08a;
 
-  /* 52-Week GitHub Contribution Calendar Levels (Yellow + Dark only) */
+  /* 52-Week GitHub Contribution Calendar Levels (Yellow + Dark) */
   --contrib-0: #161b22;
   --contrib-1: #422006;
   --contrib-2: #713f12;
@@ -76,7 +145,7 @@ body {
 
 ::selection {
   background: var(--yellow-glow);
-  color: #ffffff;
+  color: inherit;
 }
 
 /* Custom developer scrollbars using CSS variables */
@@ -85,14 +154,14 @@ body {
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--gh-bg-darkest);
+  background: var(--gh-bg-secondary);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--gh-border);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gh-border-subtle);
+  background: var(--gh-border-active);
 }
 
 /* Monospace font utility */
@@ -103,6 +172,12 @@ body {
 /* Subtle grid background for developer aesthetic */
 .bg-dev-grid {
   background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
+.dark .bg-dev-grid {
   background-image: 
     linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);

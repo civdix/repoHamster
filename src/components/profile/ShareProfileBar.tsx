@@ -51,7 +51,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
     return (
       <button
         onClick={handleCopy}
-        className="inline-flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-white transition active:scale-95"
+        className="inline-flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
         title="Copy Public Profile Link"
       >
         {copied ? (
@@ -110,7 +110,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
 
           <button
             onClick={shareOnTwitter}
-            className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--yellow-primary)]/50 transition"
+            className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 transition"
             title="Share on X / Twitter"
           >
             𝕏 Post
@@ -118,7 +118,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
 
           <button
             onClick={shareOnLinkedIn}
-            className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--yellow-primary)]/50 transition"
+            className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 transition"
             title="Share on LinkedIn"
           >
             in Share
