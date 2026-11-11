@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'repoUrl or assignmentId required' }, { status: 400 });
     }
 
-    const adminToken = (session as any)?.accessToken || (session.user as any)?.accessToken;
+    const sessionToken = (session as any)?.accessToken || (session.user as any)?.accessToken;
+    const adminToken = process.env.GITHUB_TOKEN || sessionToken;
     const result = await autoInstallAIGuardrails(targetRepoUrl, adminToken);
     return NextResponse.json(result);
   } catch (err: any) {

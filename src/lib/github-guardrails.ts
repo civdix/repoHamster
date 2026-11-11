@@ -5,11 +5,21 @@ export interface GuardrailsProvisionResult {
   requiresManualCommit?: boolean;
 }
 
-export async function autoInstallAIGuardrails(repoUrl: string, customToken?: string): Promise<GuardrailsProvisionResult> {
-  const rawToken = customToken || process.env.GITHUB_TOKEN;
-  const token = rawToken ? rawToken.trim().replace(/^['"]|['"]$/g, '') : null;
+export async function autoInstallAIGuardrails(
+  repoUrl: string,
+  customToken?: string
+): Promise<GuardrailsProvisionResult> {
+  const envToken = process.env.GITHUB_TOKEN
+    ? process.env.GITHUB_TOKEN.trim().replace(/^['"]|['"]$/g, '')
+    : null;
+  const passedToken = customToken ? customToken.trim().replace(/^['"]|['"]$/g, '') : null;
 
-  if (!token) {
+  // Resolve unique candidate tokens in priority order:
+  // 1. Configured GITHUB_TOKEN in .env (authoritative server admin PAT)
+  // 2. Passed token (e.g. session access token or candidate user token)
+  const candidateTokens = Array.from(new Set([envToken, passedToken].filter(Boolean))) as string[];
+
+  if (candidateTokens.length === 0) {
     return {
       success: false,
       message: 'GITHUB_TOKEN is missing in environment. Please configure GITHUB_TOKEN in .env',
@@ -31,40 +41,39 @@ export async function autoInstallAIGuardrails(repoUrl: string, customToken?: str
   const owner = match[1];
   const repo = match[2];
 
+  // Test and select the working token by checking repository access
+  let token = candidateTokens[0];
+  let targetBranch = 'main';
+
+  for (const tok of candidateTokens) {
+    const testHeaders = {
+      Authorization: `Bearer ${tok}`,
+      Accept: 'application/vnd.github.v3+json',
+      'User-Agent': 'RepoHamster-AI-Guardrails/1.0',
+    };
+
+    try {
+      const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: testHeaders });
+      if (repoRes.ok) {
+        const repoData = await repoRes.json();
+        targetBranch = repoData.default_branch || 'main';
+        token = tok;
+        // If this token explicitly has push permissions, choose it immediately
+        if (repoData.permissions?.push !== false) {
+          break;
+        }
+      }
+    } catch (err) {
+      console.warn('[GUARDRAILS] Token verification error:', err);
+    }
+  }
+
   const headers = {
     Authorization: `Bearer ${token}`,
     Accept: 'application/vnd.github.v3+json',
     'User-Agent': 'RepoHamster-AI-Guardrails/1.0',
     'Content-Type': 'application/json',
   };
-
-  // Check token scopes
-  try {
-    const userRes = await fetch('https://api.github.com/user', { headers });
-    const rawScopes = userRes.headers.get('x-oauth-scopes') || '';
-    const scopeList = rawScopes.split(',').map((s) => s.trim().toLowerCase());
-    const hasRepoScope = scopeList.includes('repo') || scopeList.includes('public_repo');
-
-    if (!hasRepoScope) {
-      return {
-        success: false,
-        message: `Token has scopes "${rawScopes || 'none'}", but requires "repo" or "public_repo" to commit files via GitHub API. Please generate a GitHub Personal Access Token with the "repo" scope checked and configure GITHUB_TOKEN in .env.`,
-        requiresManualCommit: true,
-      };
-    }
-  } catch (err: any) {
-    console.warn('[GUARDRAILS] Failed to verify token scopes:', err);
-  }
-
-  // Detect default branch dynamically
-  let targetBranch = 'main';
-  try {
-    const repoInfoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
-    if (repoInfoRes.ok) {
-      const repoInfo = await repoInfoRes.json();
-      targetBranch = repoInfo.default_branch || 'main';
-    }
-  } catch {}
 
   const COPILOT_INSTRUCTIONS = `# RepoHamster Technical Assessment: AI Guardrails & Socratic Guidelines
 
@@ -97,7 +106,7 @@ Failure to follow these rules invalidates the candidate's assessment results.
             'github.copilot.inlineSuggest.enable': false,
             'github.copilot.editor.enableCodeActions': false,
             'github.copilot.advanced': {
-              'inlineSuggestCount': 0
+              'inlineSuggestCount': 0,
             },
           },
           extensions: ['dbaeumer.vscode-eslint'],
@@ -140,11 +149,14 @@ Failure to follow these rules invalidates the candidate's assessment results.
   ];
 
   const committedFiles: string[] = [];
+  const verifiedFiles: string[] = [];
   let lastError: string | null = null;
 
   for (const item of filesToCommit) {
     try {
       let existingSha: string | null = null;
+      let existingContentBase64: string | null = null;
+
       const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${item.path}`, {
         headers,
       });
@@ -152,11 +164,20 @@ Failure to follow these rules invalidates the candidate's assessment results.
       if (getRes.ok) {
         const data = await getRes.json();
         existingSha = data.sha;
+        existingContentBase64 = (data.content || '').replace(/\s+/g, '');
+      }
+
+      const targetBase64 = Buffer.from(item.content, 'utf8').toString('base64');
+
+      // If the file already exists with matching content, consider it verified
+      if (existingContentBase64 && existingContentBase64 === targetBase64) {
+        verifiedFiles.push(item.path);
+        continue;
       }
 
       const payload: any = {
         message: item.message,
-        content: Buffer.from(item.content, 'utf8').toString('base64'),
+        content: targetBase64,
         branch: targetBranch,
       };
       if (existingSha) {
@@ -182,11 +203,15 @@ Failure to follow these rules invalidates the candidate's assessment results.
     }
   }
 
-  if (committedFiles.length > 0) {
+  const totalActive = committedFiles.length + verifiedFiles.length;
+  if (totalActive > 0) {
+    const details: string[] = [];
+    if (committedFiles.length > 0) details.push(`Committed: ${committedFiles.join(', ')}`);
+    if (verifiedFiles.length > 0) details.push(`Verified: ${verifiedFiles.join(', ')}`);
     return {
       success: true,
-      message: `AI Guardrails installed successfully! Committed: ${committedFiles.join(', ')}`,
-      filesCommitted: committedFiles,
+      message: `AI Guardrails installed successfully! (${details.join(' | ')})`,
+      filesCommitted: [...committedFiles, ...verifiedFiles],
     };
   }
 
