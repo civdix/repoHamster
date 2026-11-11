@@ -3,40 +3,96 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0d14;
-  --foreground: #f3f4f6;
-  --brand-lime: #a3e635;
-  --brand-purple: #a855f7;
+  /* ==========================================================================
+     GitHub Yellow + Dark Theme Design System Variables
+     ========================================================================== */
+  
+  /* Canvas & Dark Backgrounds */
+  --gh-bg: #0d1117;
+  --gh-bg-secondary: #161b22;
+  --gh-bg-tertiary: #21262d;
+  --gh-bg-darkest: #010409;
+  --gh-bg-code: #07090e;
+
+  /* Borders & Dividers */
+  --gh-border: #30363d;
+  --gh-border-subtle: #21262d;
+  --gh-border-muted: #1b1f24;
+
+  /* Typography / Content Colors */
+  --gh-text: #f0f6fc;
+  --gh-text-muted: #8b949e;
+  --gh-text-dim: #484f58;
+
+  /* Yellow & Golden Accents */
+  --yellow-primary: #eab308;
+  --yellow-bright: #facc15;
+  --yellow-dark: #ca8a04;
+  --yellow-deep: #a16207;
+  --yellow-glow: rgba(234, 179, 8, 0.25);
+  --yellow-glow-lg: 0 0 25px -5px rgba(234, 179, 8, 0.3);
+
+  /* Amber Badge / Tag Palette */
+  --amber-badge-bg: #422006;
+  --amber-badge-bg-hover: #592c08;
+  --amber-badge-border: #713f12;
+  --amber-badge-text: #fef08a;
+
+  /* 52-Week GitHub Contribution Calendar Levels (Yellow + Dark only) */
+  --contrib-0: #161b22;
+  --contrib-1: #422006;
+  --contrib-2: #713f12;
+  --contrib-3: #ca8a04;
+  --contrib-4: #facc15;
+
+  /* Button & Interactive Elements */
+  --yellow-button-text: #020617;
+  --yellow-button-bg: #eab308;
+  --yellow-button-hover: #facc15;
+  --yellow-border-subtle: rgba(234, 179, 8, 0.4);
+  --yellow-bg-subtle: rgba(66, 32, 6, 0.6);
+  --yellow-bg-glow: rgba(234, 179, 8, 0.15);
+
+  /* Status & Notification Colors */
+  --status-success: #facc15;
+  --status-warning: #eab308;
+  --status-error: #f85149;
+  --status-error-bg: rgba(248, 81, 73, 0.15);
+  --status-error-border: rgba(248, 81, 73, 0.4);
+
+  /* Legacy aliases for platform backwards compatibility */
+  --background: var(--gh-bg);
+  --foreground: var(--gh-text);
+  --brand-lime: var(--yellow-bright);
+  --brand-purple: var(--yellow-primary);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--gh-bg);
+  color: var(--gh-text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
-  selection-background-color: rgba(163, 230, 53, 0.25);
-  selection-color: #ffffff;
 }
 
 ::selection {
-  background: rgba(234, 179, 8, 0.25);
+  background: var(--yellow-glow);
   color: #ffffff;
 }
 
-/* Custom developer scrollbars */
+/* Custom developer scrollbars using CSS variables */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0d14;
+  background: var(--gh-bg-darkest);
 }
 ::-webkit-scrollbar-thumb {
-  background: #21293f;
+  background: var(--gh-border);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #374151;
+  background: var(--gh-border-subtle);
 }
 
 /* Monospace font utility */
@@ -53,7 +109,7 @@ body {
 }
 
 .bg-radial-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.12) 0%, rgba(163, 230, 53, 0.04) 35%, transparent 70%);
+  background: radial-gradient(circle at 50% 0%, var(--yellow-glow) 0%, transparent 70%);
 }
 
 /* Tactile button active states to ensure every click shows immediate visual feedback */

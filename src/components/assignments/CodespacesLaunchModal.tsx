@@ -224,21 +224,21 @@ export function CodespacesLaunchModal({
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[#30363d] bg-[#0d1117] p-6 shadow-2xl">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-6 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#30363d] pb-4">
+            <div className="flex items-center justify-between border-b border-[var(--gh-border)] pb-4">
               <div className="flex items-center space-x-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#161b22] border border-yellow-500/50 p-1">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--yellow-primary)]/50 p-1">
                   <HamsterMascot variant="normal" size={32} />
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-base">Launch Assessment Workspace</h3>
-                  <p className="text-xs text-slate-400 font-mono">{cleanUrl}</p>
+                  <p className="text-xs text-[var(--gh-text-muted)] font-mono">{cleanUrl}</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-slate-400 hover:text-white hover:bg-[#21262d] transition"
+                className="rounded-lg p-1 text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-tertiary)] transition"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -319,7 +319,7 @@ export function CodespacesLaunchModal({
                         href={defaultCodespacesUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded-lg border border-card-border bg-[#0a0d14] px-3 py-1.5 text-xs text-slate-300 hover:text-white transition"
+                        className="rounded-lg border border-card-border bg-[var(--gh-bg-darkest)] px-3 py-1.5 text-xs text-slate-300 hover:text-white transition"
                       >
                         Launch Fallback Wizard (codespaces.new)
                       </a>
@@ -393,7 +393,7 @@ export function CodespacesLaunchModal({
                       <button
                         onClick={() => handleExecuteCodespaceAction('continue', primaryExistingCodespace)}
                         disabled={!!executingAction}
-                        className="flex items-center justify-between rounded-xl border border-brand-lime/40 bg-[#0c131d] p-3 text-left hover:border-brand-lime hover:bg-[#111927] transition group disabled:opacity-50"
+                        className="flex items-center justify-between rounded-xl border border-brand-lime/40 bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-brand-lime hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
                       >
                         <div className="flex items-center space-x-3">
                           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-950 border border-lime-800 text-brand-lime group-hover:scale-105 transition">
@@ -415,7 +415,7 @@ export function CodespacesLaunchModal({
                       <button
                         onClick={() => handleExecuteCodespaceAction('create_keep', primaryExistingCodespace)}
                         disabled={!!executingAction}
-                        className="flex items-center justify-between rounded-xl border border-card-border bg-[#0a0d14] p-3 text-left hover:border-purple-500 hover:bg-[#111320] transition group disabled:opacity-50"
+                        className="flex items-center justify-between rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-purple-500 hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
                       >
                         <div className="flex items-center space-x-3">
                           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-950 border border-purple-800 text-brand-purple-light group-hover:scale-105 transition">
@@ -441,7 +441,7 @@ export function CodespacesLaunchModal({
                       <button
                         onClick={() => handleExecuteCodespaceAction('create_delete', primaryExistingCodespace)}
                         disabled={!!executingAction}
-                        className="flex items-center justify-between rounded-xl border border-card-border bg-[#0a0d14] p-3 text-left hover:border-rose-500 hover:bg-[#180f14] transition group disabled:opacity-50"
+                        className="flex items-center justify-between rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] p-3 text-left hover:border-rose-500 hover:bg-[var(--gh-bg-tertiary)] transition group disabled:opacity-50"
                       >
                         <div className="flex items-center space-x-3">
                           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-950 border border-rose-800 text-rose-400 group-hover:scale-105 transition">
@@ -497,7 +497,7 @@ export function CodespacesLaunchModal({
                         href={defaultCodespacesUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-[#0a0d14] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
+                        className="flex items-center space-x-1.5 rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white transition active:scale-95"
                         title="Fallback: Open codespaces.new creation screen on GitHub"
                       >
                         <Terminal className="h-3.5 w-3.5 text-brand-lime" />
@@ -567,7 +567,7 @@ export function CodespacesLaunchModal({
                   </button>
                 </div>
 
-                <div className="rounded-lg bg-[#07090e] p-3 font-mono text-xs text-slate-300 space-y-1 overflow-x-auto border border-card-border">
+                <div className="rounded-lg bg-[var(--gh-bg-code)] p-3 font-mono text-xs text-slate-300 space-y-1 overflow-x-auto border border-card-border">
                   {gitCommands.map((cmd, i) => (
                     <div key={i} className="flex items-center justify-between group">
                       <span className={cmd.startsWith('#') ? 'text-slate-500' : 'text-brand-lime-light'}>{cmd}</span>
@@ -585,7 +585,7 @@ export function CodespacesLaunchModal({
               </div>
 
               {/* PR Submission Instructions */}
-              <div className="rounded-xl border border-card-border bg-[#0a0d14] p-3 text-xs text-slate-400 font-mono">
+              <div className="rounded-xl border border-card-border bg-[var(--gh-bg-secondary)] p-3 text-xs text-slate-400 font-mono">
                 <span className="font-semibold text-white">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-brand-lime font-mono">{branch}</code>. RepoHamster&apos;s webhook automatically runs public and hidden test suites in an isolated sandbox.
               </div>
             </div>

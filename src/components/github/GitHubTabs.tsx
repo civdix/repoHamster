@@ -42,7 +42,7 @@ export function GitHubTabs({ activeTab, onTabChange, counts }: GitHubTabsProps) 
   ];
 
   return (
-    <div className="border-b border-[#30363d] bg-[#0d1117] px-2 sm:px-4 mb-6">
+    <div className="border-b border-[var(--gh-border)] bg-[var(--gh-bg)] px-2 sm:px-4 mb-6">
       <nav className="flex space-x-1 sm:space-x-4 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -53,18 +53,18 @@ export function GitHubTabs({ activeTab, onTabChange, counts }: GitHubTabsProps) 
               onClick={() => onTabChange(tab.id)}
               className={`flex items-center space-x-2 py-3 px-3 border-b-2 text-xs sm:text-sm font-medium transition whitespace-nowrap active:scale-95 ${
                 isActive
-                  ? 'border-yellow-400 text-white font-semibold'
-                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600'
+                  ? 'border-[var(--yellow-bright)] text-white font-semibold'
+                  : 'border-transparent text-[var(--gh-text-muted)] hover:text-slate-200 hover:border-slate-600'
               }`}
             >
-              <Icon className={`h-4 w-4 ${isActive ? 'text-yellow-400' : 'text-slate-500'}`} />
+              <Icon className={`h-4 w-4 ${isActive ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`} />
               <span>{tab.label}</span>
               {tab.count !== undefined && (
                 <span
                   className={`rounded-full px-2 py-0.5 text-[10px] font-mono ${
                     isActive
-                      ? 'bg-yellow-950/80 text-yellow-300 border border-yellow-700/60 font-bold'
-                      : 'bg-[#21262d] text-slate-400 border border-[#30363d]'
+                      ? 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)] font-bold'
+                      : 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-muted)] border border-[var(--gh-border)]'
                   }`}
                 >
                   {tab.count}

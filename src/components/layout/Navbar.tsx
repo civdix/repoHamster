@@ -14,22 +14,22 @@ export function Navbar() {
   const canSeeAdmin = isStaffAdmin || isReviewer;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#30363d] bg-[#0d1117]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-[var(--gh-border)] bg-[var(--gh-bg)]/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand */}
         <div className="flex items-center space-x-6">
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#161b22] border border-[#30363d] group-hover:border-yellow-400/60 group-hover:shadow-[0_0_15px_rgba(234,179,8,0.2)] transition p-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] group-hover:border-[var(--yellow-primary)]/60 group-hover:shadow-[var(--yellow-glow-lg)] transition p-1">
               <HamsterMascot variant="normal" size={32} />
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
                 <span className="font-bold tracking-tight text-white text-lg font-sans">
-                  Repo<span className="text-yellow-400">Hamster</span>
+                  Repo<span className="text-[var(--yellow-bright)]">Hamster</span>
                 </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-yellow-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)] animate-pulse" />
               </div>
-              <p className="text-[10px] font-mono text-slate-400 -mt-0.5 hidden sm:block">
+              <p className="text-[10px] font-mono text-[var(--gh-text-muted)] -mt-0.5 hidden sm:block">
                 Break Bugs. Ship Fixes.
               </p>
             </div>
@@ -41,8 +41,8 @@ export function Navbar() {
               href="/dashboard"
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 pathname === '/dashboard' || pathname?.startsWith('/assignments')
-                  ? 'bg-[#161b22] text-yellow-400 border border-[#30363d]'
-                  : 'text-slate-400 hover:text-white hover:bg-[#161b22]/60'
+                  ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] border border-[var(--gh-border)]'
+                  : 'text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-secondary)]/60'
               }`}
             >
               <Code2 className="h-4 w-4" />
@@ -53,11 +53,11 @@ export function Navbar() {
               href="/guide"
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 pathname === '/guide'
-                  ? 'bg-[#161b22] text-yellow-400 border border-[#30363d]'
-                  : 'text-slate-400 hover:text-white hover:bg-[#161b22]/60'
+                  ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] border border-[var(--gh-border)]'
+                  : 'text-[var(--gh-text-muted)] hover:text-white hover:bg-[var(--gh-bg-secondary)]/60'
               }`}
             >
-              <BookOpen className="h-4 w-4 text-yellow-400" />
+              <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
               <span>How to Use</span>
             </Link>
 
@@ -66,14 +66,14 @@ export function Navbar() {
                 href="/admin"
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                   pathname?.startsWith('/admin')
-                    ? 'bg-yellow-950/60 text-yellow-300 border border-yellow-700/60'
-                    : 'text-slate-400 hover:text-yellow-400 hover:bg-[#161b22]/40'
+                    ? 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)]'
+                    : 'text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] hover:bg-[var(--gh-bg-secondary)]/40'
                 }`}
               >
                 {isReviewer ? (
-                  <Eye className="h-4 w-4 text-yellow-400" />
+                  <Eye className="h-4 w-4 text-[var(--yellow-bright)]" />
                 ) : (
-                  <Shield className="h-4 w-4 text-yellow-400" />
+                  <Shield className="h-4 w-4 text-[var(--yellow-bright)]" />
                 )}
                 <span>Admin Console {isReviewer && '(Preview)'}</span>
               </Link>
@@ -86,41 +86,41 @@ export function Navbar() {
           {session?.user ? (
             <div className="flex items-center space-x-3">
               {isStaffAdmin ? (
-                <span className="hidden sm:inline-flex items-center rounded-full border border-yellow-600/60 bg-yellow-950/60 px-2.5 py-0.5 text-xs font-mono font-medium text-yellow-300">
-                  <Shield className="mr-1 h-3 w-3 text-yellow-400" />
+                <span className="hidden sm:inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-medium text-[var(--amber-badge-text)]">
+                  <Shield className="mr-1 h-3 w-3 text-[var(--yellow-bright)]" />
                   Staff Admin
                 </span>
               ) : isReviewer ? (
-                <span className="hidden sm:inline-flex items-center rounded-full border border-yellow-600/50 bg-yellow-950/40 px-2.5 py-0.5 text-xs font-mono font-medium text-yellow-300">
-                  <Eye className="mr-1 h-3 w-3 text-yellow-400" />
+                <span className="hidden sm:inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-medium text-[var(--amber-badge-text)]">
+                  <Eye className="mr-1 h-3 w-3 text-[var(--yellow-bright)]" />
                   Reviewer (Read-Only)
                 </span>
               ) : (
-                <span className="hidden sm:inline-flex items-center rounded-full border border-yellow-600/50 bg-yellow-950/30 px-2.5 py-0.5 text-xs font-mono font-medium text-yellow-400">
-                  <CheckCircle2 className="mr-1 h-3 w-3 text-yellow-400" />
+                <span className="hidden sm:inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-medium text-[var(--yellow-bright)]">
+                  <CheckCircle2 className="mr-1 h-3 w-3 text-[var(--yellow-bright)]" />
                   Candidate
                 </span>
               )}
 
               <Link
                 href="/profile"
-                className="flex items-center space-x-2 rounded-xl border border-[#30363d] bg-[#161b22] px-3 py-1.5 text-xs text-slate-300 hover:border-yellow-500/60 hover:text-white transition active:scale-95 group"
+                className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 hover:text-white transition active:scale-95 group"
                 title="View Coding Profile"
               >
                 {session.user.image ? (
                   <img
                     src={session.user.image}
                     alt={session.user.name || 'User'}
-                    className="h-6 w-6 rounded-full ring-1 ring-[#30363d]"
+                    className="h-6 w-6 rounded-full ring-1 ring-[var(--gh-border)]"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-full bg-[#0d1117] flex items-center justify-center text-slate-300 group-hover:text-yellow-400">
+                  <div className="h-6 w-6 rounded-full bg-[var(--gh-bg)] flex items-center justify-center text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)]">
                     <User className="h-3.5 w-3.5" />
                   </div>
                 )}
                 <div className="hidden sm:block text-left">
                   <p className="font-semibold text-white truncate max-w-[120px]">{session.user.name || 'Developer'}</p>
-                  <p className="text-[10px] text-yellow-400 font-mono">
+                  <p className="text-[10px] text-[var(--yellow-bright)] font-mono">
                     @{((session.user as any).username || (session.user as any).githubUsername || 'coder')}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ export function Navbar() {
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/signin' })}
                 title="Sign out"
-                className="rounded-xl border border-[#30363d] bg-[#161b22] p-2 text-slate-400 hover:text-yellow-400 hover:border-yellow-600/50 transition active:scale-95"
+                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95"
               >
                 <LogOut className="h-4 w-4" />
               </button>
@@ -138,7 +138,7 @@ export function Navbar() {
             <div className="flex items-center space-x-2">
               <Link
                 href="/auth/signin"
-                className="rounded-xl bg-yellow-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-yellow-400 transition shadow-[0_0_15px_rgba(234,179,8,0.25)] active:scale-95"
+                className="rounded-xl bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-[var(--yellow-glow-lg)] active:scale-95"
               >
                 Start Debugging
               </Link>

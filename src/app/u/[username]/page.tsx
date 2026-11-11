@@ -108,25 +108,25 @@ export default async function PublicProfilePage({ params }: PublicProfileProps) 
   if (!user) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-3xl bg-[#161b22] border border-[#30363d] shadow-[0_0_20px_rgba(234,179,8,0.2)] mb-6 p-4">
+        <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-3xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] shadow-[var(--yellow-glow-lg)] mb-6 p-4">
           <HamsterMascot variant="mercy" size={80} />
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2 font-mono">
           Developer Not Found
         </h1>
-        <p className="text-xs sm:text-sm font-mono text-slate-400 mb-6 max-w-md mx-auto">
-          No developer profile matching <span className="text-yellow-400 font-bold">@{rawUsername}</span> was found on RepoHamster.
+        <p className="text-xs sm:text-sm font-mono text-[var(--gh-text-muted)] mb-6 max-w-md mx-auto">
+          No developer profile matching <span className="text-[var(--yellow-bright)] font-bold">@{rawUsername}</span> was found on RepoHamster.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/dashboard"
-            className="rounded-xl bg-yellow-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-yellow-400 transition shadow-[0_0_15px_rgba(234,179,8,0.25)]"
+            className="rounded-xl bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-[var(--yellow-glow-lg)]"
           >
             Explore Challenges
           </Link>
           <Link
             href="/"
-            className="rounded-xl border border-[#30363d] bg-[#161b22] px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition"
+            className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 text-xs font-semibold text-[var(--gh-text)] hover:text-white transition"
           >
             Back to Home
           </Link>
@@ -143,7 +143,7 @@ export default async function PublicProfilePage({ params }: PublicProfileProps) 
   }
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-slate-200">
+    <div className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)]">
       <GitHubProfileView
         user={user}
         assignments={user.assignments}

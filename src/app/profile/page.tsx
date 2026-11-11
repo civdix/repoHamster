@@ -93,18 +93,18 @@ export default async function UserProfilePage() {
   const displayUsername = user.username || user.githubUsername || user.email.split('@')[0];
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-slate-200 py-6 space-y-6">
+    <div className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] py-6 space-y-6">
       {/* 1. Developer Handle & AI Quota Banner (Yellow + Dark Theme) */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[#30363d] bg-[#161b22] p-5 sm:p-6 space-y-5 shadow-sm">
+        <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-6 space-y-5 shadow-sm">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             {/* Left: Username Editor */}
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--gh-text-muted)]">
                   Developer Profile Settings
                 </span>
-                <span className="rounded-full bg-yellow-950/80 border border-yellow-600/50 px-2 py-0.5 text-[10px] font-mono text-yellow-300 font-bold">
+                <span className="rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] px-2 py-0.5 text-[10px] font-mono text-[var(--amber-badge-text)] font-bold">
                   Live
                 </span>
               </div>
@@ -113,38 +113,38 @@ export default async function UserProfilePage() {
 
             {/* Right: Hamster AI Credit Meters (Yellow + Dark) */}
             <div className="flex flex-wrap items-center gap-3 self-start lg:self-center">
-              <div className="rounded-xl border border-[#30363d] bg-[#0d1117] px-4 py-2.5 font-mono text-xs space-y-0.5">
-                <div className="flex items-center justify-between space-x-3 text-slate-400 text-[11px]">
+              <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2.5 font-mono text-xs space-y-0.5">
+                <div className="flex items-center justify-between space-x-3 text-[var(--gh-text-muted)] text-[11px]">
                   <span className="flex items-center space-x-1">
-                    <Bot className="h-3.5 w-3.5 text-yellow-400" />
+                    <Bot className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                     <span>Daily AI Queries</span>
                   </span>
-                  <span className="text-yellow-400 font-bold">
+                  <span className="text-[var(--yellow-bright)] font-bold">
                     {remainingRequests} / {dailyRequestLimit}
                   </span>
                 </div>
-                <div className="w-40 h-1.5 rounded-full bg-[#21262d] overflow-hidden mt-1">
+                <div className="w-40 h-1.5 rounded-full bg-[var(--gh-bg-tertiary)] overflow-hidden mt-1">
                   <div
                     style={{ width: `${Math.min(100, (remainingRequests / dailyRequestLimit) * 100)}%` }}
-                    className="h-full bg-yellow-400 rounded-full"
+                    className="h-full bg-[var(--yellow-bright)] rounded-full"
                   />
                 </div>
               </div>
 
-              <div className="rounded-xl border border-[#30363d] bg-[#0d1117] px-4 py-2.5 font-mono text-xs space-y-0.5">
-                <div className="flex items-center justify-between space-x-3 text-slate-400 text-[11px]">
+              <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-2.5 font-mono text-xs space-y-0.5">
+                <div className="flex items-center justify-between space-x-3 text-[var(--gh-text-muted)] text-[11px]">
                   <span className="flex items-center space-x-1">
-                    <Zap className="h-3.5 w-3.5 text-yellow-400" />
+                    <Zap className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
                     <span>Daily Token Budget</span>
                   </span>
-                  <span className="text-yellow-400 font-bold">
+                  <span className="text-[var(--yellow-bright)] font-bold">
                     {remainingTokens.toLocaleString()}
                   </span>
                 </div>
-                <div className="w-40 h-1.5 rounded-full bg-[#21262d] overflow-hidden mt-1">
+                <div className="w-40 h-1.5 rounded-full bg-[var(--gh-bg-tertiary)] overflow-hidden mt-1">
                   <div
                     style={{ width: `${Math.min(100, (remainingTokens / dailyTokenLimit) * 100)}%` }}
-                    className="h-full bg-yellow-400 rounded-full"
+                    className="h-full bg-[var(--yellow-bright)] rounded-full"
                   />
                 </div>
               </div>
@@ -152,7 +152,7 @@ export default async function UserProfilePage() {
           </div>
 
           {/* Share Profile Link */}
-          <div className="pt-4 border-t border-[#21262d]">
+          <div className="pt-4 border-t border-[var(--gh-border-subtle)]">
             <ShareProfileBar username={displayUsername} />
           </div>
         </div>

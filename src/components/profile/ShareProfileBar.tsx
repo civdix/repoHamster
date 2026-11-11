@@ -51,17 +51,17 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
     return (
       <button
         onClick={handleCopy}
-        className="inline-flex items-center space-x-1.5 rounded-lg border border-[#30363d] bg-[#161b22] px-3 py-1.5 text-xs font-mono text-slate-300 hover:border-yellow-500/50 hover:text-white transition active:scale-95"
+        className="inline-flex items-center space-x-1.5 rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1.5 text-xs font-mono text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-white transition active:scale-95"
         title="Copy Public Profile Link"
       >
         {copied ? (
           <>
-            <Check className="h-3.5 w-3.5 text-yellow-400" />
-            <span className="text-yellow-400 font-bold">Copied!</span>
+            <Check className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+            <span className="text-[var(--yellow-bright)] font-bold">Copied!</span>
           </>
         ) : (
           <>
-            <Share2 className="h-3.5 w-3.5 text-slate-400" />
+            <Share2 className="h-3.5 w-3.5 text-[var(--gh-text-muted)]" />
             <span>Share Profile</span>
           </>
         )}
@@ -70,17 +70,17 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
   }
 
   return (
-    <div className="rounded-xl border border-[#30363d] bg-[#0d1117] p-3 sm:p-4 shadow-sm">
+    <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 sm:p-4 shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center space-x-2.5 min-w-0">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#161b22] border border-yellow-500/40 text-yellow-400">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--gh-bg-secondary)] border border-[var(--yellow-primary)]/40 text-[var(--yellow-bright)]">
             <Share2 className="h-4 w-4" />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+            <p className="text-[11px] font-mono uppercase tracking-wider text-[var(--gh-text-muted)] font-semibold">
               Public Sharable Profile Link
             </p>
-            <p className="text-xs font-mono text-yellow-400 truncate select-all">
+            <p className="text-xs font-mono text-[var(--yellow-bright)] truncate select-all">
               https://www.repohamster.com/@{username}
             </p>
           </div>
@@ -91,8 +91,8 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
             onClick={handleCopy}
             className={`inline-flex items-center space-x-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition active:scale-95 ${
               copied
-                ? 'bg-yellow-950/80 border border-yellow-400 text-yellow-300 shadow-[0_0_15px_rgba(250,204,21,0.3)]'
-                : 'bg-yellow-500 hover:bg-yellow-400 text-slate-950 shadow-[0_0_15px_rgba(234,179,8,0.25)]'
+                ? 'bg-[var(--amber-badge-bg)] border border-[var(--yellow-bright)] text-[var(--amber-badge-text)] shadow-[var(--yellow-glow)]'
+                : 'bg-[var(--yellow-button-bg)] hover:bg-[var(--yellow-button-hover)] text-[var(--yellow-button-text)] shadow-[var(--yellow-glow)]'
             }`}
           >
             {copied ? (
@@ -110,7 +110,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
 
           <button
             onClick={shareOnTwitter}
-            className="rounded-lg border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-yellow-500/50 transition"
+            className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--yellow-primary)]/50 transition"
             title="Share on X / Twitter"
           >
             𝕏 Post
@@ -118,7 +118,7 @@ export function ShareProfileBar({ username, variant = 'full' }: ShareProfileBarP
 
           <button
             onClick={shareOnLinkedIn}
-            className="rounded-lg border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-yellow-500/50 transition"
+            className="rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text-muted)] hover:text-white hover:border-[var(--yellow-primary)]/50 transition"
             title="Share on LinkedIn"
           >
             in Share

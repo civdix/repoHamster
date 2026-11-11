@@ -10,35 +10,75 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Deep charcoal background palette inspired by Linear, Raycast, Discord
-        background: '#0a0d14',
-        'background-secondary': '#0e121c',
-        card: '#131826',
-        'card-hover': '#181e30',
-        'card-border': '#21293f',
-        'card-border-subtle': '#192033',
+        // GitHub Dark Theme CSS Variables
+        gh: {
+          bg: 'var(--gh-bg)',
+          'bg-secondary': 'var(--gh-bg-secondary)',
+          'bg-tertiary': 'var(--gh-bg-tertiary)',
+          'bg-darkest': 'var(--gh-bg-darkest)',
+          'bg-code': 'var(--gh-bg-code)',
+          border: 'var(--gh-border)',
+          'border-subtle': 'var(--gh-border-subtle)',
+          'border-muted': 'var(--gh-border-muted)',
+          text: 'var(--gh-text)',
+          'text-muted': 'var(--gh-text-muted)',
+          'text-dim': 'var(--gh-text-dim)',
+        },
 
-        // Brand Accents: Electric Lime & Vibrant Purple
+        // Yellow Accent CSS Variables
+        yellowAccent: {
+          primary: 'var(--yellow-primary)',
+          bright: 'var(--yellow-bright)',
+          dark: 'var(--yellow-dark)',
+          deep: 'var(--yellow-deep)',
+        },
+
+        // Amber Badges CSS Variables
+        amberBadge: {
+          bg: 'var(--amber-badge-bg)',
+          'bg-hover': 'var(--amber-badge-bg-hover)',
+          border: 'var(--amber-badge-border)',
+          text: 'var(--amber-badge-text)',
+        },
+
+        // Contribution Calendar Level CSS Variables
+        contrib: {
+          0: 'var(--contrib-0)',
+          1: 'var(--contrib-1)',
+          2: 'var(--contrib-2)',
+          3: 'var(--contrib-3)',
+          4: 'var(--contrib-4)',
+        },
+
+        // Deep charcoal background palette
+        background: 'var(--gh-bg)',
+        'background-secondary': 'var(--gh-bg-secondary)',
+        card: 'var(--gh-bg-secondary)',
+        'card-hover': 'var(--gh-bg-tertiary)',
+        'card-border': 'var(--gh-border)',
+        'card-border-subtle': 'var(--gh-border-subtle)',
+
+        // Brand Accents mapped to Yellow + Dark
         brand: {
-          lime: '#a3e635',       // Electric lime primary
-          'lime-light': '#bef264',
-          'lime-dark': '#65a30d',
-          'lime-glow': 'rgba(163, 230, 53, 0.15)',
+          lime: 'var(--yellow-bright)',
+          'lime-light': 'var(--yellow-bright)',
+          'lime-dark': 'var(--yellow-dark)',
+          'lime-glow': 'var(--yellow-glow)',
 
-          purple: '#a855f7',     // Vibrant purple secondary
-          'purple-light': '#c084fc',
-          'purple-dark': '#7e22ce',
-          'purple-glow': 'rgba(168, 85, 247, 0.15)',
+          purple: 'var(--yellow-primary)',
+          'purple-light': 'var(--yellow-bright)',
+          'purple-dark': 'var(--yellow-deep)',
+          'purple-glow': 'var(--yellow-glow)',
 
-          orange: '#fb923c',     // Hamster cheek & accent
+          orange: 'var(--yellow-dark)',
         },
 
         // Functional Status Colors
         accent: {
-          success: '#a3e635',    // electric lime for pass
-          warning: '#fbbf24',    // amber
-          danger: '#f43f5e',     // rose
-          info: '#38bdf8',       // sky
+          success: 'var(--yellow-bright)',
+          warning: 'var(--yellow-primary)',
+          danger: '#f43f5e',
+          info: 'var(--yellow-bright)',
         },
       },
       fontFamily: {
@@ -46,8 +86,9 @@ const config: Config = {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       boxShadow: {
-        'glow-lime': '0 0 25px -5px rgba(163, 230, 53, 0.25)',
-        'glow-purple': '0 0 25px -5px rgba(168, 85, 247, 0.25)',
+        'glow-lime': 'var(--yellow-glow-lg)',
+        'glow-purple': 'var(--yellow-glow-lg)',
+        'glow-yellow': '0 0 25px -5px rgba(234, 179, 8, 0.35)',
       },
       animation: {
         'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

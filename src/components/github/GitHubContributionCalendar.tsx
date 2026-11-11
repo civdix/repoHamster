@@ -26,7 +26,6 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
 
   // Generate 52 weeks of day grid up to today
   const { weeks, totalContributions, monthsLabels } = useMemo(() => {
-    // Map activities by date YYYY-MM-DD
     const activityMap = new Map<string, number>();
     for (const act of activities) {
       const d = new Date(act.date);
@@ -37,7 +36,6 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
     }
 
     const today = new Date();
-    // 52 weeks * 7 = 364 days
     const totalDays = 52 * 7;
     const startDate = new Date(today);
     startDate.setDate(today.getDate() - totalDays + 1);
@@ -67,13 +65,11 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
       });
     }
 
-    // Split into 52 columns of 7 days
     const weekCols: DayData[][] = [];
     for (let w = 0; w < 52; w++) {
       weekCols.push(days.slice(w * 7, (w + 1) * 7));
     }
 
-    // Extract month labels with column indices
     const mLabels: Array<{ text: string; colIndex: number }> = [];
     let lastMonth = '';
     weekCols.forEach((week, idx) => {
@@ -91,35 +87,35 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
     };
   }, [activities]);
 
-  // Color map strictly conforming to YELLOW + DARK theme
+  // Color map strictly driven by CSS Variables
   const getCellColor = (level: 0 | 1 | 2 | 3 | 4) => {
     switch (level) {
       case 1:
-        return 'bg-[#422006] hover:bg-[#592c08] border border-[#713f12]/40'; // Subtle dark amber
+        return 'bg-[var(--contrib-1)] hover:opacity-80 border border-[var(--amber-badge-border)]/40';
       case 2:
-        return 'bg-[#713f12] hover:bg-[#854d0e] border border-[#ca8a04]/40'; // Mid amber
+        return 'bg-[var(--contrib-2)] hover:opacity-80 border border-[var(--yellow-dark)]/40';
       case 3:
-        return 'bg-[#ca8a04] hover:bg-[#d97706] shadow-[0_0_6px_rgba(202,138,4,0.4)]'; // Golden yellow
+        return 'bg-[var(--contrib-3)] hover:opacity-90 shadow-[0_0_6px_var(--yellow-glow)]';
       case 4:
-        return 'bg-[#facc15] hover:bg-[#fde047] shadow-[0_0_10px_rgba(250,204,21,0.6)]'; // Vibrant yellow
+        return 'bg-[var(--contrib-4)] hover:opacity-90 shadow-[0_0_10px_var(--yellow-glow)]';
       case 0:
       default:
-        return 'bg-[#161b22] hover:bg-[#21262d] border border-[#30363d]/50'; // GitHub empty cell
+        return 'bg-[var(--contrib-0)] hover:bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)]/50';
     }
   };
 
   return (
-    <div className="rounded-xl border border-[#30363d] bg-[#0d1117] p-4 sm:p-5 text-slate-200">
+    <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-4 sm:p-5 text-[var(--gh-text)]">
       {/* Calendar Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <h3 className="text-sm font-semibold text-white flex items-center space-x-2">
-            <CalendarIcon className="h-4 w-4 text-yellow-400" />
+            <CalendarIcon className="h-4 w-4 text-[var(--yellow-bright)]" />
             <span>
               {totalContributions.toLocaleString()} contributions in the last year
             </span>
           </h3>
-          <p className="text-[11px] font-mono text-slate-400 mt-0.5">
+          <p className="text-[11px] font-mono text-[var(--gh-text-muted)] mt-0.5">
             Verified pull requests, bug fixes, and hidden harness evaluations
           </p>
         </div>
@@ -127,11 +123,11 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
         {/* Hover date tooltip preview */}
         <div className="h-6 flex items-center">
           {hoveredDay ? (
-            <span className="text-xs font-mono text-yellow-300 bg-yellow-950/60 border border-yellow-700/60 px-2.5 py-0.5 rounded-md animate-in fade-in">
+            <span className="text-xs font-mono text-[var(--amber-badge-text)] bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] px-2.5 py-0.5 rounded-md animate-in fade-in">
               <strong>{hoveredDay.count}</strong> contribution{hoveredDay.count === 1 ? '' : 's'} on {hoveredDay.dateStr}
             </span>
           ) : (
-            <span className="text-[11px] font-mono text-slate-500">
+            <span className="text-[11px] font-mono text-[var(--gh-text-dim)]">
               Hover over a day square to view activity
             </span>
           )}
@@ -142,7 +138,7 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
       <div className="overflow-x-auto pb-2">
         <div className="inline-block min-w-full">
           {/* Months Header */}
-          <div className="flex text-[10px] font-mono text-slate-400 mb-1 pl-8">
+          <div className="flex text-[10px] font-mono text-[var(--gh-text-muted)] mb-1 pl-8">
             {monthsLabels.map((m, i) => (
               <span
                 key={i}
@@ -156,7 +152,7 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
 
           <div className="flex">
             {/* Day of Week Labels */}
-            <div className="flex flex-col justify-between text-[9px] font-mono text-slate-500 pr-2 py-0.5 select-none w-7 shrink-0">
+            <div className="flex flex-col justify-between text-[9px] font-mono text-[var(--gh-text-dim)] pr-2 py-0.5 select-none w-7 shrink-0">
               <span>Mon</span>
               <span>Wed</span>
               <span>Fri</span>
@@ -184,28 +180,28 @@ export function GitHubContributionCalendar({ activities = [], username }: GitHub
         </div>
       </div>
 
-      {/* Calendar Footer & Legend (Yellow + Dark only) */}
-      <div className="mt-4 pt-3 border-t border-[#21262d] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
+      {/* Calendar Footer & Legend (Driven by CSS Variables) */}
+      <div className="mt-4 pt-3 border-t border-[var(--gh-border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] font-mono text-[var(--gh-text-muted)]">
         <div className="flex items-center space-x-4">
-          <span className="flex items-center space-x-1.5 text-yellow-400">
+          <span className="flex items-center space-x-1.5 text-[var(--yellow-bright)]">
             <Flame className="h-3.5 w-3.5" />
             <span>Active Contributor</span>
           </span>
           <span className="flex items-center space-x-1.5 text-slate-300">
-            <Trophy className="h-3.5 w-3.5 text-yellow-500" />
+            <Trophy className="h-3.5 w-3.5 text-[var(--yellow-primary)]" />
             <span>Daily streaks verified</span>
           </span>
         </div>
 
         {/* Legend */}
         <div className="flex items-center space-x-1.5 self-end sm:self-center">
-          <span className="text-[10px] text-slate-500">Less</span>
-          <div className="h-[10px] w-[10px] rounded-[2px] bg-[#161b22] border border-[#30363d]/50" />
-          <div className="h-[10px] w-[10px] rounded-[2px] bg-[#422006] border border-[#713f12]/40" />
-          <div className="h-[10px] w-[10px] rounded-[2px] bg-[#713f12]" />
-          <div className="h-[10px] w-[10px] rounded-[2px] bg-[#ca8a04]" />
-          <div className="h-[10px] w-[10px] rounded-[2px] bg-[#facc15]" />
-          <span className="text-[10px] text-slate-500">More</span>
+          <span className="text-[10px] text-[var(--gh-text-dim)]">Less</span>
+          <div className="h-[10px] w-[10px] rounded-[2px] bg-[var(--contrib-0)] border border-[var(--gh-border)]/50" />
+          <div className="h-[10px] w-[10px] rounded-[2px] bg-[var(--contrib-1)] border border-[var(--amber-badge-border)]/40" />
+          <div className="h-[10px] w-[10px] rounded-[2px] bg-[var(--contrib-2)]" />
+          <div className="h-[10px] w-[10px] rounded-[2px] bg-[var(--contrib-3)]" />
+          <div className="h-[10px] w-[10px] rounded-[2px] bg-[var(--contrib-4)]" />
+          <span className="text-[10px] text-[var(--gh-text-dim)]">More</span>
         </div>
       </div>
     </div>
