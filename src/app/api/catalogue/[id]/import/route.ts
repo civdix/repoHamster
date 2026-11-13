@@ -3,27 +3,15 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { cloneCatalogueRepository } from '@/lib/catalogue/workspace';
-import { isPlatformAdmin, isReviewer } from '@/lib/permissions';
+import { canViewAdmin } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-  if (isReviewer(session)) {
-    return NextResponse.json(
-      { error: 'Read-only mode: Importing catalogue repositories is disabled during project review.' },
-      { status: 403 }
-    );
-  }
-  if (!isPlatformAdmin(session)) {
-    return NextResponse.json(
-      { error: 'Unauthorized: Only platform administrator @repohamster can import repositories.' },
-      { status: 403 }
-    );
+  if (!session?.user || !canViewAdmin(session)) {
+    return NextResponse.json({ error: 'Unauthorized: Staff administrator or reviewer session required.' }, { status: 403 });
   }
 
   const catalogId = params.id;

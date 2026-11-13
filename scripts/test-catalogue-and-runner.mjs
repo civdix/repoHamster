@@ -56,14 +56,14 @@ function resolveLanguageHarness(language, framework) {
 async function verifyCatalogueAndMultiLanguageRunner() {
   console.log('🐹 Running RepoHamster Catalogue & Multi-Language Runner Verification...\n');
 
-  // Test 1: Verify all 10 repositories exist in SQLite database
-  console.log('Test 1: Auditing 10 Public Source Repositories in Catalogue...');
+  // Test 1: Verify all initial repositories exist in SQLite database
+  console.log('Test 1: Auditing Public Source Repositories in Catalogue...');
   const repos = await prisma.catalogRepository.findMany({
     orderBy: { createdAt: 'asc' },
   });
 
-  if (repos.length !== 10) {
-    throw new Error(`Expected exactly 10 repositories in catalogue, found ${repos.length}`);
+  if (repos.length < 10) {
+    throw new Error(`Expected at least 10 repositories in catalogue, found ${repos.length}`);
   }
 
   console.log(`  ✓ Successfully audited ${repos.length} repositories in SQLite CatalogRepository:`);

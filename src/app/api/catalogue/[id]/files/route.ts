@@ -3,14 +3,15 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { getProjectTree, readCatalogueFile } from '@/lib/catalogue/workspace';
+import { canViewAdmin } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user || (session.user as any).role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized: Admin role required' }, { status: 403 });
+  if (!session?.user || !canViewAdmin(session)) {
+    return NextResponse.json({ error: 'Unauthorized: Staff or Reviewer access required' }, { status: 403 });
   }
 
   const catalogId = params.id;
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 
   const { searchParams } = new URL(req.url);
-  const filePath = searchParams.get('file');
+  const filePath = searchParams.get('file') || searchParams.get('path');
 
   // If local repository exists
   if (repo.localPath) {

@@ -65,12 +65,7 @@ export async function validateRepositoryCompatibility(catalogId: string): Promis
       hasAutomatedTests = true;
       recommendedStatus = 'READY_FOR_TESTING';
       reproducibilityRating = 'HIGH';
-    } else if (repo.name.includes('intentionally-buggy-code')) {
-      testSuiteType = 'JEST';
-      hasAutomatedTests = true;
-      recommendedStatus = 'READY_FOR_TESTING';
-      reproducibilityRating = 'HIGH';
-    } else if (repo.name.includes('debugging-practice')) {
+    } else {
       testSuiteType = 'JEST';
       hasAutomatedTests = true;
       recommendedStatus = 'READY_FOR_TESTING';
@@ -78,7 +73,7 @@ export async function validateRepositoryCompatibility(catalogId: string): Promis
     }
   }
 
-  if (lang.includes('python') || framework.includes('fastapi')) {
+  if (lang.includes('python') || framework.includes('fastapi') || framework.includes('django')) {
     runtimes.push({ name: 'Python', version: '>=3.10 (3.12.4 active)', status: 'INSTALLED' });
     installCommand = 'pip install -r requirements.txt';
     buildCommand = 'python -m compileall .';
@@ -89,7 +84,15 @@ export async function validateRepositoryCompatibility(catalogId: string): Promis
     reproducibilityRating = 'HIGH';
   }
 
-  if (lang.includes('java') || framework.includes('spring')) {
+  const isJava =
+    (lang === 'java' ||
+      lang.startsWith('java ') ||
+      lang.endsWith(' java') ||
+      lang.includes('java-') ||
+      lang.includes('java_')) &&
+    !lang.includes('javascript');
+
+  if (isJava || framework.includes('spring')) {
     runtimes.push({ name: 'Java JDK', version: '>=17 (OpenJDK 17/21)', status: 'COMPATIBLE' });
     runtimes.push({ name: 'Maven', version: '>=3.8.0', status: 'COMPATIBLE' });
     installCommand = 'mvn clean compile';
@@ -126,8 +129,12 @@ export async function validateRepositoryCompatibility(catalogId: string): Promis
     reproducibilityRating = 'LOW';
   }
 
-  // Check Commercial Suitability
-  if (!repo.isCommercialAllowed && repo.license === 'NO_LICENSE') {
+  // Check Commercial Suitability & Licensing
+  const lic = (repo.license || '').toUpperCase();
+  const isPermissiveLicense = ['MIT', 'APACHE-2.0', 'APACHE 2.0', 'BSD-2-CLAUSE', 'BSD-3-CLAUSE', 'ISC', 'UNLICENSE'].includes(lic);
+  const commercialPermitted = repo.isCommercialAllowed || isPermissiveLicense;
+
+  if (!commercialPermitted && (repo.license === 'NO_LICENSE' || !repo.license)) {
     flaggedPatterns.push('Unlicensed repository: No explicit commercial assessment license. Requires adaptation.');
   }
 
@@ -156,6 +163,7 @@ export async function validateRepositoryCompatibility(catalogId: string): Promis
     data: {
       validationResult: JSON.stringify(result),
       importStatus: recommendedStatus,
+      isCommercialAllowed: commercialPermitted,
     },
   });
 

@@ -21,6 +21,7 @@ import {
   Clock,
   Sparkles,
   Download,
+  Play,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
@@ -122,6 +123,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
           localPath: data.localPath,
         }));
         setStatusMessage({ text: 'Repository cloned into local workspace successfully!', type: 'success' });
+        loadTree();
         router.refresh();
       } else {
         setStatusMessage({ text: data.error || 'Clone operation failed.', type: 'error' });
@@ -160,7 +162,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
   const loadTree = async () => {
     setIsLoadingTree(true);
     try {
-      const res = await fetch(`/api/catalogue/${repo.id}/tree`);
+      const res = await fetch(`/api/catalogue/${repo.id}/files`);
       const data = await res.json();
       if (res.ok && data.tree) {
         setTreeData(data.tree);
@@ -182,7 +184,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
     setSelectedFile(filePath);
     setIsLoadingFile(true);
     try {
-      const res = await fetch(`/api/catalogue/${repo.id}/file?path=${encodeURIComponent(filePath)}`);
+      const res = await fetch(`/api/catalogue/${repo.id}/files?file=${encodeURIComponent(filePath)}`);
       const data = await res.json();
       if (res.ok && data.content !== undefined) {
         setFileContent(data.content);
@@ -745,9 +747,9 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         <Download className="h-6 w-6 text-[var(--yellow-bright)]" />
                       </div>
                       <div className="space-y-1">
-                        <h3 className="text-sm font-bold text-[var(--gh-text)]">Repository Not Cloned Locally</h3>
-                        <p className="text-xs text-[var(--gh-text-secondary)] max-w-md mx-auto">
-                          Clone this repository into the RepoHamster local developer workspace (<code className="text-[var(--yellow-bright)]">catalogue-sources/{repo.id}</code>) to preview directory trees, inspect source files, and test runtimes without modifying upstream GitHub.
+                        <h3 className="text-sm font-bold text-[var(--gh-text)]">Explore Source Code & Directory Tree</h3>
+                        <p className="text-xs text-[var(--gh-text-secondary)] max-w-lg mx-auto leading-relaxed">
+                          Clone this repository into the RepoHamster local workspace cache (<code className="text-[var(--yellow-bright)]">catalogue-sources/{repo.id.substring(0, 8)}...</code>) to browse code files, inspect test assertions, and verify reproducibility directly in your browser without leaving the platform.
                         </p>
                       </div>
                       <button
@@ -755,7 +757,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         disabled={isImporting}
                         className="rounded-xl bg-[var(--yellow-primary)] px-4 py-2 text-xs font-bold text-black hover:bg-[var(--yellow-bright)] transition shadow-[var(--yellow-glow)]"
                       >
-                        {isImporting ? 'Cloning Git Repository...' : 'Clone to Local Workspace'}
+                        {isImporting ? 'Cloning Git Repository...' : 'Clone & Preview Files Locally'}
                       </button>
                     </div>
                   )}
@@ -766,7 +768,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
               {activeTab === 'CONVERT' && (
                 <div className="max-w-2xl mx-auto space-y-4">
                   {repo.importStatus !== 'READY_FOR_TESTING' && repo.importStatus !== 'IMPORTED' ? (
-                    <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 p-4 space-y-2 text-xs font-mono">
+                    <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 p-4 space-y-3 text-xs font-mono">
                       <div className="flex items-center space-x-2 text-[var(--yellow-bright)] font-bold">
                         <AlertTriangle className="h-4 w-4" />
                         <span>Quality Gate: Not Ready For Testing</span>
@@ -775,9 +777,26 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                         This repository is currently marked as <strong className="text-[var(--gh-text)]">&quot;{repo.importStatus}&quot;</strong>.
                         To protect candidate assessment integrity, only repositories marked <strong className="text-[var(--yellow-bright)]">READY_FOR_TESTING</strong> can be activated as candidate challenges.
                       </p>
-                      <p className="text-[var(--gh-text-muted)] text-[11px]">
-                        Run the compatibility validator or configure an automated test harness first.
-                      </p>
+                      <div className="flex items-center space-x-3 pt-1">
+                        <button
+                          type="button"
+                          onClick={handleRunValidation}
+                          disabled={isValidating}
+                          className="flex items-center space-x-1.5 rounded-lg bg-[var(--yellow-primary)] px-3 py-1.5 text-xs font-bold text-black hover:bg-[var(--yellow-bright)] transition shadow-[var(--yellow-glow)] disabled:opacity-50"
+                        >
+                          {isValidating ? (
+                            <>
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              <span>Validating Runtimes & Test Suites...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Play className="h-3.5 w-3.5" />
+                              <span>Validate & Mark Ready for Testing</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   ) : null}
 

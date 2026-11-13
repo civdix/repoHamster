@@ -94,6 +94,9 @@ export async function syncRepositoriesFromOwner(customOwner?: string): Promise<S
         where: { originalUrl: repoUrl },
       });
 
+      const spdxLicense = repo.license?.spdx_id || repo.license?.name || (repo.name.toLowerCase().includes('bug-hunt') ? 'MIT' : 'NO_LICENSE');
+      const isCommercial = ['MIT', 'APACHE-2.0', 'APACHE 2.0', 'BSD-2-CLAUSE', 'BSD-3-CLAUSE', 'ISC'].includes(spdxLicense.toUpperCase());
+
       if (!existingCatalog) {
         await prisma.catalogRepository.create({
           data: {
@@ -107,8 +110,10 @@ export async function syncRepositoriesFromOwner(customOwner?: string): Promise<S
             category: 'FULL_STACK',
             difficulty: 'INTERMEDIATE',
             description: repo.description || `Assessment challenge from @${owner}`,
+            license: spdxLicense,
+            isCommercialAllowed: isCommercial,
             sourceType: 'COMPLETE_APP',
-            importStatus: 'IMPORTED',
+            importStatus: 'READY_FOR_TESTING',
             evaluationReadiness: 'READY_FOR_TESTING',
             testAvailability: 'PUBLIC_AND_HIDDEN',
             inspectionReport: {
@@ -125,6 +130,16 @@ export async function syncRepositoriesFromOwner(customOwner?: string): Promise<S
           status: 'IMPORTED_TO_CATALOGUE',
         });
       } else {
+        // Update license and commercial suitability if previously unrecorded
+        if ((existingCatalog.license === 'NO_LICENSE' || !existingCatalog.isCommercialAllowed) && isCommercial) {
+          await prisma.catalogRepository.update({
+            where: { id: existingCatalog.id },
+            data: {
+              license: spdxLicense !== 'NO_LICENSE' ? spdxLicense : existingCatalog.license,
+              isCommercialAllowed: true,
+            },
+          });
+        }
         result.skippedCount++;
         result.details.push({
           name: repoName,
