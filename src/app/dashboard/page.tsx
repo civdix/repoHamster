@@ -25,6 +25,7 @@ import {
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
 import { ShareProfileBar } from '@/components/profile/ShareProfileBar';
+import { ChallengeExplorer } from '@/components/assignments/ChallengeExplorer';
 
 export const dynamic = 'force-dynamic';
 
@@ -148,6 +149,12 @@ export default async function CandidateDashboardPage() {
   const displayHandle = candidate?.username || candidate?.githubUsername || (session.user as any)?.githubUsername || 'coder';
   const displayName = candidate?.name || session.user.name || 'Developer';
 
+  // Status mapping object for client component
+  const statusMapObj: Record<string, { status: string; latestEvaluation?: any; candidateAssignmentId?: string }> = {};
+  assignmentStatusMap.forEach((value, key) => {
+    statusMapObj[key] = value;
+  });
+
   // Dynamic Hamster Greeting based on pass count
   let hamsterQuote = "Put on your coder headphones—we've got pesky bugs to nibble through!";
   if (completedCount === totalAssignments && totalAssignments > 0) {
@@ -159,32 +166,32 @@ export default async function CandidateDashboardPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8 text-[var(--gh-text)]">
       {/* 1. Personalized Welcome Card with Hamster Mascot (Yellow + Dark Theme) */}
-      <div className="relative rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 sm:p-8 overflow-hidden shadow-sm">
+      <div className="relative rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-6 overflow-hidden shadow-sm">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(ellipse_at_top_right,var(--yellow-glow),transparent_70%)] pointer-events-none" />
 
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative z-10">
           <div className="flex items-center space-x-4">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/50 shadow-[var(--yellow-glow)] p-1">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/50 shadow-[var(--yellow-glow)] p-1">
               <HamsterMascot
                 variant={completedCount > 0 ? 'normal' : 'normal'}
-                size={54}
+                size={48}
               />
             </div>
 
             <div>
-              <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-2xl font-bold tracking-tight text-[var(--gh-text)] font-sans">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--gh-text)] font-sans">
                   Welcome back, {displayName}!
                 </h1>
                 <Link
                   href="/profile"
-                  className="rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)] hover:border-[var(--yellow-bright)] transition"
+                  className="rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)] hover:border-[var(--yellow-bright)] transition"
                   title="Claim / Manage Unique Developer Handle"
                 >
                   @{displayHandle}
                 </Link>
               </div>
-              <p className="mt-1.5 text-xs sm:text-sm text-[var(--yellow-bright)] font-mono">
+              <p className="mt-1 text-xs text-[var(--yellow-bright)] font-mono">
                 &ldquo;{hamsterQuote}&rdquo;
               </p>
             </div>
@@ -193,7 +200,7 @@ export default async function CandidateDashboardPage() {
           <div className="flex flex-wrap items-center gap-2.5 self-start md:self-center shrink-0">
             <Link
               href="/profile"
-              className="rounded-xl border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-4 py-2 text-xs font-mono font-bold text-[var(--amber-badge-text)] hover:border-[var(--yellow-bright)] transition active:scale-95 shadow-[var(--yellow-glow)]"
+              className="rounded-xl border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-3.5 py-2 text-xs font-mono font-bold text-[var(--amber-badge-text)] hover:border-[var(--yellow-bright)] transition active:scale-95 shadow-[var(--yellow-glow)]"
             >
               Developer Profile
             </Link>
@@ -202,185 +209,113 @@ export default async function CandidateDashboardPage() {
         </div>
       </div>
 
-      {/* 2. Metrics Row (Yellow + Dark Theme) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 font-mono">
-        <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4">
-          <div className="flex items-center justify-between text-xs text-[var(--gh-text-muted)]">
-            <span>Total Challenges</span>
-            <Layers className="h-4 w-4 text-[var(--gh-text-dim)]" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-[var(--gh-text)]">{totalAssignments}</div>
-          <div className="mt-1 text-[11px] text-[var(--gh-text-muted)]">{availableCount} available to solve</div>
-        </div>
-
-        <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/80 p-4">
-          <div className="flex items-center justify-between text-xs text-[var(--amber-badge-text)]">
-            <span>Completed</span>
-            <CheckCircle2 className="h-4 w-4 text-[var(--yellow-bright)]" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-[var(--yellow-bright)]">{completedCount}</div>
-          <div className="mt-1 text-[11px] text-[var(--amber-badge-text)]">100% tests verified</div>
-        </div>
-
-        <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4">
-          <div className="flex items-center justify-between text-xs text-[var(--gh-text-muted)]">
-            <span>In Progress</span>
-            <Clock className="h-4 w-4 text-[var(--yellow-primary)]" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-[var(--yellow-primary)]">{inProgressCount}</div>
-          <div className="mt-1 text-[11px] text-[var(--gh-text-muted)]">Active cloud workspaces</div>
-        </div>
-
-        <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs text-[var(--gh-text-muted)]">
-            <span>AI Credit Budget</span>
-            <Bot className="h-4 w-4 text-[var(--yellow-bright)]" />
-          </div>
-          <div className="mt-2 flex items-baseline space-x-1.5">
-            <span className="text-2xl font-bold text-[var(--gh-text)]">{remainingRequests}</span>
-            <span className="text-xs text-[var(--gh-text-muted)]">/ {dailyRequestLimit} queries</span>
-          </div>
-          <div className="w-full h-1.5 rounded-full bg-[var(--gh-bg-tertiary)] overflow-hidden mt-1">
-            <div
-              style={{ width: `${Math.min(100, (remainingRequests / dailyRequestLimit) * 100)}%` }}
-              className="h-full bg-[var(--yellow-bright)] rounded-full"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Available Assignments Section */}
-      <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--gh-border-subtle)] pb-4">
-          <div>
+      {/* 2. TWO MAJOR DIVS LAYOUT: Challenges Explorer (Left) & Stats Sidebar (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        {/* MAJOR DIV 1 (Left 8 cols): All Challenges + Search & Filters */}
+        <div className="lg:col-span-8 space-y-4">
+          <div className="border-b border-[var(--gh-border-subtle)] pb-3">
             <h2 className="text-lg font-bold text-[var(--gh-text)] flex items-center space-x-2 font-sans">
               <BookMarked className="h-5 w-5 text-[var(--yellow-bright)]" />
               <span>Repository Debugging Challenges</span>
             </h2>
             <p className="text-xs text-[var(--gh-text-muted)] font-mono mt-0.5">
-              Open your assigned repository in Codespaces, fix the bugs, and submit a PR for automated hidden test evaluation.
+              Launch an assigned repository in Codespaces, fix the bugs, and submit a PR for automated hidden test evaluation.
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs font-mono text-[var(--gh-text-muted)]">
-            <span className="h-2 w-2 rounded-full bg-[var(--yellow-bright)]" />
-            <span>Interactive Evaluation Active</span>
-          </div>
+          {/* Interactive Challenge Explorer with Real Language & Framework Icons */}
+          <ChallengeExplorer
+            assignments={allAssignments}
+            statusMap={statusMapObj}
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {allAssignments.map((assignment) => {
-            const tracking = assignmentStatusMap.get(assignment.id);
-            const status = tracking?.status || 'NOT_STARTED';
-            const evaluation = tracking?.latestEvaluation;
-            const isCompleted = status === 'COMPLETED';
-            const testSummary = getTestCaseSummary(assignment);
+        {/* MAJOR DIV 2 (Right 4 cols, sticky): Compact Stats Sidebar */}
+        <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-6">
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 sm:p-5 space-y-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--gh-border-subtle)]">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--gh-text)]">
+                Assessment Metrics
+              </span>
+              <span className="rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] px-2 py-0.5 text-[10px] font-mono text-[var(--amber-badge-text)] font-bold">
+                Live Status
+              </span>
+            </div>
 
-            return (
-              <div
-                key={assignment.id}
-                className="group flex flex-col justify-between rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-5 shadow-sm transition hover:border-[var(--yellow-primary)]/60"
-              >
-                <div>
-                  {/* Top Badges */}
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="rounded-md bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] px-2 py-0.5 text-[10px] text-[var(--amber-badge-text)] font-mono font-semibold uppercase">
-                      {assignment.difficulty}
-                    </span>
-
-                    {/* Status Badge */}
-                    {isCompleted ? (
-                      <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[var(--amber-badge-text)]">
-                        <CheckCircle2 className="mr-1 h-3 w-3" />
-                        PASSED
-                      </span>
-                    ) : status === 'IN_PROGRESS' ? (
-                      <span className="inline-flex items-center rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--yellow-primary)]">
-                        <Clock className="mr-1 h-3 w-3" />
-                        In Progress
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--gh-text-muted)]">
-                        Available
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Title & Description */}
-                  <h3 className="font-bold text-[var(--gh-text)] text-base group-hover:text-[var(--yellow-bright)] transition line-clamp-1">
-                    {assignment.title}
-                  </h3>
-                  <p className="mt-1.5 text-xs text-[var(--gh-text-muted)] line-clamp-2 leading-relaxed">
-                    {assignment.description}
-                  </p>
-
-                  {/* Meta Specs */}
-                  <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] font-mono text-[var(--gh-text-muted)] border-t border-[var(--gh-border-subtle)] pt-3">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="h-2 w-2 rounded-full bg-[var(--yellow-bright)] inline-block" />
-                      <span className="truncate text-[var(--gh-text-secondary)]">{assignment.language} • {assignment.framework || 'Standard'}</span>
-                    </div>
-                    <div className="flex items-center space-x-1.5 justify-end">
-                      <Timer className="h-3.5 w-3.5 text-[var(--gh-text-dim)]" />
-                      <span>~{assignment.estimatedTimeMinutes} mins</span>
-                    </div>
-                  </div>
-
-                  {/* Testcases Present Block */}
-                  <div className="mt-2.5 rounded-lg border border-[var(--gh-border-subtle)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-[10px] font-mono flex items-center justify-between">
-                    <span className="text-[var(--gh-text-muted)]">Testcases Present:</span>
-                    <span
-                      className={`truncate font-semibold ${
-                        testSummary.hasTestCases ? 'text-[var(--yellow-bright)]' : 'text-[var(--yellow-primary)]'
-                      }`}
-                      title={testSummary.displayText}
-                    >
-                      {testSummary.displayText}
-                    </span>
-                  </div>
-
-                  {/* Test score summary if evaluated */}
-                  {evaluation && (
-                    <div className="mt-2.5 rounded-lg border border-[var(--gh-border-subtle)] bg-[var(--gh-bg-secondary)] p-2 text-xs">
-                      <div className="flex items-center justify-between font-mono">
-                        <span className="text-[var(--gh-text-muted)]">Latest Run:</span>
-                        <span
-                          className={`font-semibold ${
-                            evaluation.isPassed ? 'text-[var(--yellow-bright)]' : 'text-[var(--yellow-primary)]'
-                          }`}
-                        >
-                          {evaluation.scorePercent}% ({evaluation.passedTests}/{evaluation.totalTests} tests)
-                        </span>
-                      </div>
-                    </div>
-                  )}
+            {/* Compact Metric Cards Stack */}
+            <div className="space-y-2.5 font-mono">
+              <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)]">
+                <div className="flex items-center space-x-2.5">
+                  <Layers className="h-4 w-4 text-[var(--yellow-bright)]" />
+                  <span className="text-xs text-[var(--gh-text-secondary)]">Total Challenges</span>
                 </div>
-
-                {/* Card CTA (Variables) */}
-                <div className="mt-5 border-t border-[var(--gh-border-subtle)] pt-4">
-                  <Link
-                    href={`/assignments/${assignment.slug}`}
-                    className={`flex w-full items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-semibold transition active:scale-95 ${
-                      isCompleted
-                        ? 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50'
-                        : 'bg-[var(--yellow-button-bg)] text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] shadow-[var(--yellow-glow)] font-bold'
-                    }`}
-                  >
-                    <span>
-                      {isCompleted
-                        ? 'Review Solution & Workspace'
-                        : status === 'IN_PROGRESS'
-                        ? 'Resume in Codespaces'
-                        : 'Start Challenge'}
-                    </span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+                <div className="text-right">
+                  <span className="text-base font-bold text-[var(--gh-text)]">{totalAssignments}</span>
+                  <span className="text-[10px] text-[var(--gh-text-muted)] block">{availableCount} available</span>
                 </div>
               </div>
-            );
-          })}
+
+              <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/60">
+                <div className="flex items-center space-x-2.5">
+                  <CheckCircle2 className="h-4 w-4 text-[#10B981]" />
+                  <span className="text-xs text-[var(--amber-badge-text)] font-semibold">Completed</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-base font-bold text-[var(--yellow-bright)]">{completedCount}</span>
+                  <span className="text-[10px] text-[#10B981] font-semibold block">100% verified</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)]">
+                <div className="flex items-center space-x-2.5">
+                  <Clock className="h-4 w-4 text-[var(--yellow-primary)]" />
+                  <span className="text-xs text-[var(--gh-text-secondary)]">In Progress</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-base font-bold text-[var(--yellow-primary)]">{inProgressCount}</span>
+                  <span className="text-[10px] text-[var(--gh-text-muted)] block">active workspaces</span>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Credit Budget Progress Meter */}
+            <div className="p-3.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] space-y-2 font-mono text-xs">
+              <div className="flex items-center justify-between text-[11px] text-[var(--gh-text-muted)]">
+                <span className="flex items-center space-x-1.5 font-bold text-[var(--gh-text)]">
+                  <Bot className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+                  <span>Daily AI Queries</span>
+                </span>
+                <span className="text-[var(--yellow-bright)] font-bold">
+                  {remainingRequests} / {dailyRequestLimit}
+                </span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-[var(--gh-bg-tertiary)] overflow-hidden">
+                <div
+                  style={{ width: `${Math.min(100, (remainingRequests / dailyRequestLimit) * 100)}%` }}
+                  className="h-full bg-[var(--yellow-bright)] rounded-full transition-all"
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-[var(--gh-text-muted)] pt-1">
+                <span>Daily Token Limit</span>
+                <span className="font-bold text-[var(--gh-text)]">{remainingTokens.toLocaleString()} tokens</span>
+              </div>
+            </div>
+
+            {/* Quick Profile Link */}
+            <div className="pt-2">
+              <Link
+                href="/profile"
+                className="flex items-center justify-between p-2.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] hover:border-[var(--yellow-primary)]/60 text-xs font-mono transition text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]"
+              >
+                <span>View Full Developer Profile</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
 
       {/* 4. Recent Pull Requests & Evaluations */}
       <section className="space-y-4">
