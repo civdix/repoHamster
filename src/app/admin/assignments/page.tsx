@@ -64,7 +64,8 @@ export default async function AdminAssignmentsPage() {
   const hiddenCount = assignments.filter((a) => !a.isActive).length;
   const webhookFailedCount = assignments.filter((a) => a.webhookStatus === 'FAILED').length;
   const guardrailsFailedCount = assignments.filter((a) => a.guardrailsStatus === 'FAILED').length;
-  const hasIntegrationFailures = webhookFailedCount > 0 || guardrailsFailedCount > 0;
+  const workflowFailedCount = assignments.filter((a) => a.workflowStatus === 'FAILED').length;
+  const hasIntegrationFailures = webhookFailedCount > 0 || guardrailsFailedCount > 0 || workflowFailedCount > 0;
 
   const totalTestsAcrossAll = assignments.reduce((sum, a) => {
     const s = getTestCaseSummary(a);
@@ -93,18 +94,19 @@ export default async function AdminAssignmentsPage() {
         </div>
       </div>
 
-      {/* Global Warning Banner if any Webhooks or Guardrails Failed */}
+      {/* Global Warning Banner if any Webhooks, Guardrails, or Workflows Failed */}
       {hasIntegrationFailures && (
         <div className="rounded-xl border border-rose-500/60 bg-rose-500/15 p-4 text-xs font-mono text-rose-300 flex items-start space-x-3 animate-in fade-in duration-200 shadow-sm">
           <AlertCircle className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h4 className="font-bold text-rose-200 text-sm">
-              Attention Required: {webhookFailedCount + guardrailsFailedCount} Integration Failure(s) Detected
+              Attention Required: {webhookFailedCount + guardrailsFailedCount + workflowFailedCount} Integration Failure(s) Detected
             </h4>
             <p className="text-rose-300/90 leading-relaxed text-[11px]">
               {webhookFailedCount > 0 && `${webhookFailedCount} repository has a failed or disconnected GitHub webhook. `}
               {guardrailsFailedCount > 0 && `${guardrailsFailedCount} repository is missing AI guardrails (.github/copilot-instructions.md). `}
-              Look for the red marks below and click the red <strong className="text-white underline">Fix Hook</strong> or <strong className="text-white underline">Fix Guardrails</strong> buttons to auto-repair them.
+              {workflowFailedCount > 0 && `${workflowFailedCount} repository is missing automated PR checks (.github/workflows/test.yml). `}
+              Look for the red marks below and click the red <strong className="text-white underline">Fix Hook</strong>, <strong className="text-white underline">Fix Guardrails</strong>, or <strong className="text-white underline">Fix Checks</strong> buttons to auto-repair them.
             </p>
           </div>
         </div>

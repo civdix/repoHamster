@@ -36,6 +36,8 @@ export async function ensureDatabaseColumns(): Promise<void> {
         ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "webhookError" TEXT;
         ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "guardrailsStatus" TEXT DEFAULT 'PENDING';
         ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "guardrailsError" TEXT;
+        ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "workflowStatus" TEXT DEFAULT 'PENDING';
+        ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "workflowError" TEXT;
       `);
     } catch (e: any) {
       console.warn('[DB SELF-HEAL] Non-fatal schema column ensure notice:', e?.message || e);

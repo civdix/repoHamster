@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
 import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
+import { autoInstallTestWorkflow } from '@/lib/github-workflow-provisioner';
 import { isPlatformAdmin, isReviewer, canViewAdmin } from '@/lib/permissions';
 import fs from 'fs';
 import path from 'path';
@@ -162,12 +163,13 @@ Your objective is to identify intentionally introduced defects, fix the root cau
       },
     });
 
-    // Auto-install AI guardrails and Auto-provision Webhooks automatically in the background
+    // Auto-install AI guardrails, test workflow, and auto-provision webhooks automatically in the background
     (async () => {
       try {
-        const [whRes, grRes] = await Promise.allSettled([
+        const [whRes, grRes, wfRes] = await Promise.allSettled([
           autoCreateRepositoryWebhook(catalogRepo.originalUrl),
           autoInstallAIGuardrails(catalogRepo.originalUrl),
+          autoInstallTestWorkflow(catalogRepo.originalUrl, catalogRepo.language),
         ]);
 
         const webhookOk = whRes.status === 'fulfilled' && whRes.value.success;
@@ -176,6 +178,9 @@ Your objective is to identify intentionally introduced defects, fix the root cau
         const guardrailsOk = grRes.status === 'fulfilled' && grRes.value.success;
         const guardrailsError = grRes.status === 'fulfilled' ? (grRes.value.success ? null : grRes.value.message) : String(grRes.reason);
 
+        const workflowOk = wfRes.status === 'fulfilled' && wfRes.value.success;
+        const workflowError = wfRes.status === 'fulfilled' ? (wfRes.value.success ? null : wfRes.value.message) : String(wfRes.reason);
+
         await prisma.assignment.update({
           where: { id: assignment.id },
           data: {
@@ -183,6 +188,8 @@ Your objective is to identify intentionally introduced defects, fix the root cau
             webhookError,
             guardrailsStatus: guardrailsOk ? 'ACTIVE' : 'FAILED',
             guardrailsError,
+            workflowStatus: workflowOk ? 'ACTIVE' : 'FAILED',
+            workflowError,
           },
         });
       } catch (autoErr) {

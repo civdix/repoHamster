@@ -132,6 +132,8 @@ model Assignment {
   webhookError            String?
   guardrailsStatus        String                @default("PENDING")
   guardrailsError         String?
+  workflowStatus          String                @default("PENDING")
+  workflowError           String?
   catalogRepositoryId     String?
   createdAt               DateTime              @default(now())
   updatedAt               DateTime              @updatedAt

@@ -19,6 +19,7 @@ import {
   Shield,
   Wrench,
   RefreshCw,
+  GitPullRequest,
 } from 'lucide-react';
 import { AssignmentEditorModal } from './AssignmentEditorModal';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
@@ -47,7 +48,46 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
   const [guardrailsError, setGuardrailsError] = useState<string | null>(assignment.guardrailsError || null);
   const [guardrailsMessage, setGuardrailsMessage] = useState<string | null>(null);
 
+  // Assessment Workflow Checks State & Failure tracking
+  const [isProvisioningWorkflow, setIsProvisioningWorkflow] = useState(false);
+  const [workflowStatus, setWorkflowStatus] = useState<string>(assignment.workflowStatus || 'PENDING');
+  const [workflowError, setWorkflowError] = useState<string | null>(assignment.workflowError || null);
+  const [workflowMessage, setWorkflowMessage] = useState<string | null>(null);
+
   const hierarchy = parseLanguageHierarchy(assignment.language, assignment.framework);
+
+  const handleAutoProvisionWorkflow = async () => {
+    setIsProvisioningWorkflow(true);
+    setWorkflowMessage(null);
+    try {
+      const res = await fetch('/api/admin/workflows/provision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          repoUrl: assignment.repoUrl,
+          assignmentId: assignment.id,
+          language: assignment.language,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setWorkflowStatus('ACTIVE');
+        setWorkflowError(null);
+        setWorkflowMessage(data.message || 'Assessment checks installed successfully!');
+      } else {
+        setWorkflowStatus('FAILED');
+        setWorkflowError(data.message || 'Failed to install checks workflow.');
+        setWorkflowMessage(data.message || 'Failed to install checks workflow.');
+      }
+      router.refresh();
+    } catch (err: any) {
+      setWorkflowStatus('FAILED');
+      setWorkflowError(err?.message || 'Network error.');
+      setWorkflowMessage(err?.message || 'Network error.');
+    } finally {
+      setIsProvisioningWorkflow(false);
+    }
+  };
 
   const handleAutoProvisionGuardrails = async () => {
     setIsProvisioningGuardrails(true);
@@ -240,6 +280,33 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               </span>
             )}
 
+            {/* Assessment PR Workflow Checks Status Badge */}
+            {workflowStatus === 'ACTIVE' ? (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-emerald-400"
+                title="Automated PR assessment test workflow (.github/workflows/test.yml) is active"
+              >
+                <GitPullRequest className="h-3 w-3 text-emerald-400" />
+                <span>Checks: Active</span>
+              </span>
+            ) : workflowStatus === 'FAILED' ? (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-rose-500/70 bg-rose-500/15 px-2.5 py-0.5 text-[10px] font-mono font-bold text-rose-400 animate-pulse shadow-sm"
+                title={workflowError || 'Workflow checks failed to install. Click "Fix Checks" to retry.'}
+              >
+                <AlertCircle className="h-3 w-3 text-rose-500" />
+                <span>Checks: Failed / Missing</span>
+              </span>
+            ) : (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono font-medium text-amber-400"
+                title="Assessment checks pending verification"
+              >
+                <Clock className="h-3 w-3 text-amber-400" />
+                <span>Checks: Unchecked</span>
+              </span>
+            )}
+
             {webhookMessage && (
               <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--yellow-bright)] animate-in fade-in">
                 {webhookMessage}
@@ -249,6 +316,12 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             {guardrailsMessage && (
               <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--amber-badge-text)] animate-in fade-in">
                 {guardrailsMessage}
+              </span>
+            )}
+
+            {workflowMessage && (
+              <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-emerald-400 animate-in fade-in">
+                {workflowMessage}
               </span>
             )}
           </div>
@@ -264,7 +337,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           </p>
 
           {/* Red Failure Warning Alert Box */}
-          {(webhookStatus === 'FAILED' || guardrailsStatus === 'FAILED') && (
+          {(webhookStatus === 'FAILED' || guardrailsStatus === 'FAILED' || workflowStatus === 'FAILED') && (
             <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-xs font-mono text-rose-300 space-y-1.5 animate-in fade-in duration-200">
               <div className="flex items-center space-x-2 text-rose-400 font-bold">
                 <AlertCircle className="h-4 w-4 text-rose-500 shrink-0" />
@@ -287,6 +360,16 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
                   </p>
                   <p className="text-[10px] text-rose-400/80">
                     &rarr; Click the red <strong className="text-white underline">Fix Guardrails</strong> button on the right to install them.
+                  </p>
+                </div>
+              )}
+              {workflowStatus === 'FAILED' && (
+                <div className="text-[11px] text-rose-300/90 pl-6 space-y-0.5">
+                  <p>
+                    <strong className="text-rose-400">Checks Issue:</strong> {workflowError || 'Automated PR test workflow (.github/workflows/test.yml) could not be verified.'}
+                  </p>
+                  <p className="text-[10px] text-rose-400/80">
+                    &rarr; Click the red <strong className="text-white underline">Fix Checks</strong> button on the right to install it.
                   </p>
                 </div>
               )}
@@ -378,6 +461,35 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <Shield className="h-3.5 w-3.5 text-current" />
             )}
             <span>{guardrailsStatus === 'FAILED' ? 'Fix Guardrails' : guardrailsStatus === 'ACTIVE' ? 'Guardrails OK' : 'AI Guardrails'}</span>
+          </button>
+
+          {/* Install / Fix Assessment PR Checks Workflow Button */}
+          <button
+            onClick={handleAutoProvisionWorkflow}
+            disabled={isProvisioningWorkflow}
+            className={`flex items-center space-x-1.5 rounded-xl border px-2.5 py-1.5 text-xs transition active:scale-95 ${
+              workflowStatus === 'FAILED'
+                ? 'border-rose-500/70 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 hover:border-rose-400 font-bold animate-pulse shadow-sm'
+                : workflowStatus === 'ACTIVE'
+                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:border-emerald-500/70 hover:bg-emerald-500/20'
+                : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50'
+            }`}
+            title={
+              workflowStatus === 'FAILED'
+                ? `Checks workflow failed: ${workflowError || 'Click to retry installing'}`
+                : workflowStatus === 'ACTIVE'
+                ? 'Automated PR check workflow is active on GitHub. Click to re-verify.'
+                : 'Auto-commit .github/workflows/test.yml into repository to run tests on candidate PRs'
+            }
+          >
+            {isProvisioningWorkflow ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-current" />
+            ) : workflowStatus === 'FAILED' ? (
+              <Wrench className="h-3.5 w-3.5 text-rose-400" />
+            ) : (
+              <GitPullRequest className="h-3.5 w-3.5 text-current" />
+            )}
+            <span>{workflowStatus === 'FAILED' ? 'Fix Checks' : workflowStatus === 'ACTIVE' ? 'Checks OK' : 'Install Checks'}</span>
           </button>
 
           {/* Edit Information Modal Button */}

@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
 import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
+import { autoInstallTestWorkflow } from '@/lib/github-workflow-provisioner';
 import { isPlatformAdmin, isReviewer } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
@@ -103,12 +104,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Auto-provision both Webhook and AI Guardrails automatically in the background
+    // Auto-provision Webhook, AI Guardrails, and Test Workflow automatically in the background
     (async () => {
       try {
-        const [whRes, grRes] = await Promise.allSettled([
+        const [whRes, grRes, wfRes] = await Promise.allSettled([
           autoCreateRepositoryWebhook(assignment.repoUrl),
           autoInstallAIGuardrails(assignment.repoUrl),
+          autoInstallTestWorkflow(assignment.repoUrl, assignment.language),
         ]);
 
         const webhookOk = whRes.status === 'fulfilled' && whRes.value.success;
@@ -117,6 +119,9 @@ export async function POST(req: NextRequest) {
         const guardrailsOk = grRes.status === 'fulfilled' && grRes.value.success;
         const guardrailsError = grRes.status === 'fulfilled' ? (grRes.value.success ? null : grRes.value.message) : String(grRes.reason);
 
+        const workflowOk = wfRes.status === 'fulfilled' && wfRes.value.success;
+        const workflowError = wfRes.status === 'fulfilled' ? (wfRes.value.success ? null : wfRes.value.message) : String(wfRes.reason);
+
         await prisma.assignment.update({
           where: { id: assignment.id },
           data: {
@@ -124,6 +129,8 @@ export async function POST(req: NextRequest) {
             webhookError,
             guardrailsStatus: guardrailsOk ? 'ACTIVE' : 'FAILED',
             guardrailsError,
+            workflowStatus: workflowOk ? 'ACTIVE' : 'FAILED',
+            workflowError,
           },
         });
       } catch (err: any) {
