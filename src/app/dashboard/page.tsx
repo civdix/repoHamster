@@ -211,7 +211,7 @@ export default async function CandidateDashboardPage() {
 
       {/* 2. TWO MAJOR DIVS LAYOUT: Challenges Explorer (Left) & Stats Sidebar (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
+
         {/* MAJOR DIV 1 (Left 8 cols): All Challenges + Search & Filters */}
         <div className="lg:col-span-8 space-y-4">
           <div className="border-b border-[var(--gh-border-subtle)] pb-3">
@@ -219,9 +219,9 @@ export default async function CandidateDashboardPage() {
               <BookMarked className="h-5 w-5 text-[var(--yellow-bright)]" />
               <span>Repository Debugging Challenges</span>
             </h2>
-            <p className="text-xs text-[var(--gh-text-muted)] font-mono mt-0.5">
+            {/* <p className="text-xs text-[var(--gh-text-muted)] font-mono mt-0.5">
               Launch an assigned repository in Codespaces, fix the bugs, and submit a PR for automated hidden test evaluation.
-            </p>
+            </p> */}
           </div>
 
           {/* Interactive Challenge Explorer with Real Language & Framework Icons */}
@@ -353,11 +353,10 @@ export default async function CandidateDashboardPage() {
                   >
                     <div className="flex items-start space-x-3">
                       <div
-                        className={`mt-1 h-7 w-7 rounded-lg flex items-center justify-center shrink-0 ${
-                          isPassed
+                        className={`mt-1 h-7 w-7 rounded-lg flex items-center justify-center shrink-0 ${isPassed
                             ? 'bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--yellow-bright)]'
                             : 'bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)] text-[var(--yellow-primary)]'
-                        }`}
+                          }`}
                       >
                         {isPassed ? <CheckCircle2 className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
                       </div>
