@@ -26,17 +26,39 @@ import {
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
-const LANGUAGES = [
-  { name: 'Python', file: 'app/services/checkout.py', ext: 'py', icon: '🐍', tag: 'FastAPI / Redis async lock' },
-  { name: 'Go', file: 'src/api/handler.go', ext: 'go', icon: '🐹', tag: 'Goroutines / SQL transaction' },
-  { name: 'Java', file: 'src/OrderProcessor.java', ext: 'java', icon: '☕', tag: 'Spring / JPA isolation' },
-  { name: 'TypeScript', file: 'src/concurrency/limiter.ts', ext: 'ts', icon: '⚡', tag: 'Node.js / Token Bucket' },
-  { name: 'Rust', file: 'src/engine/worker.rs', ext: 'rs', icon: '🦀', tag: 'Tokio async event stream' },
-  { name: 'C++', file: 'src/memory/arena.cpp', ext: 'cpp', icon: '⚙️', tag: 'Thread-safe memory arena' },
+const SANDBOXES = [
+  {
+    name: 'Python',
+    icon: '🐍',
+    framework: 'FastAPI / Redis Async',
+    challenge: 'Distributed Token Bucket Rate Limiter',
+    image: 'python_sandbox.png',
+  },
+  {
+    name: 'Django',
+    icon: '🎸',
+    framework: 'DRF / Celery / PostgreSQL',
+    challenge: 'Idempotent Order Processing & Webhook Lock',
+    image: 'django_sandbox.png',
+  },
+  {
+    name: 'Go',
+    icon: '🐹',
+    framework: 'Goroutines / Worker Pool',
+    challenge: 'Bounded Worker Pool & Channel Buffer',
+    image: 'go_sandbox.png',
+  },
+  {
+    name: 'JavaScript',
+    icon: '⚡',
+    framework: 'Node.js / Express / Redis',
+    challenge: 'Cryptographic JWT & Sliding Window Interceptor',
+    image: 'javascript_sandbox.png',
+  },
 ];
 
 export function LandingBentoGrid() {
-  const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
+  const [selectedLang, setSelectedLang] = useState(SANDBOXES[0]);
   const [activeTrack, setActiveTrack] = useState<'ai' | 'strict'>('ai');
 
   return (
@@ -57,100 +79,63 @@ export function LandingBentoGrid() {
             </h3>
 
             <p className="text-xs sm:text-sm text-[var(--gh-text-secondary)] leading-relaxed">
-              Spin up containerized multi-file repositories across 12+ languages and frameworks with pre-configured dependencies, devcontainers, and instant test execution.
+              Spin up containerized multi-file repositories across your target language and framework with pre-configured dependencies, devcontainers, and instant test execution.
             </p>
 
-            {/* Language Pill Cloud */}
-            <div className="space-y-2 pt-2">
-              <span className="text-[11px] font-mono text-[var(--gh-text-muted)] block font-semibold">
-                Select Runtime Sandbox:
+            {/* Language Selection Buttons */}
+            <div className="space-y-2.5 pt-2">
+              <span className="text-[11px] font-mono text-[var(--gh-text-muted)] block font-semibold uppercase tracking-wider">
+                Select Language Challenge:
               </span>
-              <div className="flex flex-wrap gap-1.5">
-                {LANGUAGES.map((lang) => (
+              <div className="flex flex-wrap gap-2">
+                {SANDBOXES.map((lang) => (
                   <button
                     key={lang.name}
                     type="button"
                     onClick={() => setSelectedLang(lang)}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono transition font-semibold ${
+                    className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono transition font-semibold active:scale-95 ${
                       selectedLang.name === lang.name
                         ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-sm'
                         : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/40'
                     }`}
                   >
-                    {lang.name}
+                    <span>{lang.icon}</span>
+                    <span>{lang.name}</span>
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Selected Challenge Details Callout */}
+            <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3.5 space-y-2 font-mono text-xs">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-[var(--gh-text-muted)]">Active Challenge</span>
+                <span className="text-[var(--yellow-bright)] font-bold">{selectedLang.framework}</span>
+              </div>
+              <p className="text-xs font-bold text-[var(--gh-text)] font-sans">
+                {selectedLang.challenge}
+              </p>
+              <div className="pt-1 border-t border-[var(--gh-border-subtle)] flex items-center justify-between text-[11px] text-[var(--gh-text-muted)]">
+                <span className="flex items-center space-x-1 text-[#10B981]">
+                  <Check className="h-3 w-3 stroke-[3]" />
+                  <span>Hidden Tests Harness</span>
+                </span>
+                <span className="text-[var(--yellow-bright)] font-semibold">Live OA Screen</span>
+              </div>
+            </div>
           </div>
 
-          {/* Right: Live Visual Workstation & Multi-file IDE Experience */}
-          <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-none dark:shadow-inner text-left font-mono flex flex-col">
-            {/* Multi-File Tab Bar (Python, Go, Java, TS, etc.) */}
-            <div className="flex items-center space-x-1 border-b border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 overflow-x-auto scrollbar-none">
-              {LANGUAGES.map((lang) => (
-                <button
-                  key={lang.name}
-                  type="button"
-                  onClick={() => setSelectedLang(lang)}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-mono transition shrink-0 ${
-                    selectedLang.name === lang.name
-                      ? 'bg-[var(--gh-bg)] text-[var(--gh-text)] border border-[var(--gh-border)] font-bold shadow-none dark:shadow-2xs'
-                      : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg)]/50'
-                  }`}
-                >
-                  <span>{lang.icon}</span>
-                  <span>{lang.file.split('/').pop()}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Visual Canvas: Developer Coding at Workstation */}
-            <div className="relative aspect-[16/9] w-full bg-[var(--gh-bg-code)] overflow-hidden group/canvas">
-              <Image
-                src="/images/developer-coding-workspace.png"
-                alt="Software Engineer coding at a modern multi-file development workstation"
-                fill
-                className="object-cover object-center group-hover/canvas:scale-[1.02] transition-transform duration-500"
-                priority
+          {/* Right: Authentic OA Screen Display for Selected Language */}
+          <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-none dark:shadow-inner text-left flex flex-col">
+            <div className="relative aspect-[16/9.2] w-full bg-[var(--gh-bg-code)] overflow-hidden group/canvas">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={selectedLang.image}
+                src={`/images/${selectedLang.image}`}
+                alt={`${selectedLang.name} Online Assessment (OA) Challenge Screen`}
+                className="w-full h-full object-cover object-top transition-opacity duration-300 animate-in fade-in"
+                loading="eager"
               />
-
-              {/* Gradient Vignette Overlay for Crisp Readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--gh-bg)] via-black/35 to-black/20 pointer-events-none" />
-
-              {/* Top-Right Stack Badge */}
-              <div className="absolute top-3 right-3 flex items-center space-x-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/10 px-3 py-1 text-[11px] text-white font-mono font-bold">
-                <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
-                <span>{selectedLang.name} Devcontainer Live</span>
-              </div>
-
-              {/* Bottom HUD: Active File & Test Feedback */}
-              <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono text-white">
-                <div className="flex items-center space-x-2">
-                  <span className="text-base">{selectedLang.icon}</span>
-                  <div>
-                    <div className="font-bold flex items-center space-x-2">
-                      <span className="text-[var(--yellow-bright)]">{selectedLang.file}</span>
-                      <span className="text-[10px] text-white/60">• {selectedLang.tag}</span>
-                    </div>
-                    <span className="text-[10px] text-emerald-400 font-semibold">
-                      ✓ PASS: Concurrency &amp; race conditions validated
-                    </span>
-                  </div>
-                </div>
-                <div className="self-end sm:self-auto rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold">
-                  3/3 TESTS PASSED (180ms)
-                </div>
-              </div>
-            </div>
-
-            {/* Footer Status */}
-            <div className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2.5 flex items-center justify-between text-[11px] text-[var(--gh-text-muted)] font-mono">
-              <span className="flex items-center space-x-1.5">
-                <Check className="h-3.5 w-3.5 text-[#10B981]" />
-                <span>Zero Local Setup • Multi-File Sandboxes</span>
-              </span>
-              <span className="text-[var(--yellow-bright)] font-semibold">12+ Stacks Ready</span>
             </div>
           </div>
         </div>

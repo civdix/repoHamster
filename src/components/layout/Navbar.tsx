@@ -57,33 +57,15 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center space-x-1 text-[13px] font-medium text-[var(--gh-text-secondary)]">
             <Link
               href="/dashboard"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${pathname === '/dashboard' || pathname?.startsWith('/assignments')
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
+                pathname === '/dashboard' || pathname?.startsWith('/assignments')
                   ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]'
                   : ''
-                }`}
+              }`}
             >
               Challenges
             </Link>
 
-            <Link
-              href="/guide"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] flex items-center space-x-1 ${pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-                }`}
-            >
-              <span>AI vs Non-AI Mode</span>
-              <span className="rounded-full bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] text-[9px] font-mono px-1.5 py-0.2">
-                Dual
-              </span>
-            </Link>
-
-            <Link
-              href="/guide"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-                }`}
-            >
-              How It Works
-            </Link>
-            {/* 
             <Link
               href="/leaderboard"
               className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
@@ -91,13 +73,23 @@ export function Navbar() {
               }`}
             >
               Leaderboard
-            </Link> */}
+            </Link>
+
+            <Link
+              href="/guide"
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
+                pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+              }`}
+            >
+              How It Works
+            </Link>
 
             {canSeeAdmin && (
               <Link
                 href="/admin"
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] ${pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
-                  }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] ${
+                  pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
+                }`}
               >
                 Admin {isReviewer && '(Preview)'}
               </Link>
@@ -195,17 +187,15 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/guide"
+              href="/leaderboard"
               onClick={closeMenu}
               className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
             >
               <div className="flex items-center space-x-2.5">
-                <Sparkles className="h-4 w-4 text-[var(--yellow-bright)]" />
-                <span>AI vs Non-AI Mode</span>
+                <Trophy className="h-4 w-4 text-[var(--yellow-bright)]" />
+                <span>Leaderboard &amp; Stars</span>
               </div>
-              <span className="rounded-full bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] text-[10px] font-mono px-2 py-0.5">
-                Dual
-              </span>
+              <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
             </Link>
 
             <Link
@@ -216,18 +206,6 @@ export function Navbar() {
               <div className="flex items-center space-x-2.5">
                 <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
                 <span>How It Works</span>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
-            </Link>
-
-            <Link
-              href="/leaderboard"
-              onClick={closeMenu}
-              className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
-            >
-              <div className="flex items-center space-x-2.5">
-                <Trophy className="h-4 w-4 text-[var(--yellow-bright)]" />
-                <span>Leaderboard &amp; Stars</span>
               </div>
               <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
             </Link>
