@@ -189,20 +189,20 @@ export default async function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--gh-bg)]/80 dark:from-black/80 via-transparent to-transparent pointer-events-none" />
 
                   {/* Glassmorphic Floating Badges */}
-                  <div className="absolute top-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[var(--gh-text)] dark:text-white backdrop-blur shadow-none dark:shadow-sm">
+                  {/* <div className="absolute top-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[var(--gh-text)] dark:text-white backdrop-blur shadow-none dark:shadow-sm">
                     <span className="h-2 w-2 rounded-full bg-[#10B981] animate-ping" />
                     <span className="h-2 w-2 rounded-full bg-[#10B981] -ml-2" />
                     <span>Sandbox Ready</span>
-                  </div>
+                  </div> */}
 
                   <div className="absolute top-3 right-3 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/95 px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] backdrop-blur shadow-none dark:shadow-sm">
                     Mode: Dual OA Track
                   </div>
 
-                  <div className="absolute bottom-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3.5 py-1 text-xs font-mono font-bold text-[#10B981] backdrop-blur shadow-none dark:shadow-sm">
+                  {/* <div className="absolute bottom-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3.5 py-1 text-xs font-mono font-bold text-[#10B981] backdrop-blur shadow-none dark:shadow-sm">
                     <Check className="h-3.5 w-3.5 stroke-[3]" />
                     <span>14/14 Edge-Case Tests Passing</span>
-                  </div>
+                  </div> */}
 
                   <div className="absolute bottom-3 right-3 flex items-center space-x-1 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[#F59E0B] backdrop-blur shadow-none dark:shadow-sm">
                     <Star className="h-3.5 w-3.5 fill-current" />
