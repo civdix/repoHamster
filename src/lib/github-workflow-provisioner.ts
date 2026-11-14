@@ -21,11 +21,14 @@ jobs:
   test:
     name: Run Pytest Suite
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Candidate PR Code
         uses: actions/checkout@v4
         with:
           ref: \${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       # Anti-Cheat: Restore authoritative tests from upstream repository
       - name: Restore Authoritative Tests
@@ -62,11 +65,14 @@ jobs:
   test:
     name: Run Go Test Suite
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Candidate PR Code
         uses: actions/checkout@v4
         with:
           ref: \${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       # Anti-Cheat: Restore authoritative tests from upstream repository
       - name: Restore Authoritative Tests
@@ -97,11 +103,14 @@ jobs:
   test:
     name: Run Test Suite
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Candidate PR Code
         uses: actions/checkout@v4
         with:
           ref: \${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       # Anti-Cheat: Restore authoritative tests from upstream repository
       - name: Restore Authoritative Tests
