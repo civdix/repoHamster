@@ -67,13 +67,14 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           repoUrl: assignment.repoUrl,
           assignmentId: assignment.id,
           language: assignment.language,
+          force: workflowStatus === 'ACTIVE',
         }),
       });
       const data = await res.json();
       if (data.success) {
         setWorkflowStatus('ACTIVE');
         setWorkflowError(null);
-        setWorkflowMessage(data.message || 'Assessment checks installed successfully!');
+        setWorkflowMessage(data.message || (workflowStatus === 'ACTIVE' ? 'Assessment checks reinstalled successfully!' : 'Assessment checks installed successfully!'));
       } else {
         setWorkflowStatus('FAILED');
         setWorkflowError(data.message || 'Failed to install checks workflow.');
@@ -428,10 +429,12 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <Loader2 className="h-3.5 w-3.5 animate-spin text-current" />
             ) : webhookStatus === 'FAILED' ? (
               <Wrench className="h-3.5 w-3.5 text-rose-400" />
+            ) : webhookStatus === 'ACTIVE' ? (
+              <RefreshCw className="h-3.5 w-3.5 text-emerald-400" />
             ) : (
               <Webhook className="h-3.5 w-3.5 text-current" />
             )}
-            <span>{webhookStatus === 'FAILED' ? 'Fix Hook' : webhookStatus === 'ACTIVE' ? 'Hook OK' : 'Connect Hook'}</span>
+            <span>{webhookStatus === 'FAILED' ? 'Fix Hook' : webhookStatus === 'ACTIVE' ? 'Reinstall Hook' : 'Connect Hook'}</span>
           </button>
 
           {/* Install / Fix AI Guardrails Button */}
@@ -449,7 +452,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               guardrailsStatus === 'FAILED'
                 ? `Guardrails failed: ${guardrailsError || 'Click to retry installing'}`
                 : guardrailsStatus === 'ACTIVE'
-                ? 'Guardrails active. Click to re-verify.'
+                ? 'Guardrails active. Click to reinstall/refresh in repository.'
                 : 'Install Copilot Socratic rules and disable inline autocompletions in repository'
             }
           >
@@ -457,10 +460,12 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <Loader2 className="h-3.5 w-3.5 animate-spin text-current" />
             ) : guardrailsStatus === 'FAILED' ? (
               <Wrench className="h-3.5 w-3.5 text-rose-400" />
+            ) : guardrailsStatus === 'ACTIVE' ? (
+              <RefreshCw className="h-3.5 w-3.5 text-emerald-400" />
             ) : (
               <Shield className="h-3.5 w-3.5 text-current" />
             )}
-            <span>{guardrailsStatus === 'FAILED' ? 'Fix Guardrails' : guardrailsStatus === 'ACTIVE' ? 'Guardrails OK' : 'AI Guardrails'}</span>
+            <span>{guardrailsStatus === 'FAILED' ? 'Fix Guardrails' : guardrailsStatus === 'ACTIVE' ? 'Reinstall Guardrails' : 'AI Guardrails'}</span>
           </button>
 
           {/* Install / Fix Assessment PR Checks Workflow Button */}
@@ -478,7 +483,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               workflowStatus === 'FAILED'
                 ? `Checks workflow failed: ${workflowError || 'Click to retry installing'}`
                 : workflowStatus === 'ACTIVE'
-                ? 'Automated PR check workflow is active on GitHub. Click to re-verify.'
+                ? 'Automated PR check workflow is active on GitHub. Click to reinstall/refresh in repository.'
                 : 'Auto-commit .github/workflows/test.yml into repository to run tests on candidate PRs'
             }
           >
@@ -486,10 +491,18 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               <Loader2 className="h-3.5 w-3.5 animate-spin text-current" />
             ) : workflowStatus === 'FAILED' ? (
               <Wrench className="h-3.5 w-3.5 text-rose-400" />
+            ) : workflowStatus === 'ACTIVE' ? (
+              <RefreshCw className="h-3.5 w-3.5 text-emerald-400" />
             ) : (
               <GitPullRequest className="h-3.5 w-3.5 text-current" />
             )}
-            <span>{workflowStatus === 'FAILED' ? 'Fix Checks' : workflowStatus === 'ACTIVE' ? 'Checks OK' : 'Install Checks'}</span>
+            <span>
+              {workflowStatus === 'FAILED'
+                ? 'Fix Checks'
+                : workflowStatus === 'ACTIVE'
+                ? 'Reinstall Checks'
+                : 'Install Checks'}
+            </span>
           </button>
 
           {/* Edit Information Modal Button */}

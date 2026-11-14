@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { repoUrl, assignmentId, language } = await req.json();
+    const { repoUrl, assignmentId, language, force } = await req.json();
 
     let targetRepoUrl = repoUrl;
     let targetLanguage = language || 'javascript';
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 
     const sessionToken = (session as any)?.accessToken || (session.user as any)?.accessToken;
     const adminToken = process.env.GITHUB_TOKEN || sessionToken;
-    const result = await autoInstallTestWorkflow(targetRepoUrl, targetLanguage, adminToken);
+    const result = await autoInstallTestWorkflow(targetRepoUrl, targetLanguage, adminToken, Boolean(force));
 
     if (assignmentId) {
       await prisma.assignment.update({

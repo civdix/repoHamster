@@ -137,7 +137,8 @@ jobs:
 export async function autoInstallTestWorkflow(
   repoUrl: string,
   language: string = 'javascript',
-  customToken?: string
+  customToken?: string,
+  force: boolean = false
 ): Promise<WorkflowProvisionResult> {
   const envToken = process.env.GITHUB_TOKEN
     ? process.env.GITHUB_TOKEN.trim().replace(/^['"]|['"]$/g, '')
@@ -223,8 +224,8 @@ export async function autoInstallTestWorkflow(
 
     const targetBase64 = Buffer.from(workflowContent, 'utf8').toString('base64');
 
-    // If the workflow already exists with matching content, consider it verified & active!
-    if (existingContentBase64 && existingContentBase64 === targetBase64) {
+    // If the workflow already exists with matching content and not forcing, consider it verified & active!
+    if (!force && existingContentBase64 && existingContentBase64 === targetBase64) {
       const res: WorkflowProvisionResult = {
         success: true,
         message: 'Assessment workflow (.github/workflows/test.yml) verified and active.',
@@ -235,7 +236,7 @@ export async function autoInstallTestWorkflow(
     }
 
     const payload: any = {
-      message: 'ci: add automated PR test evaluation workflow',
+      message: force ? 'ci: reinstall/refresh automated PR test workflow' : 'ci: add automated PR test evaluation workflow',
       content: targetBase64,
       branch: targetBranch,
     };
