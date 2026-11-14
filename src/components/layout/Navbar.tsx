@@ -57,20 +57,18 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center space-x-1 text-[13px] font-medium text-[var(--gh-text-secondary)]">
             <Link
               href="/dashboard"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
-                pathname === '/dashboard' || pathname?.startsWith('/assignments')
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${pathname === '/dashboard' || pathname?.startsWith('/assignments')
                   ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]'
                   : ''
-              }`}
+                }`}
             >
               Challenges
             </Link>
 
             <Link
               href="/guide"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] flex items-center space-x-1 ${
-                pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-              }`}
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] flex items-center space-x-1 ${pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+                }`}
             >
               <span>AI vs Non-AI Mode</span>
               <span className="rounded-full bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] text-[9px] font-mono px-1.5 py-0.2">
@@ -80,13 +78,12 @@ export function Navbar() {
 
             <Link
               href="/guide"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
-                pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-              }`}
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+                }`}
             >
               How It Works
             </Link>
-
+            {/* 
             <Link
               href="/leaderboard"
               className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
@@ -94,14 +91,13 @@ export function Navbar() {
               }`}
             >
               Leaderboard
-            </Link>
+            </Link> */}
 
             {canSeeAdmin && (
               <Link
                 href="/admin"
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] ${
-                  pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] ${pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
+                  }`}
               >
                 Admin {isReviewer && '(Preview)'}
               </Link>
