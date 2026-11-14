@@ -13,6 +13,8 @@ import {
   Flame,
   Zap,
   Code2,
+  Lock,
+  Clock,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
@@ -105,14 +107,19 @@ export function GitHubProfileSidebar({
         {/* Role Pill (Driven by CSS Variables) */}
         <div className="pt-1">
           {user.role === 'ADMIN' ? (
-            <span className="inline-flex items-center rounded-full border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-[var(--yellow-glow-lg)]">
+            <span className="inline-flex items-center rounded-full border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-none dark:shadow-[var(--yellow-glow-lg)]">
               <Shield className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" />
               Platform Admin
             </span>
-          ) : (
+          ) : (stats?.solvedCount || 0) > 0 ? (
             <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-medium text-[var(--amber-badge-text)]">
-              <CheckCircle2 className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+              <CheckCircle2 className="mr-1.5 h-3.5 w-3.5 text-[#10B981]" />
               Verified Candidate
+            </span>
+          ) : (
+            <span className="inline-flex items-center rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1 text-xs font-mono font-medium text-[var(--gh-text-muted)]">
+              <Clock className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+              Candidate (Onboarding)
             </span>
           )}
         </div>
@@ -122,7 +129,7 @@ export function GitHubProfileSidebar({
           {isOwner ? (
             <Link
               href="/profile"
-              className="w-full flex items-center justify-center space-x-2 rounded-xl bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)] px-4 py-2 text-xs font-bold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95 shadow-sm"
+              className="w-full flex items-center justify-center space-x-2 rounded-xl bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)] px-4 py-2 text-xs font-bold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95 shadow-none dark:shadow-sm"
             >
               <span>Edit Profile &amp; Handle</span>
             </Link>
@@ -130,10 +137,10 @@ export function GitHubProfileSidebar({
 
           <button
             onClick={handleCopyLink}
-            className={`w-full flex items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 shadow-sm ${
+            className={`w-full flex items-center justify-center space-x-2 rounded-xl px-4 py-2 text-xs font-bold transition active:scale-95 shadow-none dark:shadow-sm ${
               copied
-                ? 'bg-[var(--amber-badge-bg)] border border-[var(--yellow-bright)] text-[var(--amber-badge-text)] shadow-[var(--yellow-glow-lg)]'
-                : 'bg-[var(--yellow-primary)] hover:bg-[var(--yellow-bright)] text-[var(--yellow-button-text)] shadow-[var(--yellow-glow-lg)]'
+                ? 'bg-[var(--amber-badge-bg)] border border-[var(--yellow-bright)] text-[var(--amber-badge-text)]'
+                : 'bg-[var(--yellow-primary)] hover:bg-[var(--yellow-bright)] text-[var(--yellow-button-text)]'
             }`}
           >
             {copied ? (
@@ -182,27 +189,51 @@ export function GitHubProfileSidebar({
           <span>Achievements</span>
         </h3>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5 flex items-center space-x-2 hover:border-[var(--yellow-primary)]/50 transition">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] shrink-0">
-              <Zap className="h-4 w-4" />
+        {(stats?.solvedCount || 0) === 0 && (stats?.submissionsCount || 0) === 0 ? (
+          <div className="rounded-xl border border-dashed border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/60 p-3 text-center space-y-1 font-mono">
+            <div className="flex items-center justify-center space-x-1.5 text-[var(--gh-text-muted)] text-[11px] font-bold">
+              <Lock className="h-3.5 w-3.5 text-[var(--gh-text-dim)]" />
+              <span>Achievements Locked (0/4)</span>
             </div>
-            <div className="min-w-0">
-              <p className="text-[11px] font-bold text-[var(--gh-text)] truncate">Bug Hunter</p>
-              <p className="text-[9px] font-mono text-[var(--amber-badge-text)] truncate">{stats?.solvedCount || 0} Solved</p>
-            </div>
+            <p className="text-[10px] text-[var(--gh-text-dim)] leading-relaxed">
+              Solve your first repo challenge to begin earning verified badges.
+            </p>
           </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2">
+            <div className={`rounded-xl border p-2.5 flex items-center space-x-2 transition ${
+              (stats?.solvedCount || 0) > 0
+                ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 hover:border-[var(--yellow-primary)]/50'
+                : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 opacity-60'
+            }`}>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] shrink-0">
+                <Zap className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold text-[var(--gh-text)] truncate">Bug Hunter</p>
+                <p className="text-[9px] font-mono text-[var(--amber-badge-text)] truncate">
+                  {(stats?.solvedCount || 0) > 0 ? `${stats?.solvedCount} Solved` : 'Locked'}
+                </p>
+              </div>
+            </div>
 
-          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2.5 flex items-center space-x-2 hover:border-[var(--yellow-primary)]/50 transition">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] shrink-0">
-              <Flame className="h-4 w-4" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[11px] font-bold text-[var(--gh-text)] truncate">Pull Shark</p>
-              <p className="text-[9px] font-mono text-[var(--amber-badge-text)] truncate">{stats?.submissionsCount || 0} PRs</p>
+            <div className={`rounded-xl border p-2.5 flex items-center space-x-2 transition ${
+              (stats?.submissionsCount || 0) > 0
+                ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/40 hover:border-[var(--yellow-primary)]/50'
+                : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 opacity-60'
+            }`}>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] shrink-0">
+                <Flame className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold text-[var(--gh-text)] truncate">Pull Shark</p>
+                <p className="text-[9px] font-mono text-[var(--amber-badge-text)] truncate">
+                  {(stats?.submissionsCount || 0) > 0 ? `${stats?.submissionsCount} PRs` : 'Locked'}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* 4. Mastered Technologies */}

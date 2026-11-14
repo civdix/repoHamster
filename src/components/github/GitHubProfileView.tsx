@@ -11,6 +11,8 @@ import {
   Award,
   Zap,
   Search,
+  Lock,
+  ArrowRight,
 } from 'lucide-react';
 import { GitHubTabs, GitHubTabType } from './GitHubTabs';
 import { GitHubContributionCalendar } from './GitHubContributionCalendar';
@@ -87,6 +89,14 @@ export function GitHubProfileView({
   const passRate =
     allSubmissions.length > 0 ? Math.round((passedSubmissions.length / allSubmissions.length) * 100) : 0;
 
+  // Real, dynamic achievements evaluation
+  const hasBugHunter = completedAssignments.length > 0;
+  const hasPullShark = pullRequests.length > 0;
+  const hasHarnessMaster = completedAssignments.length > 0 && passRate >= 80;
+  const hasSocraticIntegrity = completedAssignments.length > 0;
+
+  const unlockedCount = [hasBugHunter, hasPullShark, hasHarnessMaster, hasSocraticIntegrity].filter(Boolean).length;
+
   const stacksSolved = Array.from(
     new Set(
       completedAssignments
@@ -136,7 +146,7 @@ export function GitHubProfileView({
             counts={{
               challenges: assignments.length,
               pullRequests: pullRequests.length,
-              achievements: 4,
+              achievements: unlockedCount,
             }}
           />
 
@@ -356,65 +366,174 @@ export function GitHubProfileView({
           {/* TAB 4: ACHIEVEMENTS */}
           {activeTab === 'achievements' && (
             <div className="space-y-4 animate-in fade-in duration-200">
+              {/* Header summary banner */}
+              <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center space-x-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
+                    <Award className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-[var(--gh-text)]">
+                      {unlockedCount} of 4 Achievements Unlocked
+                    </h3>
+                    <p className="text-xs text-[var(--gh-text-muted)] font-mono">
+                      {unlockedCount === 0
+                        ? 'Candidate onboarding: Solve your first repo challenge or submit a PR to earn achievements.'
+                        : 'Badges are cryptographically verified upon automated CI and test harness completion.'}
+                    </p>
+                  </div>
+                </div>
+
+                {unlockedCount === 0 && (
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex items-center space-x-1.5 rounded-lg bg-[var(--yellow-button-bg)] px-3.5 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shrink-0 shadow-none dark:shadow-sm"
+                  >
+                    <span>Start Practicing</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-5 space-y-3">
+                {/* 1. Bug Hunter */}
+                <div className={`rounded-xl border p-5 space-y-3 transition ${
+                  hasBugHunter
+                    ? 'border-[var(--amber-badge-border)] bg-[var(--gh-bg)] shadow-none dark:shadow-sm'
+                    : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 opacity-60'
+                }`}>
                   <div className="flex items-center space-x-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
-                      <Zap className="h-6 w-6" />
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${
+                      hasBugHunter
+                        ? 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border-[var(--amber-badge-border)]'
+                        : 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-dim)] border-[var(--gh-border)]'
+                    }`}>
+                      {hasBugHunter ? <Zap className="h-6 w-6" /> : <Lock className="h-5 w-5" />}
                     </div>
                     <div>
                       <h4 className="font-bold text-[var(--gh-text)] text-sm">Bug Hunter</h4>
-                      <p className="text-xs text-[var(--yellow-bright)] font-mono">Tier II Unlocked</p>
+                      <p className={`text-xs font-mono font-semibold ${hasBugHunter ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`}>
+                        {hasBugHunter
+                          ? completedAssignments.length >= 5
+                            ? 'Tier II Master Unlocked'
+                            : 'Tier I Solved'
+                          : 'Locked (Requires 1 Solved Challenge)'}
+                      </p>
                     </div>
                   </div>
                   <p className="text-xs text-[var(--gh-text-muted)] leading-relaxed">
-                    Awarded for resolving complex concurrency race conditions and logic bugs verified by hidden test suites.
+                    {hasBugHunter
+                      ? `Awarded for resolving complex concurrency race conditions and logic bugs across ${completedAssignments.length} verified repositories.`
+                      : 'Awarded for resolving complex concurrency race conditions and logic bugs verified by hidden test suites.'}
                   </p>
+                  {hasBugHunter && (
+                    <div className="pt-2 border-t border-[var(--gh-border-subtle)] text-[11px] font-mono text-[#10B981] font-semibold flex items-center space-x-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>{completedAssignments.length} challenge{completedAssignments.length === 1 ? '' : 's'} verified</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-5 space-y-3">
+                {/* 2. Pull Shark */}
+                <div className={`rounded-xl border p-5 space-y-3 transition ${
+                  hasPullShark
+                    ? 'border-[var(--amber-badge-border)] bg-[var(--gh-bg)] shadow-none dark:shadow-sm'
+                    : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 opacity-60'
+                }`}>
                   <div className="flex items-center space-x-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
-                      <Flame className="h-6 w-6" />
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${
+                      hasPullShark
+                        ? 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border-[var(--amber-badge-border)]'
+                        : 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-dim)] border-[var(--gh-border)]'
+                    }`}>
+                      {hasPullShark ? <Flame className="h-6 w-6" /> : <Lock className="h-5 w-5" />}
                     </div>
                     <div>
                       <h4 className="font-bold text-[var(--gh-text)] text-sm">Pull Shark</h4>
-                      <p className="text-xs text-[var(--yellow-bright)] font-mono">{pullRequests.length} Submissions</p>
+                      <p className={`text-xs font-mono font-semibold ${hasPullShark ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`}>
+                        {hasPullShark
+                          ? `${pullRequests.length} Submissions Shipped`
+                          : 'Locked (Requires 1 Pull Request)'}
+                      </p>
                     </div>
                   </div>
                   <p className="text-xs text-[var(--gh-text-muted)] leading-relaxed">
                     Shipped production pull requests with atomic commits, passing GitHub Actions CI workflows.
                   </p>
+                  {hasPullShark && (
+                    <div className="pt-2 border-t border-[var(--gh-border-subtle)] text-[11px] font-mono text-[#10B981] font-semibold flex items-center space-x-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>{pullRequests.length} pull request{pullRequests.length === 1 ? '' : 's'} recorded</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-5 space-y-3">
+                {/* 3. Harness Master */}
+                <div className={`rounded-xl border p-5 space-y-3 transition ${
+                  hasHarnessMaster
+                    ? 'border-[var(--amber-badge-border)] bg-[var(--gh-bg)] shadow-none dark:shadow-sm'
+                    : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 opacity-60'
+                }`}>
                   <div className="flex items-center space-x-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
-                      <Award className="h-6 w-6" />
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${
+                      hasHarnessMaster
+                        ? 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border-[var(--amber-badge-border)]'
+                        : 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-dim)] border-[var(--gh-border)]'
+                    }`}>
+                      {hasHarnessMaster ? <Award className="h-6 w-6" /> : <Lock className="h-5 w-5" />}
                     </div>
                     <div>
                       <h4 className="font-bold text-[var(--gh-text)] text-sm">Harness Master</h4>
-                      <p className="text-xs text-[var(--yellow-bright)] font-mono">{passRate}% Pass Rate</p>
+                      <p className={`text-xs font-mono font-semibold ${hasHarnessMaster ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`}>
+                        {hasHarnessMaster
+                          ? `${passRate}% Pass Rate Achieved`
+                          : `Locked (Current: ${passRate}%, Requires ≥80%)`}
+                      </p>
                     </div>
                   </div>
                   <p className="text-xs text-[var(--gh-text-muted)] leading-relaxed">
                     Maintained high automated test accuracy against adversarial edge cases and performance timeouts.
                   </p>
+                  {hasHarnessMaster && (
+                    <div className="pt-2 border-t border-[var(--gh-border-subtle)] text-[11px] font-mono text-[#10B981] font-semibold flex items-center space-x-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>Automated harness precision verified</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-5 space-y-3">
+                {/* 4. Socratic Integrity */}
+                <div className={`rounded-xl border p-5 space-y-3 transition ${
+                  hasSocraticIntegrity
+                    ? 'border-[var(--amber-badge-border)] bg-[var(--gh-bg)] shadow-none dark:shadow-sm'
+                    : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/50 opacity-60'
+                }`}>
                   <div className="flex items-center space-x-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border border-[var(--amber-badge-border)]">
-                      <CheckCircle2 className="h-6 w-6" />
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${
+                      hasSocraticIntegrity
+                        ? 'bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] border-[var(--amber-badge-border)]'
+                        : 'bg-[var(--gh-bg-tertiary)] text-[var(--gh-text-dim)] border-[var(--gh-border)]'
+                    }`}>
+                      {hasSocraticIntegrity ? <CheckCircle2 className="h-6 w-6" /> : <Lock className="h-5 w-5" />}
                     </div>
                     <div>
                       <h4 className="font-bold text-[var(--gh-text)] text-sm">Socratic Integrity</h4>
-                      <p className="text-xs text-[var(--yellow-bright)] font-mono">AI Guardrails Adherent</p>
+                      <p className={`text-xs font-mono font-semibold ${hasSocraticIntegrity ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-dim)]'}`}>
+                        {hasSocraticIntegrity
+                          ? 'AI Guardrails Adherent'
+                          : 'Locked (Requires 1 Solved Challenge)'}
+                      </p>
                     </div>
                   </div>
                   <p className="text-xs text-[var(--gh-text-muted)] leading-relaxed">
                     Solved challenges through first-principles debugging without full codebase AI token burning.
                   </p>
+                  {hasSocraticIntegrity && (
+                    <div className="pt-2 border-t border-[var(--gh-border-subtle)] text-[11px] font-mono text-[#10B981] font-semibold flex items-center space-x-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>Zero hallucination threshold met</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

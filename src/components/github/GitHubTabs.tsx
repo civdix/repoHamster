@@ -37,7 +37,7 @@ export function GitHubTabs({ activeTab, onTabChange, counts }: GitHubTabsProps) 
       id: 'achievements',
       label: 'Achievements',
       icon: Award,
-      count: counts?.achievements ?? 4,
+      count: counts?.achievements ?? 0,
     },
   ];
 
