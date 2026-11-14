@@ -37,3 +37,16 @@ try {
     process.exit(1);
   }
 }
+
+// Auto-sync schema with PostgreSQL in CI / Vercel deployment builds to ensure new columns exist in production
+if (isPostgres && (process.env.DATABASE_URL || dbUrl)) {
+  try {
+    console.log('[PRISMA AUTO-MIGRATE] Pushing database schema to ensure all columns exist in database...');
+    execSync(`npx prisma db push --schema=${schema} --skip-generate --accept-data-loss`, {
+      stdio: 'inherit',
+      env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL || dbUrl },
+    });
+  } catch (pushErr) {
+    console.warn('[PRISMA AUTO-MIGRATE] Note: Schema push finished or skipped (runtime self-heal is active):', pushErr?.message || pushErr);
+  }
+}

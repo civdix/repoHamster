@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import prisma from '@/lib/db';
+import prisma, { ensureDatabaseColumns } from '@/lib/db';
 import {
   Layers,
   Code2,
@@ -22,6 +22,8 @@ import { getTestCaseSummary } from '@/lib/test-case-utils';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminAssignmentsPage() {
+  await ensureDatabaseColumns().catch(() => {});
+
   let assignments: any[] = [];
   let catalogRepositories: any[] = [];
 

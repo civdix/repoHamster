@@ -25,5 +25,24 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 
+// Self-healing migration for PostgreSQL to guarantee schema columns exist
+let selfHealPromise: Promise<void> | null = null;
+export async function ensureDatabaseColumns(): Promise<void> {
+  if (selfHealPromise) return selfHealPromise;
+  selfHealPromise = (async () => {
+    try {
+      await prisma.$executeRawUnsafe(`
+        ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "webhookStatus" TEXT DEFAULT 'PENDING';
+        ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "webhookError" TEXT;
+        ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "guardrailsStatus" TEXT DEFAULT 'PENDING';
+        ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "guardrailsError" TEXT;
+      `);
+    } catch (e: any) {
+      console.warn('[DB SELF-HEAL] Non-fatal schema column ensure notice:', e?.message || e);
+    }
+  })();
+  return selfHealPromise;
+}
+
 export default prisma;
 

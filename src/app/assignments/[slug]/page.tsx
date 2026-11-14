@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import prisma from '@/lib/db';
+import prisma, { ensureDatabaseColumns } from '@/lib/db';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
 import { GitHubWorkspaceView } from '@/components/github/GitHubWorkspaceView';
 
@@ -17,6 +17,8 @@ export default async function AssignmentDetailPage({ params }: Props) {
   if (!session?.user) {
     redirect(`/auth/signin?callbackUrl=/assignments/${params.slug}`);
   }
+
+  await ensureDatabaseColumns().catch(() => {});
 
   const userEmail = session.user.email?.toLowerCase();
 

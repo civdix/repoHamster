@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
-import prisma from '@/lib/db';
+import prisma, { ensureDatabaseColumns } from '@/lib/db';
 import {
   Code2,
   CheckCircle2,
@@ -36,6 +36,9 @@ export default async function CandidateDashboardPage() {
     redirect('/auth/signin?callbackUrl=/dashboard');
   }
 
+  // Ensure any newly added schema columns exist in PostgreSQL database
+  await ensureDatabaseColumns().catch(() => {});
+
   const userEmail = session.user.email?.toLowerCase();
 
   // Fetch or resolve candidate
@@ -67,8 +70,29 @@ export default async function CandidateDashboardPage() {
           },
         },
       });
-    } catch (err) {
-      console.error('[CANDIDATE DASHBOARD] DB query error:', err);
+    } catch (err: any) {
+      console.error('[CANDIDATE DASHBOARD] DB query error:', err?.message || err);
+      if (err?.code === 'P2022') {
+        await ensureDatabaseColumns().catch(() => {});
+        candidate = await prisma.user.findUnique({
+          where: { email: userEmail },
+          include: {
+            assignments: {
+              include: {
+                assignment: true,
+                submissions: {
+                  include: {
+                    evaluation: true,
+                    pullRequest: true,
+                  },
+                  orderBy: { submittedAt: 'desc' },
+                  take: 1,
+                },
+              },
+            },
+          },
+        }).catch(() => null);
+      }
     }
   }
 
@@ -89,8 +113,15 @@ export default async function CandidateDashboardPage() {
     for (const row of settingsRows) {
       systemSettings[row.key] = row.value;
     }
-  } catch (err) {
-    console.error('[CANDIDATE DASHBOARD] Assignment query error:', err);
+  } catch (err: any) {
+    console.error('[CANDIDATE DASHBOARD] Assignment query error:', err?.message || err);
+    if (err?.code === 'P2022') {
+      await ensureDatabaseColumns().catch(() => {});
+      allAssignments = await prisma.assignment.findMany({
+        where: { isActive: true },
+        orderBy: { createdAt: 'asc' },
+      }).catch(() => []);
+    }
   }
 
   // AI Usage Calculations
