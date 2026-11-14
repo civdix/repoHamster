@@ -88,9 +88,9 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/profile"
+              href="/leaderboard"
               className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
-                pathname === '/profile' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+                pathname === '/leaderboard' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
               }`}
             >
               Leaderboard
@@ -225,7 +225,7 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/profile"
+              href="/leaderboard"
               onClick={closeMenu}
               className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
             >

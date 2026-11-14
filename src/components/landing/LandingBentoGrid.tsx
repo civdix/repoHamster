@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Code2,
   CheckCircle2,
@@ -26,13 +27,12 @@ import {
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 const LANGUAGES = [
-  { name: 'Go', file: 'src/api/handler.go', ext: 'go', code: 'func DeductInventory(ctx context.Context, itemID string) error {\n  tx, err := db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})\n  if err != nil { return err }\n  // Atomic mutex lock acquired\n  return tx.Commit()\n}' },
-  { name: 'Python', file: 'app/services/checkout.py', ext: 'py', code: 'async def checkout_cart(cart_id: str, user_id: str):\n  async with redis.lock(f"cart:{cart_id}", timeout=10):\n    balance = await db.get_user_balance(user_id)\n    if balance < total: raise InsufficientFundsError()\n    return await db.deduct(user_id, total)' },
-  { name: 'TypeScript', file: 'src/concurrency/limiter.ts', ext: 'ts', code: 'export async function acquireToken(bucketKey: string): Promise<boolean> {\n  const now = Date.now();\n  const allowed = await redis.eval(RATE_LIMIT_LUA, 1, bucketKey, now);\n  return Boolean(allowed);\n}' },
-  { name: 'Java', file: 'OrderProcessor.java', ext: 'java', code: '@Transactional(isolation = Isolation.SERIALIZABLE)\npublic OrderResult process(OrderRequest req) {\n  inventoryService.reserveStock(req.getItems());\n  return paymentGateway.charge(req.getTotal());\n}' },
-  { name: 'Rust', file: 'src/engine/worker.rs', ext: 'rs', code: 'pub async fn dispatch_task(rx: Receiver<Task>) -> Result<()> {\n  let mut stream = rx.into_stream();\n  while let Some(task) = stream.next().await {\n    tokio::spawn(async move { task.execute().await });\n  }\n  Ok(())\n}' },
-  { name: 'C++', file: 'src/memory/arena.cpp', ext: 'cpp', code: 'void* MemoryArena::allocate(size_t bytes) {\n  std::lock_guard<std::mutex> lock(mutex_);\n  if (offset_ + bytes > capacity_) throw OutOfMemoryException();\n  void* ptr = buffer_ + offset_;\n  offset_ += bytes;\n  return ptr;\n}' },
-  { name: 'SQL', file: 'migrations/003_atomic.sql', ext: 'sql', code: 'CREATE OR REPLACE FUNCTION deduct_balance(\n  p_user_id UUID, p_amount NUMERIC\n) RETURNS VOID AS $$\nBEGIN\n  UPDATE accounts SET balance = balance - p_amount\n  WHERE id = p_user_id AND balance >= p_amount;\nEND; $$ LANGUAGE plpgsql;' },
+  { name: 'Python', file: 'app/services/checkout.py', ext: 'py', icon: '🐍', tag: 'FastAPI / Redis async lock' },
+  { name: 'Go', file: 'src/api/handler.go', ext: 'go', icon: '🐹', tag: 'Goroutines / SQL transaction' },
+  { name: 'Java', file: 'src/OrderProcessor.java', ext: 'java', icon: '☕', tag: 'Spring / JPA isolation' },
+  { name: 'TypeScript', file: 'src/concurrency/limiter.ts', ext: 'ts', icon: '⚡', tag: 'Node.js / Token Bucket' },
+  { name: 'Rust', file: 'src/engine/worker.rs', ext: 'rs', icon: '🦀', tag: 'Tokio async event stream' },
+  { name: 'C++', file: 'src/memory/arena.cpp', ext: 'cpp', icon: '⚙️', tag: 'Thread-safe memory arena' },
 ];
 
 export function LandingBentoGrid() {
@@ -84,31 +84,71 @@ export function LandingBentoGrid() {
             </div>
           </div>
 
-          {/* Right: Live Mini Code & File Tree Box */}
-          <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-inner text-left font-mono">
-            {/* File Tree Header */}
-            <div className="flex items-center justify-between border-b border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2.5 text-xs">
-              <div className="flex items-center space-x-2 text-[11px] text-[var(--gh-text-secondary)]">
-                <FolderTree className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
-                <span className="font-semibold text-[var(--gh-text)]">{selectedLang.file}</span>
-              </div>
-              <span className="rounded-full bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] px-2 py-0.5 text-[10px] font-bold">
-                Pre-wired Devcontainer
-              </span>
+          {/* Right: Live Visual Workstation & Multi-file IDE Experience */}
+          <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-inner text-left font-mono flex flex-col">
+            {/* Multi-File Tab Bar (Python, Go, Java, TS, etc.) */}
+            <div className="flex items-center space-x-1 border-b border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 overflow-x-auto scrollbar-none">
+              {LANGUAGES.map((lang) => (
+                <button
+                  key={lang.name}
+                  type="button"
+                  onClick={() => setSelectedLang(lang)}
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-mono transition shrink-0 ${
+                    selectedLang.name === lang.name
+                      ? 'bg-[var(--gh-bg)] text-[var(--gh-text)] border border-[var(--gh-border)] font-bold shadow-2xs'
+                      : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg)]/50'
+                  }`}
+                >
+                  <span>{lang.icon}</span>
+                  <span>{lang.file.split('/').pop()}</span>
+                </button>
+              ))}
             </div>
 
-            {/* Code Content */}
-            <div className="p-4 text-xs overflow-x-auto leading-relaxed bg-[var(--gh-bg-code)]">
-              <pre className="text-[var(--gh-text)] text-[11px] sm:text-xs">
-                <code>{selectedLang.code}</code>
-              </pre>
+            {/* Visual Canvas: Developer Coding at Workstation */}
+            <div className="relative aspect-[16/9] w-full bg-[var(--gh-bg-code)] overflow-hidden group/canvas">
+              <Image
+                src="/images/developer-coding-workspace.jpg"
+                alt="Software Engineer coding at a modern multi-file development workstation"
+                fill
+                className="object-cover object-center group-hover/canvas:scale-[1.02] transition-transform duration-500"
+                priority
+              />
+
+              {/* Gradient Vignette Overlay for Crisp Readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--gh-bg)] via-black/35 to-black/20 pointer-events-none" />
+
+              {/* Top-Right Stack Badge */}
+              <div className="absolute top-3 right-3 flex items-center space-x-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/10 px-3 py-1 text-[11px] text-white font-mono font-bold">
+                <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
+                <span>{selectedLang.name} Devcontainer Live</span>
+              </div>
+
+              {/* Bottom HUD: Active File & Test Feedback */}
+              <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono text-white">
+                <div className="flex items-center space-x-2">
+                  <span className="text-base">{selectedLang.icon}</span>
+                  <div>
+                    <div className="font-bold flex items-center space-x-2">
+                      <span className="text-[var(--yellow-bright)]">{selectedLang.file}</span>
+                      <span className="text-[10px] text-white/60">• {selectedLang.tag}</span>
+                    </div>
+                    <span className="text-[10px] text-emerald-400 font-semibold">
+                      ✓ PASS: Concurrency &amp; race conditions validated
+                    </span>
+                  </div>
+                </div>
+                <div className="self-end sm:self-auto rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold">
+                  3/3 TESTS PASSED (180ms)
+                </div>
+              </div>
             </div>
 
             {/* Footer Status */}
-            <div className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2 flex items-center justify-between text-[11px] text-[var(--gh-text-muted)]">
+            <div className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-4 py-2.5 flex items-center justify-between text-[11px] text-[var(--gh-text-muted)] font-mono">
               <span className="flex items-center space-x-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
-                <span>Zero Local Setup • 1-Click Launch</span>
+                <Check className="h-3.5 w-3.5 text-[#10B981]" />
+                <span>Zero Local Setup • Multi-File Sandboxes</span>
               </span>
               <span className="text-[var(--yellow-bright)] font-semibold">12+ Stacks Ready</span>
             </div>
@@ -223,36 +263,58 @@ export function LandingBentoGrid() {
 
           {/* Switchable Track UI */}
           {activeTrack === 'ai' ? (
-            <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/60 p-3.5 text-xs space-y-2 animate-in fade-in duration-200">
+            <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/60 p-3.5 text-xs space-y-2.5 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <HamsterMascot variant="normal" size={24} />
-                  <span className="font-mono text-[11px] font-bold text-[var(--amber-badge-text)]">
-                    Track A: AI Copilot Panel Enabled
-                  </span>
+                  <div>
+                    <span className="font-mono text-[11px] font-bold text-[var(--amber-badge-text)] block">
+                      Track A: AI Copilot Enabled
+                    </span>
+                    <span className="text-[10px] text-[var(--gh-text-muted)] font-mono">
+                      Modeled on Amazon SDE &amp; Shopify BYOE Pairing
+                    </span>
+                  </div>
                 </div>
                 <span className="text-[10px] font-mono text-[var(--yellow-bright)] font-semibold">15 Queries/Day</span>
               </div>
               <p className="text-[var(--amber-badge-text)] text-[11px] leading-relaxed">
-                Test prompt engineering, code synthesis, and architectural review with Socratic invariant clues.
+                Evaluates real-world software engineering with integrated AI. Candidates use Socratic AI hints to navigate multi-file codebases, synthesize bug fixes, and verify edge cases without hallucinating errors.
               </p>
+              <div className="flex items-center space-x-2 text-[10px] font-mono text-[var(--amber-badge-text)] opacity-90 pt-1 border-t border-[var(--amber-badge-border)]/40">
+                <span>Real Example:</span>
+                <span className="font-bold underline">Amazon AI-Assisted SDE OA</span>
+                <span>•</span>
+                <span className="font-bold underline">Shopify BYOE Pair Coding</span>
+              </div>
             </div>
           ) : (
-            <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3.5 text-xs space-y-2 animate-in fade-in duration-200">
+            <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3.5 text-xs space-y-2.5 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 text-[var(--gh-text)]">
                   <Lock className="h-4 w-4 text-[var(--yellow-bright)]" />
-                  <span className="font-mono text-[11px] font-bold">
-                    Track B: Strict Non-AI Environment
-                  </span>
+                  <div>
+                    <span className="font-mono text-[11px] font-bold block">
+                      Track B: Strict Non-AI Environment
+                    </span>
+                    <span className="text-[10px] text-[var(--gh-text-muted)] font-mono">
+                      Modeled on IBM, Google &amp; Meta Assessments
+                    </span>
+                  </div>
                 </div>
                 <span className="bg-rose-500/10 text-rose-500 text-[10px] font-mono px-1.5 py-0.2 rounded font-bold">
                   AI Locked
                 </span>
               </div>
               <p className="text-[var(--gh-text-secondary)] text-[11px] leading-relaxed">
-                Pure documentation and direct terminal debugging to sharpen raw algorithmic and systems instincts.
+                Locked-down testing environment with zero external AI tools. Sharpen raw algorithmic instincts, manual terminal debugging, and deep concurrency invariants using language documentation only.
               </p>
+              <div className="flex items-center space-x-2 text-[10px] font-mono text-[var(--gh-text-muted)] pt-1 border-t border-[var(--gh-border)]/60">
+                <span>Real Example:</span>
+                <span className="font-bold text-[var(--gh-text)] underline">IBM HackerRank Non-AI OA</span>
+                <span>•</span>
+                <span className="font-bold text-[var(--gh-text)] underline">Meta / Google Proctored</span>
+              </div>
             </div>
           )}
         </div>

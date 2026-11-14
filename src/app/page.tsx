@@ -80,8 +80,8 @@ export default async function HomePage() {
           
           {/* Left Column: Copy & CTAs */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            {/* Eyebrow Badge */}
-            <div className="inline-flex items-center space-x-2 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3.5 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
+            {/* Eyebrow Badge - Sharp Square Developer Tag */}
+            <div className="inline-flex items-center space-x-2 rounded-sm border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-xs">
               <span className="flex h-4 w-4 items-center justify-center">
                 <HamsterMascot variant="normal" size={18} />
               </span>
@@ -415,10 +415,10 @@ export default async function HomePage() {
               <div className="pt-2 text-xs font-mono text-[var(--gh-text-secondary)]">
                 Direct Contact:{' '}
                 <a
-                  href="mailto:shivam@repohamster.dev"
+                  href="mailto:shivam@repohamster.com"
                   className="font-bold text-[var(--yellow-primary)] hover:underline"
                 >
-                  shivam@repohamster.dev
+                  shivam@repohamster.com
                 </a>
               </div>
             </div>
@@ -426,7 +426,7 @@ export default async function HomePage() {
             {/* Right Column: Clean Minimal Contact Form */}
             <div className="lg:col-span-6">
               <form
-                action="mailto:shivam@repohamster.dev"
+                action="mailto:shivam@repohamster.com"
                 method="POST"
                 encType="text/plain"
                 className="space-y-3 text-left font-sans"

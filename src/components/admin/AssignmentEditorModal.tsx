@@ -80,6 +80,56 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
     hiddenTestSpecStr: initialHiddenSpecStr,
   });
 
+  const [fetchingInstructions, setFetchingInstructions] = useState(false);
+  const [instructionFetchMsg, setInstructionFetchMsg] = useState<string | null>(null);
+
+  const handleFetchInstructionsFromRepo = async (targetRepoUrl?: string) => {
+    const url = targetRepoUrl || formData.repoUrl;
+    if (!url) {
+      setInstructionFetchMsg('Please provide a repository URL first.');
+      return;
+    }
+    setFetchingInstructions(true);
+    setInstructionFetchMsg(null);
+    try {
+      const match = url.match(/github\.com\/([^\/]+)\/([^\/\.#]+)/);
+      if (!match) {
+        setInstructionFetchMsg('Only GitHub repositories are supported for auto-fetch.');
+        return;
+      }
+      const [, owner, repoName] = match;
+      let foundContent: string | null = null;
+      let foundFile = '';
+      for (const branch of ['main', 'master', 'HEAD']) {
+        for (const file of ['INSTRUCTIONS.md', 'instructions.md', 'Instructions.md']) {
+          try {
+            const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repoName}/${branch}/${file}`);
+            if (res.ok) {
+              const text = (await res.text()).trim();
+              if (text && !text.startsWith('404: Not Found')) {
+                foundContent = text;
+                foundFile = file;
+                break;
+              }
+            }
+          } catch {}
+        }
+        if (foundContent) break;
+      }
+
+      if (foundContent) {
+        setFormData((prev) => ({ ...prev, instructions: foundContent! }));
+        setInstructionFetchMsg(`✓ Successfully auto-populated from ${foundFile}`);
+      } else {
+        setInstructionFetchMsg('No INSTRUCTIONS.md found in repository. Retaining default instructions.');
+      }
+    } catch (err: any) {
+      setInstructionFetchMsg('Failed to fetch from repo: ' + (err.message || 'Network error'));
+    } finally {
+      setFetchingInstructions(false);
+    }
+  };
+
   const [isCustomSubtype, setIsCustomSubtype] = useState(false);
   const [customSubtypeInput, setCustomSubtypeInput] = useState('');
 
@@ -123,6 +173,10 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
     }));
 
     setDetectedNotice(`⚡ Sub-Repo Type auto-configured: "${detected.subType || chosenLang}" based on repo ${chosen.name}.`);
+
+    if (chosen.originalUrl && isNew) {
+      handleFetchInstructionsFromRepo(chosen.originalUrl);
+    }
   };
 
   const handleRepoUrlChange = (newUrl: string) => {
@@ -639,14 +693,33 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
 
               {/* Instructions */}
               <div>
-                <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
-                  Candidate Problem Instructions (Markdown)
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)]">
+                    Candidate Problem Instructions (Markdown)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => handleFetchInstructionsFromRepo()}
+                    disabled={fetchingInstructions || !formData.repoUrl}
+                    className="inline-flex items-center space-x-1 text-[11px] font-mono text-[var(--yellow-bright)] hover:underline disabled:opacity-50"
+                  >
+                    <span>{fetchingInstructions ? 'Fetching...' : 'Fetch INSTRUCTIONS.md from Repo'}</span>
+                  </button>
+                </div>
+                {instructionFetchMsg && (
+                  <div className={`text-[10px] font-mono mb-1.5 px-2 py-0.5 rounded border ${
+                    instructionFetchMsg.startsWith('✓')
+                      ? 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+                      : 'text-[var(--gh-text-muted)] bg-[var(--gh-bg)] border-[var(--gh-border)]'
+                  }`}>
+                    {instructionFetchMsg}
+                  </div>
+                )}
                 <textarea
-                  rows={4}
+                  rows={5}
                   value={formData.instructions}
                   onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none font-mono"
                 />
               </div>
 

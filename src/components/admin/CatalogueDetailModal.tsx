@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   FileCode2,
@@ -82,6 +82,47 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
     aiTokenLimit: 10000,
     instructions: `### Debugging Challenge: ${defaultTitle}\n\n#### Overview\nThis challenge is sourced from the open-source repository \`${repo.originalUrl}\`.\n\n#### Your Task\n1. Analyze the project structure and public test suites.\n2. Diagnose intentionally introduced defects in the codebase.\n3. Implement the bug fix while preserving regression safety.\n4. Ensure all public and authoritative hidden test suites pass.`,
   });
+
+  const [instructionSource, setInstructionSource] = useState<{
+    present: boolean;
+    filename?: string;
+    source?: string;
+    loading?: boolean;
+  }>({ present: false, loading: true });
+
+  // Auto-populate INSTRUCTIONS.md from the repository if present
+  useEffect(() => {
+    let isMounted = true;
+    const fetchRepoInstructions = async () => {
+      try {
+        const res = await fetch(`/api/catalogue/${repo.id}/instructions`);
+        const data = await res.json();
+        if (isMounted && data.success) {
+          setInstructionSource({
+            present: data.present,
+            filename: data.filename,
+            source: data.source,
+            loading: false,
+          });
+          if (data.present && data.instructions) {
+            setConvertForm((prev) => ({
+              ...prev,
+              instructions: data.instructions,
+            }));
+          }
+        }
+      } catch (err) {
+        if (isMounted) {
+          setInstructionSource({ present: false, loading: false });
+        }
+      }
+    };
+
+    fetchRepoInstructions();
+    return () => {
+      isMounted = false;
+    };
+  }, [repo.id]);
 
   const handleRunValidation = async () => {
     setIsValidating(true);
@@ -878,10 +919,28 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase">Markdown Instructions</label>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase">
+                          Markdown Instructions
+                        </label>
+                        {instructionSource.loading ? (
+                          <span className="text-[10px] font-mono text-[var(--gh-text-muted)]">
+                            Checking repository for INSTRUCTIONS.md...
+                          </span>
+                        ) : instructionSource.present ? (
+                          <span className="inline-flex items-center space-x-1 text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+                            <CheckCircle2 className="h-3 w-3" />
+                            <span>Auto-populated from {instructionSource.filename || 'INSTRUCTIONS.md'}</span>
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-mono text-[var(--gh-text-muted)] bg-[var(--gh-bg)] px-2 py-0.5 rounded border border-[var(--gh-border)]">
+                            Default Instructions (No INSTRUCTIONS.md in repo)
+                          </span>
+                        )}
+                      </div>
                       <textarea
-                        rows={5}
+                        rows={6}
                         value={convertForm.instructions}
                         onChange={(e) => setConvertForm({ ...convertForm, instructions: e.target.value })}
                         className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"

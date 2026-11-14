@@ -39,10 +39,10 @@ export default function ContactPage() {
                   <span>
                     Email:{' '}
                     <a
-                      href="mailto:shivam@repohamster.dev"
+                      href="mailto:shivam@repohamster.com"
                       className="font-bold text-[var(--yellow-primary)] hover:underline"
                     >
-                      shivam@repohamster.dev
+                      shivam@repohamster.com
                     </a>
                   </span>
                 </div>
@@ -60,7 +60,7 @@ export default function ContactPage() {
             {/* Right Column: Clean Form */}
             <div className="lg:col-span-6">
               <form
-                action="mailto:shivam@repohamster.dev"
+                action="mailto:shivam@repohamster.com"
                 method="POST"
                 encType="text/plain"
                 className="space-y-3.5 text-left font-sans"

@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
 import { isPlatformAdmin, isReviewer, canViewAdmin } from '@/lib/permissions';
+import fs from 'fs';
+import path from 'path';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,8 +62,26 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const aiRequestLimit = parseInt(body.aiRequestLimit, 10) || 15;
   const aiTokenLimit = parseInt(body.aiTokenLimit, 10) || 10000;
 
+  // Automatically populate INSTRUCTIONS.md from the repository if present
+  let repoInstructions: string | null = null;
+  if (catalogRepo.localPath) {
+    for (const filename of ['INSTRUCTIONS.md', 'instructions.md', 'Instructions.md']) {
+      const fullPath = path.join(catalogRepo.localPath, filename);
+      if (fs.existsSync(fullPath)) {
+        try {
+          const content = fs.readFileSync(fullPath, 'utf-8').trim();
+          if (content.length > 0) {
+            repoInstructions = content;
+            break;
+          }
+        } catch {}
+      }
+    }
+  }
+
   const instructions =
     body.instructions ||
+    repoInstructions ||
     `### Debugging Challenge: ${title}
 
 #### Overview
