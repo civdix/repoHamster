@@ -62,11 +62,11 @@ export default function RootLayout({
                 </div>
               </div>
 
-              <div className="flex items-center space-x-6 text-[11px] font-mono text-[var(--gh-text-secondary)]">
+              <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-5 gap-y-2 text-[11px] font-mono text-[var(--gh-text-secondary)]">
                 <Link href="/dashboard" className="hover:text-[var(--yellow-bright)] transition">Challenges</Link>
                 <Link href="/admin" className="hover:text-[var(--gh-text)] transition">Admin Console</Link>
-                <span>Automated Hidden Test Engine</span>
-                <span className="text-[var(--gh-text-muted)]">© 2026 RepoHamster Inc.</span>
+                <span className="hidden sm:inline">Automated Test Engine</span>
+                <span className="text-[var(--gh-text-muted)]">© 2026 RepoHamster</span>
               </div>
             </div>
           </footer>

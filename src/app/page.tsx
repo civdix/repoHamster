@@ -3,24 +3,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import {
-  Code2,
-  GitPullRequest,
-  CheckCircle2,
-  Shield,
-  Bot,
-  Zap,
   ArrowRight,
   Terminal,
-  Lock,
-  Layers,
-  Sparkles,
-  Cpu,
-  Timer,
   Check,
-  ExternalLink,
-  Flame,
-  BookMarked,
-  Award,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { LandingFaq } from '@/components/landing/LandingFaq';
@@ -79,105 +64,107 @@ export default async function HomePage() {
   return (
     <div className="relative overflow-hidden bg-dev-grid text-[var(--gh-text)] min-h-screen">
       {/* Background Radial Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-radial-glow pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] sm:h-[600px] bg-radial-glow pointer-events-none" />
 
       {/* 1. Hero Section */}
-      <section className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 lg:px-8">
-        <div className="text-center max-w-4xl mx-auto space-y-6">
+      <section className="relative mx-auto max-w-7xl px-4 pt-8 pb-12 sm:pt-14 sm:pb-16 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto space-y-4 sm:space-y-5">
           {/* Eyebrow badge with mascot avatar */}
-          <div className="inline-flex items-center space-x-2.5 rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3.5 py-1 text-xs font-mono font-medium text-[var(--gh-text-muted)] backdrop-blur shadow-sm">
-            <span className="flex h-5 w-5 items-center justify-center">
-              <HamsterMascot variant="normal" size={20} />
+          <div className="inline-flex items-center space-x-2 rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-1 text-xs font-mono font-medium text-[var(--gh-text-muted)] backdrop-blur shadow-sm">
+            <span className="flex h-4 w-4 items-center justify-center">
+              <HamsterMascot variant="normal" size={18} />
             </span>
-            <span className="text-[var(--yellow-bright)] font-bold">RepoHamster v1.0</span>
+            <span className="text-[var(--yellow-bright)] font-bold">RepoHamster</span>
             <span className="text-[var(--gh-text-dim)]">•</span>
             <span>Break Bugs. Ship Fixes.</span>
           </div>
 
           {/* Main Headline (Yellow + Dark) */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--gh-text)] leading-[1.1] font-sans">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[var(--gh-text)] leading-[1.15] font-sans">
             The Code Has Bugs.{' '}
-            <span className="text-[var(--yellow-bright)] drop-shadow-[0_0_25px_var(--yellow-glow)]">
+            <span className="text-[var(--yellow-bright)] drop-shadow-[0_0_20px_var(--yellow-glow)]">
               Let&apos;s Find Them.
             </span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-base sm:text-xl text-[var(--gh-text-muted)] max-w-2xl mx-auto leading-relaxed font-sans">
-            Real-world debugging challenges. AI-assisted problem solving. Automated evaluation.
-            Prove your engineering skills one bug at a time in authentic GitHub environments.
+          <p className="text-xs sm:text-base text-[var(--gh-text-muted)] max-w-2xl mx-auto leading-relaxed font-sans">
+            Real-world debugging in authentic GitHub repositories. Launch cloud Codespaces, consult Socratic AI, and prove your engineering skills with hidden test evaluation.
           </p>
 
-          {/* CTAs */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* Primary CTAs */}
+          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
             {session ? (
               <>
                 <Link
                   href="/dashboard"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-[var(--yellow-button-bg)] px-7 py-3.5 text-sm font-bold text-[var(--yellow-button-text)] shadow-[var(--yellow-glow-lg)] hover:bg-[var(--yellow-button-hover)] transition active:scale-95"
+                  className="flex items-center justify-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-6 py-3 text-xs sm:text-sm font-bold text-[var(--yellow-button-text)] shadow-sm hover:bg-[var(--yellow-button-hover)] transition active:scale-95"
                 >
-                  <span>Go to Candidate Dashboard</span>
+                  <span>Go to Challenges</span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/guide"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-6 py-3.5 text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
+                  className="flex items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-5 py-3 text-xs sm:text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-[var(--yellow-bright)]" />
-                  <span>How to Use Guide</span>
+                  <span>How It Works</span>
                 </Link>
               </>
             ) : (
               <>
                 <Link
                   href="/auth/signin"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2.5 rounded-xl bg-[var(--yellow-button-bg)] px-7 py-3.5 text-sm font-bold text-[var(--yellow-button-text)] shadow-[var(--yellow-glow-lg)] hover:bg-[var(--yellow-button-hover)] transition active:scale-95"
+                  className="flex items-center justify-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-6 py-3 text-xs sm:text-sm font-bold text-[var(--yellow-button-text)] shadow-sm hover:bg-[var(--yellow-button-hover)] transition active:scale-95"
                 >
                   <span>Start Debugging</span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/guide"
-                  className="flex w-full sm:w-auto items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-6 py-3.5 text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
+                  className="flex items-center justify-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-5 py-3 text-xs sm:text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/50 hover:text-[var(--yellow-bright)] transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-[var(--yellow-bright)]" />
-                  <span>How to Use Guide</span>
+                  <span>How It Works</span>
                 </Link>
               </>
             )}
           </div>
 
-          {/* Trust Metrics Pill */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-[var(--gh-text-muted)]">
+          {/* Trust Metrics */}
+          <div className="pt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11px] font-mono text-[var(--gh-text-muted)]">
             <span className="flex items-center">
-              <Check className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" /> 1-Click Codespaces IDE
+              <Check className="mr-1 h-3.5 w-3.5 text-[var(--yellow-bright)] shrink-0" /> 1-Click Codespaces
             </span>
             <span className="flex items-center">
-              <Check className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" /> Authoritative Hidden Tests
+              <Check className="mr-1 h-3.5 w-3.5 text-[var(--yellow-bright)] shrink-0" /> Hidden Test Harness
             </span>
             <span className="flex items-center">
-              <Check className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" /> Controlled Hamster AI
+              <Check className="mr-1 h-3.5 w-3.5 text-[var(--yellow-bright)] shrink-0" /> Socratic Hamster AI
+            </span>
+            <span className="flex items-center">
+              <Check className="mr-1 h-3.5 w-3.5 text-[var(--yellow-bright)] shrink-0" /> Verified Profiles
             </span>
           </div>
         </div>
 
         {/* Hero Workstation Live Showcase Card */}
-        <div className="mt-14 mx-auto max-w-4xl">
+        <div className="mt-8 sm:mt-12 mx-auto max-w-4xl">
           <LandingHeroWorkstation />
         </div>
       </section>
 
-      {/* 2. BENTO GRID SECTION (User Requested Highlight) */}
-      <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-2">
+      {/* 2. BENTO GRID SECTION (Core Architecture) */}
+      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 space-y-1.5">
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
-            Platform Architecture &amp; Capabilities
+            Platform Capabilities
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--gh-text)] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[var(--gh-text)] tracking-tight">
             Engineered Like GitHub. Built for Craft.
           </h2>
           <p className="text-xs sm:text-sm text-[var(--gh-text-muted)] leading-relaxed">
-            Everything you need to test true engineering judgment—from zero-config cloud IDEs to secret test harnesses and shareable developer profiles.
+            Everything you need to test engineering depth—from cloud IDEs to secret test harnesses and verified portfolios.
           </p>
         </div>
 
@@ -186,15 +173,15 @@ export default async function HomePage() {
       </section>
 
       {/* 3. Explore Debugging Challenges (Curriculum Catalog) */}
-      <section id="challenges" className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-10 gap-4">
+      <section id="challenges" className="relative mx-auto max-w-7xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 gap-4">
           <div>
             <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
               Curriculum Catalog
             </span>
-            <h2 className="text-3xl font-extrabold text-[var(--gh-text)] mt-1">Explore Debugging Challenges</h2>
-            <p className="mt-1.5 text-xs sm:text-sm text-[var(--gh-text-muted)] max-w-xl">
-              Each repository represents a real production bug or vulnerability. Pass all hidden assertions to prove mastery.
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--gh-text)] mt-1">Explore Debugging Challenges</h2>
+            <p className="mt-1 text-xs sm:text-sm text-[var(--gh-text-muted)] max-w-xl">
+              Each repository represents an authentic bug or vulnerability. Pass all hidden assertions to prove mastery.
             </p>
           </div>
 
@@ -207,7 +194,7 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {assignments.map((assignment) => (
             <GitHubRepoCard
               key={assignment.id}
@@ -224,12 +211,12 @@ export default async function HomePage() {
       </section>
 
       {/* 4. Why Developers Love RepoHamster (Testimonials & Social Proof) */}
-      <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-2">
+      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 space-y-1.5">
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
             Developer Experience
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--gh-text)]">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--gh-text)]">
             Built for Engineers Who Care About Craft
           </h2>
           <p className="text-xs sm:text-sm text-[var(--gh-text-muted)]">
@@ -237,21 +224,21 @@ export default async function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Card 1: Vishakha Chaudhary */}
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
-            <div className="flex items-center space-x-1 text-[var(--yellow-bright)]">
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 sm:p-6 space-y-3 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
+            <div className="flex items-center space-x-1 text-[var(--yellow-bright)] text-sm">
               {'★'.repeat(5)}
             </div>
             <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed italic">
-              &quot;The instant 1-Click Codespaces setup is incredible. I didn&apos;t waste hours configuring runtimes; within 30 seconds I had the codebase running, traced the concurrency race condition, used Hamster AI for Socratic invariant hints, and shipped a passing PR.&quot;
+              &quot;The 1-Click Codespaces setup had the codebase running in 30 seconds with zero runtime hassle. Traced the concurrency race condition with Hamster AI and shipped a passing PR.&quot;
             </p>
             <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={vishakhaAvatar}
                 alt="Vishakha Chaudhary"
-                className="h-10 w-10 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
+                className="h-9 w-9 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
               />
               <div>
                 <p className="text-xs font-bold text-[var(--gh-text)] flex items-center space-x-1">
@@ -266,19 +253,19 @@ export default async function HomePage() {
           </div>
 
           {/* Card 2: Shivam Dixit (civdix) */}
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
-            <div className="flex items-center space-x-1 text-[var(--yellow-bright)]">
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 sm:p-6 space-y-3 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
+            <div className="flex items-center space-x-1 text-[var(--yellow-bright)] text-sm">
               {'★'.repeat(5)}
             </div>
             <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed italic">
-              &quot;RepoHamster mirrors real-life software engineering far better than leetcode puzzles. The hidden test harnesses catch actual production edge cases, memory leaks, and rate-limiting bugs that standard unit tests overlook.&quot;
+              &quot;RepoHamster mirrors actual engineering far better than leetcode puzzles. The hidden test harness catches edge cases, memory leaks, and race conditions that normal tests miss.&quot;
             </p>
             <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={civdixAvatar}
                 alt="Shivam Dixit"
-                className="h-10 w-10 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
+                className="h-9 w-9 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
               />
               <div>
                 <p className="text-xs font-bold text-[var(--gh-text)] flex items-center space-x-1">
@@ -293,16 +280,16 @@ export default async function HomePage() {
           </div>
 
           {/* Card 3: Anonymous Review */}
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 space-y-4 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
-            <div className="flex items-center space-x-1 text-[var(--yellow-bright)]">
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 sm:p-6 space-y-3 shadow-sm hover:border-[var(--yellow-primary)]/40 transition">
+            <div className="flex items-center space-x-1 text-[var(--yellow-bright)] text-sm">
               {'★'.repeat(5)}
             </div>
             <p className="text-xs text-[var(--gh-text-secondary)] leading-relaxed italic">
-              &quot;The developer profile and 52-week streak calendar give genuine proof-of-work. In tech hiring, seeing a candidate systematically isolate regressions, review CI logs, and commit clean fixes is 10x more informative than any synthetic whiteboard interview.&quot;
+              &quot;Seeing a candidate isolate regressions, review CI logs, and commit clean fixes in real codebases is 10x more informative than any whiteboard interview.&quot;
             </p>
             <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
-              <div className="h-10 w-10 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center p-1.5 shadow-sm">
-                <HamsterMascot variant="normal" size={24} />
+              <div className="h-9 w-9 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center p-1.5 shadow-sm">
+                <HamsterMascot variant="normal" size={20} />
               </div>
               <div>
                 <p className="text-xs font-bold text-[var(--gh-text)] flex items-center space-x-1">
@@ -310,7 +297,7 @@ export default async function HomePage() {
                   <span className="text-[10px] text-[var(--yellow-bright)]">✓</span>
                 </p>
                 <p className="text-[10px] text-[var(--gh-text-muted)] font-mono">
-                  @anonymous • Staff Infrastructure (FAANG)
+                  Staff Infrastructure (FAANG)
                 </p>
               </div>
             </div>
@@ -319,25 +306,25 @@ export default async function HomePage() {
       </section>
 
       {/* 5. FAQ Section */}
-      <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
-        <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">
+      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8 border-t border-[var(--gh-border)]">
+        <div className="text-center max-w-3xl mx-auto mb-8 space-y-1.5">
           <span className="text-xs font-mono uppercase tracking-wider text-[var(--yellow-bright)] font-bold">
             Got Questions?
           </span>
-          <h2 className="text-3xl font-extrabold text-[var(--gh-text)]">Frequently Asked Questions</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--gh-text)]">Frequently Asked Questions</h2>
         </div>
 
         <LandingFaq />
       </section>
 
       {/* 6. Call to Action Banner (Yellow + Dark) */}
-      <section className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-[var(--yellow-primary)]/50 bg-[var(--amber-badge-bg)]/60 p-8 sm:p-12 text-center relative overflow-hidden shadow-[var(--yellow-glow-lg)]">
-          <div className="relative z-10 max-w-2xl mx-auto space-y-4">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--gh-bg-secondary)] border border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] p-1">
-              <HamsterMascot variant="normal" size={44} />
+      <section className="relative mx-auto max-w-7xl px-4 pb-14 sm:pb-20 sm:px-6 lg:px-8">
+        <div className="rounded-2xl sm:rounded-3xl border border-[var(--yellow-primary)]/50 bg-[var(--amber-badge-bg)]/60 p-6 sm:p-10 lg:p-12 text-center relative overflow-hidden shadow-[var(--yellow-glow-lg)]">
+          <div className="relative z-10 max-w-2xl mx-auto space-y-3.5">
+            <div className="inline-flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-[var(--gh-bg-secondary)] border border-[var(--yellow-primary)]/60 shadow-[var(--yellow-glow)] p-1">
+              <HamsterMascot variant="normal" size={38} />
             </div>
-            <h2 className="text-3xl font-extrabold text-[var(--gh-text)] tracking-tight font-sans">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--gh-text)] tracking-tight font-sans">
               Ready to break bugs and ship fixes?
             </h2>
             <p className="text-xs sm:text-sm text-[var(--gh-text-secondary)] leading-relaxed font-sans">
@@ -346,7 +333,7 @@ export default async function HomePage() {
             <div className="pt-2">
               <Link
                 href="/auth/signin"
-                className="inline-flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-8 py-3.5 text-sm font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-[var(--yellow-glow-lg)] active:scale-95"
+                className="inline-flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-7 py-3 text-xs sm:text-sm font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
               >
                 <span>Start Debugging Now</span>
                 <ArrowRight className="h-4 w-4" />
