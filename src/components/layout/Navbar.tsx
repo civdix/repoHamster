@@ -4,7 +4,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Code2, Shield, User, LogOut, CheckCircle2, BookOpen, Eye, Menu, X, ArrowRight } from 'lucide-react';
+import {
+  Code2,
+  Shield,
+  User,
+  LogOut,
+  Sparkles,
+  Trophy,
+  BookOpen,
+  Eye,
+  Menu,
+  X,
+  ArrowRight,
+} from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
@@ -20,217 +32,234 @@ export function Navbar() {
   const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--gh-border)] bg-[var(--gh-bg)]/95 backdrop-blur-md transition-colors duration-200">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand */}
-        <div className="flex items-center space-x-6">
+    <header className="sticky top-0 z-40 h-[72px] border-b border-[var(--gh-border)] bg-[var(--gh-bg)]/90 backdrop-blur-md transition-colors duration-200">
+      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Left: Brand Logo & Wordmark */}
+        <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2.5 group">
-            <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] group-hover:border-[var(--yellow-primary)]/60 group-hover:shadow-[var(--yellow-glow)] transition p-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] group-hover:border-[var(--yellow-primary)]/60 shadow-sm transition p-1">
               <HamsterMascot variant="normal" size={28} />
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <span className="font-bold tracking-tight text-[var(--gh-text)] text-base sm:text-lg font-sans">
-                  Repo<span className="text-[var(--yellow-bright)]">Hamster</span>
+                <span className="font-bold tracking-tight text-[var(--gh-text)] text-lg font-sans">
+                  repo<span className="text-[var(--yellow-bright)]">Hamster</span>
                 </span>
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)] animate-pulse" />
               </div>
               <p className="text-[10px] font-mono text-[var(--gh-text-muted)] -mt-0.5 hidden sm:block">
-                Break Bugs. Ship Fixes.
+                Production-Ready Repo OAs
               </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1">
+          {/* Center Links (Editorial Warm Navigation) */}
+          <nav className="hidden lg:flex items-center space-x-1 text-[13px] font-medium text-[var(--gh-text-secondary)]">
             <Link
               href="/dashboard"
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
                 pathname === '/dashboard' || pathname?.startsWith('/assignments')
-                  ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] border border-[var(--gh-border)]'
-                  : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)]/60'
+                  ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]'
+                  : ''
               }`}
             >
-              <Code2 className="h-4 w-4" />
-              <span>Challenges</span>
+              Challenges
             </Link>
 
             <Link
               href="/guide"
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                pathname === '/guide'
-                  ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] border border-[var(--gh-border)]'
-                  : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)]/60'
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] flex items-center space-x-1 ${
+                pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
               }`}
             >
-              <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
-              <span>How to Use</span>
+              <span>AI vs Non-AI Mode</span>
+              <span className="rounded-full bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] text-[9px] font-mono px-1.5 py-0.2">
+                Dual
+              </span>
+            </Link>
+
+            <Link
+              href="/guide"
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
+                pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+              }`}
+            >
+              How It Works
+            </Link>
+
+            <Link
+              href="/profile"
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] ${
+                pathname === '/profile' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+              }`}
+            >
+              Leaderboard
             </Link>
 
             {canSeeAdmin && (
               <Link
                 href="/admin"
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                  pathname?.startsWith('/admin')
-                    ? 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)]'
-                    : 'text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] hover:bg-[var(--gh-bg-secondary)]/40'
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] ${
+                  pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
                 }`}
               >
-                {isReviewer ? (
-                  <Eye className="h-4 w-4 text-[var(--yellow-bright)]" />
-                ) : (
-                  <Shield className="h-4 w-4 text-[var(--yellow-bright)]" />
-                )}
-                <span>Admin Console {isReviewer && '(Preview)'}</span>
+                Admin {isReviewer && '(Preview)'}
               </Link>
             )}
           </nav>
         </div>
 
-        {/* Right Actions & Profile */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        {/* Right Actions: Sign In + Primary Pill CTA */}
+        <div className="flex items-center space-x-3 sm:space-x-4">
           {session?.user ? (
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              {isStaffAdmin ? (
-                <span className="hidden sm:inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-medium text-[var(--amber-badge-text)]">
-                  <Shield className="mr-1 h-3 w-3 text-[var(--yellow-bright)]" />
-                  Staff Admin
-                </span>
-              ) : isReviewer ? (
-                <span className="hidden sm:inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-medium text-[var(--amber-badge-text)]">
-                  <Eye className="mr-1 h-3 w-3 text-[var(--yellow-bright)]" />
-                  Reviewer
-                </span>
-              ) : (
-                <span className="hidden lg:inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-medium text-[var(--yellow-bright)]">
-                  <CheckCircle2 className="mr-1 h-3 w-3 text-[var(--yellow-bright)]" />
-                  Candidate
-                </span>
-              )}
-
+            <div className="flex items-center space-x-2.5">
               <Link
                 href="/profile"
-                className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-1.5 sm:px-3 sm:py-1.5 text-xs text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 hover:text-[var(--yellow-bright)] transition active:scale-95 group"
-                title="View Coding Profile"
+                className="flex items-center space-x-2 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-1.5 text-xs text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 transition group"
+                title="View Profile"
               >
                 {session.user.image ? (
                   <img
                     src={session.user.image}
                     alt={session.user.name || 'User'}
-                    className="h-6 w-6 rounded-full ring-1 ring-[var(--gh-border)] object-cover"
+                    className="h-6 w-6 rounded-full object-cover border border-[var(--gh-border)]"
                   />
                 ) : (
-                  <div className="h-6 w-6 rounded-full bg-[var(--gh-bg)] flex items-center justify-center text-[var(--gh-text)] group-hover:text-[var(--yellow-bright)]">
+                  <div className="h-6 w-6 rounded-full bg-[var(--gh-bg)] flex items-center justify-center text-[var(--gh-text)]">
                     <User className="h-3.5 w-3.5" />
                   </div>
                 )}
-                <div className="hidden sm:block text-left">
-                  <p className="font-semibold text-[var(--gh-text)] truncate max-w-[100px] leading-tight">{session.user.name || 'Developer'}</p>
-                  <p className="text-[10px] text-[var(--yellow-bright)] font-mono leading-tight">
-                    @{((session.user as any).username || (session.user as any).githubUsername || 'coder')}
-                  </p>
-                </div>
+                <span className="hidden sm:inline font-medium max-w-[90px] truncate">
+                  {session.user.name || 'Coder'}
+                </span>
+              </Link>
+
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center space-x-1.5 rounded-full bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
+              >
+                <span>Start Practicing</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
 
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/signin' })}
                 title="Sign out"
-                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95"
+                className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text-muted)] hover:text-[var(--yellow-primary)] transition"
               >
                 <LogOut className="h-4 w-4" />
               </button>
             </div>
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <Link
                 href="/auth/signin"
-                className="rounded-xl bg-[var(--yellow-button-bg)] px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
+                className="text-xs font-medium text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] transition px-2 py-1"
               >
                 Sign In
+              </Link>
+
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center space-x-1.5 rounded-full bg-[var(--yellow-button-bg)] px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
+              >
+                <span>Start Practicing &rarr;</span>
               </Link>
             </div>
           )}
 
-          {/* Theme Switcher Toggle (Default White / Dark) */}
+          {/* Theme Toggle */}
           <ThemeToggle />
 
-          {/* Mobile Menu Hamburger Button */}
+          {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 transition"
-            aria-label="Toggle navigation menu"
+            className="lg:hidden rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-2 text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/60 transition"
+            aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[var(--gh-border)] bg-[var(--gh-bg)] px-4 py-3 space-y-2 animate-in slide-in-from-top-2 duration-150">
-          <Link
-            href="/dashboard"
-            onClick={closeMenu}
-            className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition ${
-              pathname === '/dashboard' || pathname?.startsWith('/assignments')
-                ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] font-bold border border-[var(--gh-border)]'
-                : 'text-[var(--gh-text-secondary)] hover:bg-[var(--gh-bg-secondary)]'
-            }`}
-          >
-            <div className="flex items-center space-x-2.5">
-              <Code2 className="h-4 w-4 text-[var(--yellow-bright)]" />
-              <span>Challenges</span>
-            </div>
-            <ArrowRight className="h-3 w-3 text-[var(--gh-text-muted)]" />
-          </Link>
-
-          <Link
-            href="/guide"
-            onClick={closeMenu}
-            className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition ${
-              pathname === '/guide'
-                ? 'bg-[var(--gh-bg-secondary)] text-[var(--yellow-bright)] font-bold border border-[var(--gh-border)]'
-                : 'text-[var(--gh-text-secondary)] hover:bg-[var(--gh-bg-secondary)]'
-            }`}
-          >
-            <div className="flex items-center space-x-2.5">
-              <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
-              <span>How to Use</span>
-            </div>
-            <ArrowRight className="h-3 w-3 text-[var(--gh-text-muted)]" />
-          </Link>
-
-          {canSeeAdmin && (
+        <div className="lg:hidden fixed inset-x-0 top-[72px] z-50 border-b border-[var(--gh-border)] bg-[var(--gh-bg)]/98 backdrop-blur-xl shadow-2xl p-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
+          <div className="space-y-1.5">
             <Link
-              href="/admin"
+              href="/dashboard"
               onClick={closeMenu}
-              className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition ${
-                pathname?.startsWith('/admin')
-                  ? 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] font-bold border border-[var(--amber-badge-border)]'
-                  : 'text-[var(--gh-text-secondary)] hover:bg-[var(--gh-bg-secondary)]'
-              }`}
+              className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
             >
               <div className="flex items-center space-x-2.5">
-                <Shield className="h-4 w-4 text-[var(--yellow-bright)]" />
-                <span>Admin Console {isReviewer && '(Preview)'}</span>
+                <Code2 className="h-4 w-4 text-[var(--yellow-bright)]" />
+                <span>Repo Challenges</span>
               </div>
-              <ArrowRight className="h-3 w-3 text-[var(--gh-text-muted)]" />
+              <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
             </Link>
-          )}
 
-          {session?.user && (
+            <Link
+              href="/guide"
+              onClick={closeMenu}
+              className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
+            >
+              <div className="flex items-center space-x-2.5">
+                <Sparkles className="h-4 w-4 text-[var(--yellow-bright)]" />
+                <span>AI vs Non-AI Mode</span>
+              </div>
+              <span className="rounded-full bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] text-[10px] font-mono px-2 py-0.5">
+                Dual
+              </span>
+            </Link>
+
+            <Link
+              href="/guide"
+              onClick={closeMenu}
+              className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
+            >
+              <div className="flex items-center space-x-2.5">
+                <BookOpen className="h-4 w-4 text-[var(--yellow-bright)]" />
+                <span>How It Works</span>
+              </div>
+              <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
+            </Link>
+
             <Link
               href="/profile"
               onClick={closeMenu}
-              className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-[var(--gh-text-secondary)] hover:bg-[var(--gh-bg-secondary)] border-t border-[var(--gh-border-subtle)] pt-3"
+              className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
             >
               <div className="flex items-center space-x-2.5">
-                <User className="h-4 w-4 text-[var(--yellow-bright)]" />
-                <span>My Developer Profile</span>
+                <Trophy className="h-4 w-4 text-[var(--yellow-bright)]" />
+                <span>Leaderboard &amp; Stars</span>
               </div>
-              <ArrowRight className="h-3 w-3 text-[var(--gh-text-muted)]" />
+              <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
             </Link>
-          )}
+
+            {canSeeAdmin && (
+              <Link
+                href="/admin"
+                onClick={closeMenu}
+                className="flex items-center justify-between p-3 rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-sm font-semibold text-[var(--amber-badge-text)]"
+              >
+                <div className="flex items-center space-x-2.5">
+                  <Shield className="h-4 w-4 text-[var(--yellow-bright)]" />
+                  <span>Admin Console</span>
+                </div>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
+          </div>
+
+          <div className="pt-2">
+            <Link
+              href="/dashboard"
+              onClick={closeMenu}
+              className="flex items-center justify-center space-x-2 w-full rounded-full bg-[var(--yellow-button-bg)] p-3 text-xs font-bold text-[var(--yellow-button-text)] shadow-sm"
+            >
+              <span>Start Practicing Now &rarr;</span>
+            </Link>
+          </div>
         </div>
       )}
     </header>

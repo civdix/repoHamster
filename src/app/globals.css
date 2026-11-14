@@ -4,63 +4,68 @@
 
 :root {
   /* ==========================================================================
-     GitHub Design System Variables - DEFAULT WHITE BACKGROUND
+     repoHamster Design System: Warm Alabaster / Editorial System
      ========================================================================== */
   
-  /* Canvas & Light Backgrounds (Default White) */
-  --gh-bg: #ffffff;
-  --gh-bg-secondary: #f6f8fa;
-  --gh-bg-tertiary: #eaeef2;
-  --gh-bg-darkest: #ffffff;
-  --gh-bg-code: #f6f8fa;
+  /* Canvas & Warm Backgrounds */
+  --gh-bg: #FAF7F2;
+  --gh-bg-secondary: #FFFFFF;
+  --gh-bg-tertiary: #F4EFEA;
+  --gh-bg-darkest: #141413;
+  --gh-bg-code: #F4EFEA;
 
   /* Borders & Dividers */
-  --gh-border: #d0d7de;
-  --gh-border-subtle: #eaeef2;
-  --gh-border-muted: #d8dee4;
-  --gh-border-active: #ca8a04;
+  --gh-border: #E6E1D6;
+  --gh-border-subtle: #EFECE6;
+  --gh-border-muted: #D8D2C5;
+  --gh-border-active: #FF5A1F;
 
   /* Typography / Content Colors */
-  --gh-text: #1f2328;
-  --gh-text-secondary: #656d76;
-  --gh-text-muted: #656d76;
-  --gh-text-dim: #8c959f;
+  --gh-text: #141413;
+  --gh-text-secondary: #5C5A55;
+  --gh-text-muted: #5C5A55;
+  --gh-text-dim: #828079;
 
-  /* Yellow & Golden Accents */
-  --yellow-primary: #ca8a04;
-  --yellow-bright: #b45309;
-  --yellow-dark: #854d0e;
-  --yellow-deep: #713f12;
-  --yellow-glow: rgba(202, 138, 4, 0.18);
-  --yellow-glow-lg: 0 0 25px -5px rgba(202, 138, 4, 0.22);
+  /* Vibrant Ember Orange Accents */
+  --yellow-primary: #FF5A1F;
+  --yellow-bright: #FF5A1F;
+  --yellow-dark: #E04810;
+  --yellow-deep: #B83508;
+  --yellow-glow: rgba(255, 90, 31, 0.14);
+  --yellow-glow-lg: 0 4px 25px -4px rgba(255, 90, 31, 0.22);
 
-  /* Amber Badge / Tag Palette */
-  --amber-badge-bg: #fef9c3;
-  --amber-badge-bg-hover: #fef08a;
-  --amber-badge-border: #fde047;
-  --amber-badge-text: #713f12;
+  /* Ember / Amber Badge */
+  --amber-badge-bg: rgba(255, 90, 31, 0.08);
+  --amber-badge-bg-hover: rgba(255, 90, 31, 0.14);
+  --amber-badge-border: rgba(255, 90, 31, 0.22);
+  --amber-badge-text: #FF5A1F;
 
-  /* 52-Week GitHub Contribution Calendar Levels (Default White Theme) */
-  --contrib-0: #ebedf0;
-  --contrib-1: #fef08a;
-  --contrib-2: #facc15;
-  --contrib-3: #eab308;
-  --contrib-4: #ca8a04;
+  /* 52-Week Contribution Calendar (Ember Orange Palette) */
+  --contrib-0: #EFECE6;
+  --contrib-1: #FFE3D6;
+  --contrib-2: #FFB394;
+  --contrib-3: #FF8554;
+  --contrib-4: #FF5A1F;
 
   /* Button & Interactive Elements */
-  --yellow-button-text: #000000;
-  --yellow-button-bg: #eab308;
-  --yellow-button-hover: #ca8a04;
-  --yellow-border-subtle: rgba(202, 138, 4, 0.35);
-  --yellow-bg-subtle: rgba(254, 249, 195, 0.7);
-  --yellow-bg-glow: rgba(234, 179, 8, 0.12);
+  --yellow-button-text: #FFFFFF;
+  --yellow-button-bg: #141413;
+  --yellow-button-hover: #262624;
+  --yellow-border-subtle: rgba(255, 90, 31, 0.35);
+  --yellow-bg-subtle: rgba(255, 90, 31, 0.06);
+  --yellow-bg-glow: rgba(255, 90, 31, 0.12);
+
+  /* Secondary Accents */
+  --accent-emerald: #10B981;
+  --accent-amber: #F59E0B;
+  --pill-stone: #EFECE6;
 
   /* Status & Notification Colors */
-  --status-success: #1a7f37;
-  --status-warning: #9a6700;
-  --status-error: #cf222e;
-  --status-error-bg: #ffebe9;
-  --status-error-border: #ff8182;
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-error: #E11D48;
+  --status-error-bg: #FFE4E6;
+  --status-error-border: #FDA4AF;
 
   /* Legacy aliases for platform backwards compatibility */
   --background: var(--gh-bg);
@@ -71,63 +76,68 @@
 
 .dark {
   /* ==========================================================================
-     GitHub Yellow + Dark Theme Design System Variables (Dark Mode)
+     repoHamster Dark Mode: Deep Charcoal Warm Slate & Ember Glow
      ========================================================================== */
 
   /* Canvas & Dark Backgrounds */
-  --gh-bg: #0d1117;
-  --gh-bg-secondary: #161b22;
-  --gh-bg-tertiary: #21262d;
-  --gh-bg-darkest: #010409;
-  --gh-bg-code: #07090e;
+  --gh-bg: #0F0F0E;
+  --gh-bg-secondary: #171716;
+  --gh-bg-tertiary: #1F1F1D;
+  --gh-bg-darkest: #0A0A09;
+  --gh-bg-code: #131312;
 
   /* Borders & Dividers */
-  --gh-border: #30363d;
-  --gh-border-subtle: #21262d;
-  --gh-border-muted: #1b1f24;
-  --gh-border-active: #eab308;
+  --gh-border: #2A2A28;
+  --gh-border-subtle: #222220;
+  --gh-border-muted: #1B1B19;
+  --gh-border-active: #FF5A1F;
 
   /* Typography / Content Colors */
-  --gh-text: #f0f6fc;
-  --gh-text-secondary: #8b949e;
-  --gh-text-muted: #8b949e;
-  --gh-text-dim: #484f58;
+  --gh-text: #F5F4F0;
+  --gh-text-secondary: #9E9D97;
+  --gh-text-muted: #9E9D97;
+  --gh-text-dim: #63625D;
 
-  /* Yellow & Golden Accents */
-  --yellow-primary: #eab308;
-  --yellow-bright: #facc15;
-  --yellow-dark: #ca8a04;
-  --yellow-deep: #a16207;
-  --yellow-glow: rgba(234, 179, 8, 0.25);
-  --yellow-glow-lg: 0 0 25px -5px rgba(234, 179, 8, 0.3);
+  /* Vibrant Ember Orange Accents */
+  --yellow-primary: #FF5A1F;
+  --yellow-bright: #FF6E38;
+  --yellow-dark: #E04810;
+  --yellow-deep: #B83508;
+  --yellow-glow: rgba(255, 90, 31, 0.22);
+  --yellow-glow-lg: 0 4px 28px -4px rgba(255, 90, 31, 0.35);
 
   /* Amber Badge / Tag Palette */
-  --amber-badge-bg: #422006;
-  --amber-badge-bg-hover: #592c08;
-  --amber-badge-border: #713f12;
-  --amber-badge-text: #fef08a;
+  --amber-badge-bg: rgba(255, 90, 31, 0.15);
+  --amber-badge-bg-hover: rgba(255, 90, 31, 0.22);
+  --amber-badge-border: rgba(255, 90, 31, 0.35);
+  --amber-badge-text: #FF6E38;
 
-  /* 52-Week GitHub Contribution Calendar Levels (Yellow + Dark) */
-  --contrib-0: #161b22;
-  --contrib-1: #422006;
-  --contrib-2: #713f12;
-  --contrib-3: #ca8a04;
-  --contrib-4: #facc15;
+  /* 52-Week Contribution Calendar (Dark) */
+  --contrib-0: #1C1C1A;
+  --contrib-1: #4A2314;
+  --contrib-2: #85371A;
+  --contrib-3: #C4451A;
+  --contrib-4: #FF5A1F;
 
   /* Button & Interactive Elements */
-  --yellow-button-text: #020617;
-  --yellow-button-bg: #eab308;
-  --yellow-button-hover: #facc15;
-  --yellow-border-subtle: rgba(234, 179, 8, 0.4);
-  --yellow-bg-subtle: rgba(66, 32, 6, 0.6);
-  --yellow-bg-glow: rgba(234, 179, 8, 0.15);
+  --yellow-button-text: #0F0F0E;
+  --yellow-button-bg: #F5F4F0;
+  --yellow-button-hover: #FFFFFF;
+  --yellow-border-subtle: rgba(255, 90, 31, 0.4);
+  --yellow-bg-subtle: rgba(255, 90, 31, 0.12);
+  --yellow-bg-glow: rgba(255, 90, 31, 0.2);
+
+  /* Secondary Accents */
+  --accent-emerald: #10B981;
+  --accent-amber: #F59E0B;
+  --pill-stone: #2A2A28;
 
   /* Status & Notification Colors */
-  --status-success: #facc15;
-  --status-warning: #eab308;
-  --status-error: #f85149;
-  --status-error-bg: rgba(248, 81, 73, 0.15);
-  --status-error-border: rgba(248, 81, 73, 0.4);
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-error: #FB7185;
+  --status-error-bg: rgba(225, 29, 72, 0.15);
+  --status-error-border: rgba(225, 29, 72, 0.4);
 
   /* Legacy aliases for platform backwards compatibility */
   --background: var(--gh-bg);
@@ -173,14 +183,14 @@ body {
 .bg-dev-grid {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(20, 20, 19, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 19, 0.035) 1px, transparent 1px);
 }
 
 .dark .bg-dev-grid {
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
 .bg-radial-glow {
@@ -192,6 +202,6 @@ button:active:not(:disabled),
 a[role="button"]:active,
 a.btn:active {
   transform: scale(0.97);
-  filter: brightness(0.92);
+  filter: brightness(0.95);
   transition: transform 0.06s ease, filter 0.06s ease;
 }
