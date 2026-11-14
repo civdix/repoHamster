@@ -86,7 +86,7 @@ export function ChallengeExplorer({ assignments, statusMap }: ChallengeExplorerP
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search challenges by title, language (Python, Go, Java), or framework..."
-            className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-8 py-2 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none transition shadow-2xs"
+            className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] pl-9 pr-8 py-2 text-xs font-mono text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none transition shadow-none dark:shadow-2xs"
           />
           {searchQuery && (
             <button
@@ -113,7 +113,7 @@ export function ChallengeExplorer({ assignments, statusMap }: ChallengeExplorerP
           onClick={() => setSelectedStatus('ALL')}
           className={`px-2.5 py-1 rounded-lg transition font-semibold text-[11px] ${
             selectedStatus === 'ALL'
-              ? 'bg-[var(--yellow-primary)] text-white shadow-2xs'
+              ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-2xs'
               : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
           }`}
         >
@@ -125,7 +125,7 @@ export function ChallengeExplorer({ assignments, statusMap }: ChallengeExplorerP
           onClick={() => setSelectedStatus('AVAILABLE')}
           className={`px-2.5 py-1 rounded-lg transition font-semibold text-[11px] ${
             selectedStatus === 'AVAILABLE'
-              ? 'bg-[var(--yellow-primary)] text-white shadow-2xs'
+              ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-2xs'
               : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
           }`}
         >
@@ -137,7 +137,7 @@ export function ChallengeExplorer({ assignments, statusMap }: ChallengeExplorerP
           onClick={() => setSelectedStatus('IN_PROGRESS')}
           className={`px-2.5 py-1 rounded-lg transition font-semibold text-[11px] ${
             selectedStatus === 'IN_PROGRESS'
-              ? 'bg-[var(--yellow-primary)] text-white shadow-2xs'
+              ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-2xs'
               : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
           }`}
         >
@@ -149,7 +149,7 @@ export function ChallengeExplorer({ assignments, statusMap }: ChallengeExplorerP
           onClick={() => setSelectedStatus('COMPLETED')}
           className={`px-2.5 py-1 rounded-lg transition font-semibold text-[11px] ${
             selectedStatus === 'COMPLETED'
-              ? 'bg-[var(--yellow-primary)] text-white shadow-2xs'
+              ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-2xs'
               : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)]'
           }`}
         >

@@ -35,12 +35,12 @@ export function ProfileSettingsSection({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-6 space-y-4 shadow-sm transition-all">
+    <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-6 space-y-4 shadow-none dark:shadow-sm transition-all">
       {/* Top Bar: Handle Info + AI Quotas + Settings Toggle */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Left: User Identity & Settings Button */}
         <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center font-mono font-bold text-sm text-[var(--amber-badge-text)] shadow-xs">
+          <div className="h-10 w-10 rounded-full bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] flex items-center justify-center font-mono font-bold text-sm text-[var(--amber-badge-text)] shadow-none dark:shadow-xs">
             {displayUsername.slice(0, 2).toUpperCase()}
           </div>
           <div>
@@ -74,7 +74,7 @@ export function ProfileSettingsSection({
 
         {/* Right: Hamster AI Credit Meters */}
         <div className="flex flex-wrap items-center gap-3 self-start lg:self-center">
-          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2 font-mono text-xs space-y-0.5 shadow-2xs">
+          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2 font-mono text-xs space-y-0.5 shadow-none dark:shadow-2xs">
             <div className="flex items-center justify-between space-x-3 text-[var(--gh-text-muted)] text-[11px]">
               <span className="flex items-center space-x-1">
                 <Bot className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
@@ -92,7 +92,7 @@ export function ProfileSettingsSection({
             </div>
           </div>
 
-          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2 font-mono text-xs space-y-0.5 shadow-2xs">
+          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2 font-mono text-xs space-y-0.5 shadow-none dark:shadow-2xs">
             <div className="flex items-center justify-between space-x-3 text-[var(--gh-text-muted)] text-[11px]">
               <span className="flex items-center space-x-1">
                 <Zap className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />

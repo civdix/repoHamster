@@ -44,7 +44,7 @@ export function LandingBentoGrid() {
       {/* =========================================================================
           CARD 1 (Spans 12 cols): Multi-Language Sandboxes
           ========================================================================= */}
-      <div className="lg:col-span-12 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-8 shadow-sm hover:border-[var(--yellow-primary)]/40 transition duration-300 relative overflow-hidden group">
+      <div className="lg:col-span-12 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-8 shadow-none dark:shadow-sm hover:border-[var(--yellow-primary)]/40 transition duration-300 relative overflow-hidden group">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
           <div className="lg:w-5/12 space-y-4 text-left">
             <div className="inline-flex items-center space-x-2 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
@@ -73,7 +73,7 @@ export function LandingBentoGrid() {
                     onClick={() => setSelectedLang(lang)}
                     className={`px-3 py-1 rounded-lg text-xs font-mono transition font-semibold ${
                       selectedLang.name === lang.name
-                        ? 'bg-[var(--yellow-primary)] text-white shadow-sm'
+                        ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-sm'
                         : 'bg-[var(--gh-bg)] border border-[var(--gh-border)] text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:border-[var(--yellow-primary)]/40'
                     }`}
                   >
@@ -85,7 +85,7 @@ export function LandingBentoGrid() {
           </div>
 
           {/* Right: Live Visual Workstation & Multi-file IDE Experience */}
-          <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-inner text-left font-mono flex flex-col">
+          <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-none dark:shadow-inner text-left font-mono flex flex-col">
             {/* Multi-File Tab Bar (Python, Go, Java, TS, etc.) */}
             <div className="flex items-center space-x-1 border-b border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-3 py-2 overflow-x-auto scrollbar-none">
               {LANGUAGES.map((lang) => (
@@ -95,7 +95,7 @@ export function LandingBentoGrid() {
                   onClick={() => setSelectedLang(lang)}
                   className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-mono transition shrink-0 ${
                     selectedLang.name === lang.name
-                      ? 'bg-[var(--gh-bg)] text-[var(--gh-text)] border border-[var(--gh-border)] font-bold shadow-2xs'
+                      ? 'bg-[var(--gh-bg)] text-[var(--gh-text)] border border-[var(--gh-border)] font-bold shadow-none dark:shadow-2xs'
                       : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg)]/50'
                   }`}
                 >
@@ -108,7 +108,7 @@ export function LandingBentoGrid() {
             {/* Visual Canvas: Developer Coding at Workstation */}
             <div className="relative aspect-[16/9] w-full bg-[var(--gh-bg-code)] overflow-hidden group/canvas">
               <Image
-                src="/images/developer-coding-workspace.jpg"
+                src="/images/developer-coding-workspace.png"
                 alt="Software Engineer coding at a modern multi-file development workstation"
                 fill
                 className="object-cover object-center group-hover/canvas:scale-[1.02] transition-transform duration-500"
@@ -159,7 +159,7 @@ export function LandingBentoGrid() {
       {/* =========================================================================
           CARD 2 (Spans 6 cols): Instant Verification (Automated Test Grading)
           ========================================================================= */}
-      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-sm text-left group">
+      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-none dark:shadow-sm text-left group">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
@@ -182,7 +182,7 @@ export function LandingBentoGrid() {
           </div>
 
           {/* Simulated Test Runner Card */}
-          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3.5 font-mono text-xs space-y-2.5 shadow-sm">
+          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3.5 font-mono text-xs space-y-2.5 shadow-none dark:shadow-sm">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--gh-border-subtle)] text-[11px]">
               <span className="text-[var(--gh-text)] font-bold">
                 <span className="text-[var(--yellow-bright)]">$</span> RUN pytest tests/test_rate_limiter.py
@@ -219,7 +219,7 @@ export function LandingBentoGrid() {
       {/* =========================================================================
           CARD 3 (Spans 6 cols): Dual OA Modes (AI-Assisted vs Strict Non-AI)
           ========================================================================= */}
-      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-sm text-left group">
+      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-none dark:shadow-sm text-left group">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
@@ -232,7 +232,7 @@ export function LandingBentoGrid() {
                 onClick={() => setActiveTrack('ai')}
                 className={`px-2 py-0.5 rounded text-[10px] font-mono transition font-bold ${
                   activeTrack === 'ai'
-                    ? 'bg-[var(--yellow-primary)] text-white shadow-xs'
+                    ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-xs'
                     : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                 }`}
               >
@@ -243,7 +243,7 @@ export function LandingBentoGrid() {
                 onClick={() => setActiveTrack('strict')}
                 className={`px-2 py-0.5 rounded text-[10px] font-mono transition font-bold ${
                   activeTrack === 'strict'
-                    ? 'bg-[var(--gh-text)] text-[var(--gh-bg)] shadow-xs'
+                    ? 'bg-[var(--gh-text)] text-[var(--gh-bg)] shadow-none dark:shadow-xs'
                     : 'text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                 }`}
               >
@@ -328,7 +328,7 @@ export function LandingBentoGrid() {
       {/* =========================================================================
           CARD 4 (Spans 6 cols): Progression & Rewards (Repo Stars)
           ========================================================================= */}
-      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-sm text-left group">
+      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-none dark:shadow-sm text-left group">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
@@ -389,7 +389,7 @@ export function LandingBentoGrid() {
       {/* =========================================================================
           CARD 5 (Spans 6 cols): Automated Code QA (Post-Mortem Review)
           ========================================================================= */}
-      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-sm text-left group">
+      <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-none dark:shadow-sm text-left group">
         <div className="space-y-4">
           <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
             <GitPullRequest className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
@@ -406,7 +406,7 @@ export function LandingBentoGrid() {
           </div>
 
           {/* Annotated Diff Snippet */}
-          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 space-y-2 font-mono text-xs shadow-inner">
+          <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-3 space-y-2 font-mono text-xs shadow-none dark:shadow-inner">
             <div className="space-y-1 text-[11px]">
               <div className="text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded font-medium">
                 + if (!ctx.acquireLock(key, 5000)) &#123; return Error(&quot;Lock conflict&quot;); &#125;

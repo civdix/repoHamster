@@ -86,19 +86,19 @@ export default async function HomePage() {
             priority
             className="object-cover object-center"
           />
-          {/* Atmospheric Dark & Glass Vignette Overlay for Depth & Accessible Contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/75 to-black/60" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(245,158,11,0.12),transparent_65%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[var(--gh-bg)]" />
+          {/* Atmospheric Glass & Vignette Overlay: Luminous Alabaster in Light Theme, Deep Cinematic Charcoal in Dark Mode */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF7F2]/92 via-[#FAF7F2]/80 to-[#FAF7F2]/50 dark:from-black/90 dark:via-black/80 dark:to-black/65 transition-colors duration-200" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,90,31,0.08),transparent_65%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(245,158,11,0.14),transparent_65%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--gh-bg)] dark:from-black/35 dark:via-transparent dark:to-[var(--gh-bg)]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            
+
             {/* Left Column: Copy & CTAs */}
             <div className="lg:col-span-6 space-y-6 text-left">
               {/* Eyebrow Badge - Sharp Square Developer Tag */}
-              <div className="inline-flex items-center space-x-2 rounded-sm border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/90 backdrop-blur-md px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-xs">
+              <div className="inline-flex items-center space-x-2 rounded-sm border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/90 backdrop-blur-md px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-none dark:shadow-xs">
                 <span className="flex h-4 w-4 items-center justify-center">
                   <HamsterMascot variant="normal" size={18} />
                 </span>
@@ -128,7 +128,7 @@ export default async function HomePage() {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center justify-center space-x-2 rounded-full bg-[var(--yellow-button-bg)] px-7 py-3.5 text-xs sm:text-sm font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] shadow-sm transition active:scale-95"
+                  className="inline-flex items-center justify-center space-x-2 rounded-full bg-[var(--yellow-button-bg)] px-7 py-3.5 text-xs sm:text-sm font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] shadow-none dark:shadow-sm transition active:scale-95"
                 >
                   <span>Launch a Repo Challenge</span>
                   <ArrowRight className="h-4 w-4" />
@@ -136,7 +136,7 @@ export default async function HomePage() {
 
                 <Link
                   href="/guide"
-                  className="inline-flex items-center justify-center space-x-2 rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/90 backdrop-blur-md px-6 py-3.5 text-xs sm:text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)] hover:text-[var(--yellow-primary)] transition active:scale-95"
+                  className="inline-flex items-center justify-center space-x-2 rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]/90 backdrop-blur-md px-6 py-3.5 text-xs sm:text-sm font-semibold text-[var(--gh-text)] hover:border-[var(--yellow-primary)] hover:text-[var(--yellow-primary)] shadow-none dark:shadow-sm transition active:scale-95"
                 >
                   <Terminal className="h-4 w-4 text-[var(--yellow-primary)]" />
                   <span>Explore Sample Repo</span>
@@ -162,49 +162,49 @@ export default async function HomePage() {
 
             {/* Right Column: Refined Computer-Screen-Style Interface Layered Over the Landscape */}
             <div className="lg:col-span-6">
-              <div className="relative rounded-2xl border border-white/20 bg-black/60 backdrop-blur-xl p-3 sm:p-4 shadow-2xl overflow-hidden group transition-all duration-300 hover:border-[var(--yellow-primary)]/50">
+              <div className="relative rounded-2xl border border-[var(--gh-border)] dark:border-white/20 bg-white/90 dark:bg-black/60 backdrop-blur-xl p-3 sm:p-4 shadow-none dark:shadow-2xl overflow-hidden group transition-all duration-300 hover:border-[var(--yellow-primary)]/50">
                 {/* Computer Screen Window Titlebar */}
-                <div className="flex items-center justify-between pb-3 px-2 border-b border-white/10 text-xs font-mono">
+                <div className="flex items-center justify-between pb-3 px-2 border-b border-[var(--gh-border)] dark:border-white/10 text-xs font-mono">
                   <div className="flex items-center space-x-2">
                     <span className="h-3 w-3 rounded-full bg-[#FF5F56]" />
                     <span className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
                     <span className="h-3 w-3 rounded-full bg-[#27C93F]" />
-                    <span className="ml-2 text-white/70 text-[11px] font-semibold">repohamster-workstation — zsh</span>
+                    <span className="ml-2 text-[var(--gh-text)] dark:text-white/70 text-[11px] font-semibold">repohamster-workstation — zsh</span>
                   </div>
-                  <div className="flex items-center space-x-1.5 text-[10px] text-white/60">
+                  <div className="flex items-center space-x-1.5 text-[10px] text-[var(--gh-text-muted)] dark:text-white/60">
                     <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
                     <span>Codespace Active</span>
                   </div>
                 </div>
 
                 {/* Layered Workstation Screen Preview */}
-                <div className="relative mt-3 rounded-xl overflow-hidden border border-white/10 bg-black/40 aspect-[640/440]">
+                <div className="relative mt-3 rounded-xl overflow-hidden border border-[var(--gh-border)] dark:border-white/10 bg-[var(--gh-bg)] dark:bg-black/40 aspect-[640/440]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/developer-coding-workspace.jpg"
+                    src="/images/developer-coding-workspace.png"
                     alt="repoHamster Interactive IDE and Workstation Preview"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     loading="eager"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--gh-bg)]/80 dark:from-black/80 via-transparent to-transparent pointer-events-none" />
 
                   {/* Glassmorphic Floating Badges */}
-                  <div className="absolute top-3 left-3 flex items-center space-x-1.5 rounded-full border border-white/15 bg-black/75 px-3 py-1 text-xs font-mono font-bold text-white backdrop-blur shadow-sm">
+                  <div className="absolute top-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[var(--gh-text)] dark:text-white backdrop-blur shadow-none dark:shadow-sm">
                     <span className="h-2 w-2 rounded-full bg-[#10B981] animate-ping" />
                     <span className="h-2 w-2 rounded-full bg-[#10B981] -ml-2" />
                     <span>Sandbox Ready</span>
                   </div>
 
-                  <div className="absolute top-3 right-3 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/95 px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] backdrop-blur shadow-sm">
+                  <div className="absolute top-3 right-3 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/95 px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] backdrop-blur shadow-none dark:shadow-sm">
                     Mode: Dual OA Track
                   </div>
 
-                  <div className="absolute bottom-3 left-3 flex items-center space-x-1.5 rounded-full border border-white/15 bg-black/75 px-3.5 py-1 text-xs font-mono font-bold text-[#10B981] backdrop-blur shadow-sm">
+                  <div className="absolute bottom-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3.5 py-1 text-xs font-mono font-bold text-[#10B981] backdrop-blur shadow-none dark:shadow-sm">
                     <Check className="h-3.5 w-3.5 stroke-[3]" />
                     <span>14/14 Edge-Case Tests Passing</span>
                   </div>
 
-                  <div className="absolute bottom-3 right-3 flex items-center space-x-1 rounded-full border border-white/15 bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[#F59E0B] backdrop-blur shadow-sm">
+                  <div className="absolute bottom-3 right-3 flex items-center space-x-1 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[#F59E0B] backdrop-blur shadow-none dark:shadow-sm">
                     <Star className="h-3.5 w-3.5 fill-current" />
                     <span>+3 Repo Stars</span>
                   </div>
@@ -273,7 +273,7 @@ export default async function HomePage() {
           {assignments.map((assignment, index) => (
             <div
               key={assignment.id}
-              className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 flex flex-col justify-between hover:border-[var(--yellow-primary)]/60 transition shadow-sm group"
+              className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 flex flex-col justify-between hover:border-[var(--yellow-primary)]/60 transition shadow-none dark:shadow-sm group"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">

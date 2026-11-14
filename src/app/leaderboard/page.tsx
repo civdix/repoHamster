@@ -162,7 +162,7 @@ export default async function LeaderboardPage() {
       <div className="mx-auto max-w-6xl space-y-10">
         {/* Header Eyebrow & Title */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center space-x-2 rounded-sm border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3.5 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-xs">
+          <div className="inline-flex items-center space-x-2 rounded-sm border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3.5 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-none dark:shadow-xs">
             <Trophy className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
             <span>GLOBAL DEVELOPER LEADERBOARD</span>
             <span className="opacity-40">•</span>
@@ -229,12 +229,12 @@ export default async function LeaderboardPage() {
             </div>
 
             {/* Rank 1 (Gold) */}
-            <div className="order-1 md:order-2 rounded-2xl border-2 border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)]/40 p-7 text-center space-y-4 relative -translate-y-2 shadow-lg flex flex-col justify-between">
+            <div className="order-1 md:order-2 rounded-2xl border-2 border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)]/40 p-7 text-center space-y-4 relative -translate-y-2 shadow-none dark:shadow-lg flex flex-col justify-between">
               <div className="space-y-3">
-                <span className="inline-block rounded-full bg-[var(--yellow-primary)] text-white font-mono text-xs px-4 py-1 font-bold shadow-xs">
+                <span className="inline-block rounded-full bg-[var(--yellow-primary)] text-white font-mono text-xs px-4 py-1 font-bold shadow-none dark:shadow-xs">
                   👑 Rank #1 • Champion
                 </span>
-                <div className="h-16 w-16 rounded-full bg-[var(--gh-bg)] border-2 border-[var(--yellow-primary)] flex items-center justify-center mx-auto text-2xl font-bold font-mono text-[var(--yellow-bright)] shadow-md">
+                <div className="h-16 w-16 rounded-full bg-[var(--gh-bg)] border-2 border-[var(--yellow-primary)] flex items-center justify-center mx-auto text-2xl font-bold font-mono text-[var(--yellow-bright)] shadow-none dark:shadow-md">
                   {top3[0].username.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
@@ -284,7 +284,7 @@ export default async function LeaderboardPage() {
         )}
 
         {/* Full Table */}
-        <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] overflow-hidden shadow-sm">
+        <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] overflow-hidden shadow-none dark:shadow-sm">
           <div className="p-4 sm:p-5 border-b border-[var(--gh-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-base font-bold text-[var(--gh-text)] font-sans">

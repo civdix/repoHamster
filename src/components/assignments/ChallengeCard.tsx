@@ -30,7 +30,7 @@ export function ChallengeCard({ assignment, status, evaluation }: ChallengeCardP
     assignment.framework.toLowerCase() !== assignment.language?.toLowerCase();
 
   return (
-    <div className="group flex flex-col justify-between rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-4 sm:p-5 shadow-xs transition hover:border-[var(--yellow-primary)]/60 hover:shadow-sm">
+    <div className="group flex flex-col justify-between rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-4 sm:p-5 shadow-none transition hover:border-[var(--yellow-primary)]/60 dark:shadow-xs dark:hover:shadow-sm">
       <div className="space-y-3">
         {/* Top Header: Difficulty & Status */}
         <div className="flex items-center justify-between gap-2">
@@ -125,7 +125,7 @@ export function ChallengeCard({ assignment, status, evaluation }: ChallengeCardP
           className={`flex w-full items-center justify-center space-x-2 rounded-lg px-4 py-2 text-xs font-semibold transition active:scale-95 ${
             isCompleted
               ? 'border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50'
-              : 'bg-[var(--yellow-button-bg)] text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] shadow-[var(--yellow-glow)] font-bold'
+              : 'bg-[var(--yellow-button-bg)] text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] shadow-none dark:shadow-[var(--yellow-glow)] font-bold'
           }`}
         >
           <span>

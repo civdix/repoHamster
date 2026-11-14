@@ -42,7 +42,7 @@ export function ThemeToggle() {
       type="button"
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       title={isDark ? 'Switch to light theme (default white)' : 'Switch to dark theme'}
-      className="flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95 shadow-sm"
+      className="flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-[var(--gh-text-muted)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/60 transition active:scale-95 shadow-none dark:shadow-sm"
     >
       {isDark ? (
         <Sun className="h-4 w-4 text-[var(--yellow-bright)]" />

@@ -166,12 +166,12 @@ export default async function CandidateDashboardPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8 text-[var(--gh-text)]">
       {/* 1. Personalized Welcome Card with Hamster Mascot (Yellow + Dark Theme) */}
-      <div className="relative rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-6 overflow-hidden shadow-sm">
+      <div className="relative rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-6 overflow-hidden shadow-none dark:shadow-sm">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(ellipse_at_top_right,var(--yellow-glow),transparent_70%)] pointer-events-none" />
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative z-10">
           <div className="flex items-center space-x-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/50 shadow-[var(--yellow-glow)] p-1">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--gh-bg)] border border-[var(--yellow-primary)]/50 shadow-none dark:shadow-[var(--yellow-glow)] p-1">
               <HamsterMascot
                 variant={completedCount > 0 ? 'normal' : 'normal'}
                 size={48}
@@ -200,7 +200,7 @@ export default async function CandidateDashboardPage() {
           <div className="flex flex-wrap items-center gap-2.5 self-start md:self-center shrink-0">
             <Link
               href="/profile"
-              className="rounded-xl border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-3.5 py-2 text-xs font-mono font-bold text-[var(--amber-badge-text)] hover:border-[var(--yellow-bright)] transition active:scale-95 shadow-[var(--yellow-glow)]"
+              className="rounded-xl border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-3.5 py-2 text-xs font-mono font-bold text-[var(--amber-badge-text)] hover:border-[var(--yellow-bright)] transition active:scale-95 shadow-none dark:shadow-[var(--yellow-glow)]"
             >
               Developer Profile
             </Link>
@@ -233,7 +233,7 @@ export default async function CandidateDashboardPage() {
 
         {/* MAJOR DIV 2 (Right 4 cols, sticky): Compact Stats Sidebar */}
         <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-6">
-          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 sm:p-5 space-y-4 shadow-sm">
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 sm:p-5 space-y-4 shadow-none dark:shadow-sm">
             <div className="flex items-center justify-between pb-3 border-b border-[var(--gh-border-subtle)]">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--gh-text)]">
                 Assessment Metrics

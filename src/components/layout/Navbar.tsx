@@ -37,7 +37,7 @@ export function Navbar() {
         {/* Left: Brand Logo & Wordmark */}
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2.5 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] group-hover:border-[var(--yellow-primary)]/60 shadow-sm transition p-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--gh-bg-secondary)] border border-[var(--gh-border)] group-hover:border-[var(--yellow-primary)]/60 shadow-none dark:shadow-sm transition p-1">
               <HamsterMascot variant="normal" size={28} />
             </div>
             <div>
@@ -136,7 +136,7 @@ export function Navbar() {
 
               <Link
                 href="/dashboard"
-                className="inline-flex items-center space-x-1.5 rounded-full bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
+                className="inline-flex items-center space-x-1.5 rounded-full bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-none dark:shadow-sm active:scale-95"
               >
                 <span>Start Practicing</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -161,7 +161,7 @@ export function Navbar() {
 
               <Link
                 href="/dashboard"
-                className="inline-flex items-center space-x-1.5 rounded-full bg-[var(--yellow-button-bg)] px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
+                className="inline-flex items-center space-x-1.5 rounded-full bg-[var(--yellow-button-bg)] px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-none dark:shadow-sm active:scale-95"
               >
                 <span>Start Practicing &rarr;</span>
               </Link>
@@ -184,7 +184,7 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[72px] z-50 border-b border-[var(--gh-border)] bg-[var(--gh-bg)]/98 backdrop-blur-xl shadow-2xl p-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden fixed inset-x-0 top-[72px] z-50 border-b border-[var(--gh-border)] bg-[var(--gh-bg)]/98 backdrop-blur-xl shadow-none dark:shadow-2xl p-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
           <div className="space-y-1.5">
             <Link
               href="/dashboard"
@@ -255,7 +255,7 @@ export function Navbar() {
             <Link
               href="/dashboard"
               onClick={closeMenu}
-              className="flex items-center justify-center space-x-2 w-full rounded-full bg-[var(--yellow-button-bg)] p-3 text-xs font-bold text-[var(--yellow-button-text)] shadow-sm"
+              className="flex items-center justify-center space-x-2 w-full rounded-full bg-[var(--yellow-button-bg)] p-3 text-xs font-bold text-[var(--yellow-button-text)] shadow-none dark:shadow-sm"
             >
               <span>Start Practicing Now &rarr;</span>
             </Link>
