@@ -9,6 +9,7 @@ import {
   Trash2,
   CheckCircle2,
   AlertCircle,
+  AlertTriangle,
   Loader2,
   FileCode2,
   Clock,
@@ -16,6 +17,8 @@ import {
   Layers,
   Webhook,
   Shield,
+  Wrench,
+  RefreshCw,
 } from 'lucide-react';
 import { AssignmentEditorModal } from './AssignmentEditorModal';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
@@ -31,9 +34,17 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
   const [isToggling, setIsToggling] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  // Webhook State & Failure tracking
   const [isProvisioning, setIsProvisioning] = useState(false);
+  const [webhookStatus, setWebhookStatus] = useState<string>(assignment.webhookStatus || 'PENDING');
+  const [webhookError, setWebhookError] = useState<string | null>(assignment.webhookError || null);
   const [webhookMessage, setWebhookMessage] = useState<string | null>(null);
+
+  // Guardrails State & Failure tracking
   const [isProvisioningGuardrails, setIsProvisioningGuardrails] = useState(false);
+  const [guardrailsStatus, setGuardrailsStatus] = useState<string>(assignment.guardrailsStatus || 'PENDING');
+  const [guardrailsError, setGuardrailsError] = useState<string | null>(assignment.guardrailsError || null);
   const [guardrailsMessage, setGuardrailsMessage] = useState<string | null>(null);
 
   const hierarchy = parseLanguageHierarchy(assignment.language, assignment.framework);
@@ -45,11 +56,22 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
       const res = await fetch('/api/admin/guardrails/provision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ repoUrl: assignment.repoUrl }),
+        body: JSON.stringify({ repoUrl: assignment.repoUrl, assignmentId: assignment.id }),
       });
       const data = await res.json();
-      setGuardrailsMessage(data.message || (data.success ? 'Guardrails installed!' : 'Failed to install.'));
+      if (data.success) {
+        setGuardrailsStatus('ACTIVE');
+        setGuardrailsError(null);
+        setGuardrailsMessage(data.message || 'AI Guardrails installed successfully!');
+      } else {
+        setGuardrailsStatus('FAILED');
+        setGuardrailsError(data.message || 'Failed to install guardrails.');
+        setGuardrailsMessage(data.message || 'Failed to install guardrails.');
+      }
+      router.refresh();
     } catch (err: any) {
+      setGuardrailsStatus('FAILED');
+      setGuardrailsError(err?.message || 'Network error.');
       setGuardrailsMessage(err?.message || 'Network error.');
     } finally {
       setIsProvisioningGuardrails(false);
@@ -63,11 +85,22 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
       const res = await fetch('/api/admin/webhooks/provision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ repoUrl: assignment.repoUrl }),
+        body: JSON.stringify({ repoUrl: assignment.repoUrl, assignmentId: assignment.id }),
       });
       const data = await res.json();
-      setWebhookMessage(data.message || (data.success ? 'Webhook connected!' : 'Failed to connect.'));
+      if (data.success) {
+        setWebhookStatus('ACTIVE');
+        setWebhookError(null);
+        setWebhookMessage(data.message || 'Webhook connected successfully!');
+      } else {
+        setWebhookStatus('FAILED');
+        setWebhookError(data.message || 'Failed to connect webhook.');
+        setWebhookMessage(data.message || 'Failed to connect webhook.');
+      }
+      router.refresh();
     } catch (err: any) {
+      setWebhookStatus('FAILED');
+      setWebhookError(err?.message || 'Network error.');
       setWebhookMessage(err?.message || 'Network error.');
     } finally {
       setIsProvisioning(false);
@@ -153,6 +186,60 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
               </span>
             )}
 
+            {/* Webhook Status Badge */}
+            {webhookStatus === 'ACTIVE' ? (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-emerald-400"
+                title="GitHub webhook is connected and actively listening for Pull Requests"
+              >
+                <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                <span>Webhook: Connected</span>
+              </span>
+            ) : webhookStatus === 'FAILED' ? (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-rose-500/70 bg-rose-500/15 px-2.5 py-0.5 text-[10px] font-mono font-bold text-rose-400 animate-pulse shadow-sm"
+                title={webhookError || 'Webhook connection failed. Click "Fix Hook" to retry.'}
+              >
+                <AlertCircle className="h-3 w-3 text-rose-500" />
+                <span>Webhook: Disconnected / Failed</span>
+              </span>
+            ) : (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono font-medium text-amber-400"
+                title="Webhook pending verification"
+              >
+                <Clock className="h-3 w-3 text-amber-400" />
+                <span>Webhook: Unchecked</span>
+              </span>
+            )}
+
+            {/* AI Guardrails Status Badge */}
+            {guardrailsStatus === 'ACTIVE' ? (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-emerald-400"
+                title="AI Guardrails and Copilot Socratic rules are installed on the repository"
+              >
+                <Shield className="h-3 w-3 text-emerald-400" />
+                <span>Guardrails: Active</span>
+              </span>
+            ) : guardrailsStatus === 'FAILED' ? (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-rose-500/70 bg-rose-500/15 px-2.5 py-0.5 text-[10px] font-mono font-bold text-rose-400 animate-pulse shadow-sm"
+                title={guardrailsError || 'Guardrail installation failed. Click "Fix Guardrails" to retry.'}
+              >
+                <AlertCircle className="h-3 w-3 text-rose-500" />
+                <span>Guardrails: Failed / Missing</span>
+              </span>
+            ) : (
+              <span
+                className="inline-flex items-center space-x-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono font-medium text-amber-400"
+                title="Guardrails pending verification"
+              >
+                <Clock className="h-3 w-3 text-amber-400" />
+                <span>Guardrails: Unchecked</span>
+              </span>
+            )}
+
             {webhookMessage && (
               <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--yellow-bright)] animate-in fade-in">
                 {webhookMessage}
@@ -175,6 +262,36 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
           <p className="text-xs text-[var(--gh-text-secondary)] max-w-3xl leading-relaxed">
             {assignment.description}
           </p>
+
+          {/* Red Failure Warning Alert Box */}
+          {(webhookStatus === 'FAILED' || guardrailsStatus === 'FAILED') && (
+            <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-xs font-mono text-rose-300 space-y-1.5 animate-in fade-in duration-200">
+              <div className="flex items-center space-x-2 text-rose-400 font-bold">
+                <AlertCircle className="h-4 w-4 text-rose-500 shrink-0" />
+                <span>Action Needed: Repository Integration Incomplete</span>
+              </div>
+              {webhookStatus === 'FAILED' && (
+                <div className="text-[11px] text-rose-300/90 pl-6 space-y-0.5">
+                  <p>
+                    <strong className="text-rose-400">Webhook Issue:</strong> {webhookError || 'GitHub webhook is disconnected on this repository.'}
+                  </p>
+                  <p className="text-[10px] text-rose-400/80">
+                    &rarr; Click the red <strong className="text-white underline">Fix Hook</strong> button on the right to connect it.
+                  </p>
+                </div>
+              )}
+              {guardrailsStatus === 'FAILED' && (
+                <div className="text-[11px] text-rose-300/90 pl-6 space-y-0.5">
+                  <p>
+                    <strong className="text-rose-400">Guardrails Issue:</strong> {guardrailsError || 'AI guardrails (.github/copilot-instructions.md) could not be verified.'}
+                  </p>
+                  <p className="text-[10px] text-rose-400/80">
+                    &rarr; Click the red <strong className="text-white underline">Fix Guardrails</strong> button on the right to install them.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Action Controls */}
@@ -205,34 +322,62 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             )}
           </button>
 
-          {/* Auto-Provision Webhook Button */}
+          {/* Auto-Provision / Fix Webhook Button */}
           <button
             onClick={handleAutoProvisionWebhook}
             disabled={isProvisioning}
-            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1.5 text-xs text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50 transition active:scale-95"
-            title="Auto-create or verify GitHub repository webhook via API"
+            className={`flex items-center space-x-1.5 rounded-xl border px-2.5 py-1.5 text-xs transition active:scale-95 ${
+              webhookStatus === 'FAILED'
+                ? 'border-rose-500/70 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 hover:border-rose-400 font-bold animate-pulse shadow-sm'
+                : webhookStatus === 'ACTIVE'
+                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:border-emerald-500/70 hover:bg-emerald-500/20'
+                : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50'
+            }`}
+            title={
+              webhookStatus === 'FAILED'
+                ? `Webhook failed: ${webhookError || 'Click to retry auto-connecting'}`
+                : webhookStatus === 'ACTIVE'
+                ? 'Webhook is active on GitHub. Click to re-verify.'
+                : 'Auto-create or verify GitHub repository webhook via API'
+            }
           >
             {isProvisioning ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--yellow-bright)]" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-current" />
+            ) : webhookStatus === 'FAILED' ? (
+              <Wrench className="h-3.5 w-3.5 text-rose-400" />
             ) : (
-              <Webhook className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+              <Webhook className="h-3.5 w-3.5 text-current" />
             )}
-            <span className="hidden sm:inline">Auto-Connect Hook</span>
+            <span>{webhookStatus === 'FAILED' ? 'Fix Hook' : webhookStatus === 'ACTIVE' ? 'Hook OK' : 'Connect Hook'}</span>
           </button>
 
-          {/* Install AI Guardrails Button */}
+          {/* Install / Fix AI Guardrails Button */}
           <button
             onClick={handleAutoProvisionGuardrails}
             disabled={isProvisioningGuardrails}
-            className="flex items-center space-x-1.5 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-1.5 text-xs text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50 transition active:scale-95"
-            title="Install Copilot Socratic rules and disable inline autocompletions in repository"
+            className={`flex items-center space-x-1.5 rounded-xl border px-2.5 py-1.5 text-xs transition active:scale-95 ${
+              guardrailsStatus === 'FAILED'
+                ? 'border-rose-500/70 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 hover:border-rose-400 font-bold animate-pulse shadow-sm'
+                : guardrailsStatus === 'ACTIVE'
+                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:border-emerald-500/70 hover:bg-emerald-500/20'
+                : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-secondary)] hover:text-[var(--yellow-bright)] hover:border-[var(--yellow-primary)]/50'
+            }`}
+            title={
+              guardrailsStatus === 'FAILED'
+                ? `Guardrails failed: ${guardrailsError || 'Click to retry installing'}`
+                : guardrailsStatus === 'ACTIVE'
+                ? 'Guardrails active. Click to re-verify.'
+                : 'Install Copilot Socratic rules and disable inline autocompletions in repository'
+            }
           >
             {isProvisioningGuardrails ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--yellow-bright)]" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-current" />
+            ) : guardrailsStatus === 'FAILED' ? (
+              <Wrench className="h-3.5 w-3.5 text-rose-400" />
             ) : (
-              <Shield className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+              <Shield className="h-3.5 w-3.5 text-current" />
             )}
-            <span className="hidden sm:inline">AI Guardrails</span>
+            <span>{guardrailsStatus === 'FAILED' ? 'Fix Guardrails' : guardrailsStatus === 'ACTIVE' ? 'Guardrails OK' : 'AI Guardrails'}</span>
           </button>
 
           {/* Edit Information Modal Button */}

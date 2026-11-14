@@ -42,7 +42,36 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await autoCreateRepositoryWebhook(targetRepoUrl);
-    return NextResponse.json(result);
+
+    // Explicitly update assignment in database
+    if (assignmentId) {
+      await prisma.assignment.update({
+        where: { id: assignmentId },
+        data: {
+          webhookStatus: result.success ? 'ACTIVE' : 'FAILED',
+          webhookError: result.success ? null : result.message,
+        },
+      }).catch((e) => console.warn('[WEBHOOK PROVISION] Could not update assignment:', e));
+    } else {
+      await prisma.assignment.updateMany({
+        where: {
+          OR: [
+            { repoUrl: targetRepoUrl },
+            { repoUrl: { contains: targetRepoUrl.split('github.com/')[1] || targetRepoUrl } },
+          ],
+        },
+        data: {
+          webhookStatus: result.success ? 'ACTIVE' : 'FAILED',
+          webhookError: result.success ? null : result.message,
+        },
+      }).catch((e) => console.warn('[WEBHOOK PROVISION] Could not update assignments:', e));
+    }
+
+    return NextResponse.json({
+      ...result,
+      webhookStatus: result.success ? 'ACTIVE' : 'FAILED',
+      webhookError: result.success ? null : result.message,
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || 'Failed to provision webhook' }, { status: 500 });
   }

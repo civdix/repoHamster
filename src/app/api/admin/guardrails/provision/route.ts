@@ -44,7 +44,35 @@ export async function POST(req: NextRequest) {
     const sessionToken = (session as any)?.accessToken || (session.user as any)?.accessToken;
     const adminToken = process.env.GITHUB_TOKEN || sessionToken;
     const result = await autoInstallAIGuardrails(targetRepoUrl, adminToken);
-    return NextResponse.json(result);
+
+    if (assignmentId) {
+      await prisma.assignment.update({
+        where: { id: assignmentId },
+        data: {
+          guardrailsStatus: result.success ? 'ACTIVE' : 'FAILED',
+          guardrailsError: result.success ? null : result.message,
+        },
+      }).catch((e) => console.warn('[GUARDRAILS PROVISION] Could not update assignment:', e));
+    } else {
+      await prisma.assignment.updateMany({
+        where: {
+          OR: [
+            { repoUrl: targetRepoUrl },
+            { repoUrl: { contains: targetRepoUrl.split('github.com/')[1] || targetRepoUrl } },
+          ],
+        },
+        data: {
+          guardrailsStatus: result.success ? 'ACTIVE' : 'FAILED',
+          guardrailsError: result.success ? null : result.message,
+        },
+      }).catch((e) => console.warn('[GUARDRAILS PROVISION] Could not update assignments:', e));
+    }
+
+    return NextResponse.json({
+      ...result,
+      guardrailsStatus: result.success ? 'ACTIVE' : 'FAILED',
+      guardrailsError: result.success ? null : result.message,
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || 'Failed to install AI guardrails' }, { status: 500 });
   }

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
+import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
 import { isPlatformAdmin, isReviewer, canViewAdmin } from '@/lib/permissions';
 import fs from 'fs';
 import path from 'path';
@@ -161,10 +162,33 @@ Your objective is to identify intentionally introduced defects, fix the root cau
       },
     });
 
-    // Auto-install AI guardrails and Copilot restrictions to the upstream challenge repository
-    autoInstallAIGuardrails(catalogRepo.originalUrl).catch((err) =>
-      console.warn('[CATALOGUE CONVERT] Non-fatal error installing AI guardrails:', err)
-    );
+    // Auto-install AI guardrails and Auto-provision Webhooks automatically in the background
+    (async () => {
+      try {
+        const [whRes, grRes] = await Promise.allSettled([
+          autoCreateRepositoryWebhook(catalogRepo.originalUrl),
+          autoInstallAIGuardrails(catalogRepo.originalUrl),
+        ]);
+
+        const webhookOk = whRes.status === 'fulfilled' && whRes.value.success;
+        const webhookError = whRes.status === 'fulfilled' ? (whRes.value.success ? null : whRes.value.message) : String(whRes.reason);
+
+        const guardrailsOk = grRes.status === 'fulfilled' && grRes.value.success;
+        const guardrailsError = grRes.status === 'fulfilled' ? (grRes.value.success ? null : grRes.value.message) : String(grRes.reason);
+
+        await prisma.assignment.update({
+          where: { id: assignment.id },
+          data: {
+            webhookStatus: webhookOk ? 'ACTIVE' : 'FAILED',
+            webhookError,
+            guardrailsStatus: guardrailsOk ? 'ACTIVE' : 'FAILED',
+            guardrailsError,
+          },
+        });
+      } catch (autoErr) {
+        console.warn('[CATALOGUE CONVERT] Auto-provisioning background error:', autoErr);
+      }
+    })();
 
     return NextResponse.json({
       success: true,

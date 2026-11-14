@@ -1,3 +1,5 @@
+import prisma from '@/lib/db';
+
 export interface GuardrailsProvisionResult {
   success: boolean;
   message: string;
@@ -20,11 +22,13 @@ export async function autoInstallAIGuardrails(
   const candidateTokens = Array.from(new Set([envToken, passedToken].filter(Boolean))) as string[];
 
   if (candidateTokens.length === 0) {
-    return {
+    const res: GuardrailsProvisionResult = {
       success: false,
       message: 'GITHUB_TOKEN is missing in environment. Please configure GITHUB_TOKEN in .env',
       requiresManualCommit: true,
     };
+    await updateDbGuardrailsStatus(repoUrl, 'FAILED', res.message);
+    return res;
   }
 
   // Parse owner and repo
@@ -208,18 +212,42 @@ Failure to follow these rules invalidates the candidate's assessment results.
     const details: string[] = [];
     if (committedFiles.length > 0) details.push(`Committed: ${committedFiles.join(', ')}`);
     if (verifiedFiles.length > 0) details.push(`Verified: ${verifiedFiles.join(', ')}`);
-    return {
+    const res: GuardrailsProvisionResult = {
       success: true,
       message: `AI Guardrails installed successfully! (${details.join(' | ')})`,
       filesCommitted: [...committedFiles, ...verifiedFiles],
     };
+    await updateDbGuardrailsStatus(repoUrl, 'ACTIVE', null);
+    return res;
   }
 
-  return {
+  const res: GuardrailsProvisionResult = {
     success: false,
     message: lastError
       ? `Could not commit guardrails files: ${lastError}. Check repository write permissions or copy templates/guardrails manually.`
       : 'Could not commit guardrails files. Check repository permissions or copy templates/guardrails manually.',
     requiresManualCommit: true,
   };
+  await updateDbGuardrailsStatus(repoUrl, 'FAILED', res.message);
+  return res;
+}
+
+async function updateDbGuardrailsStatus(repoUrl: string, status: string, errorMsg: string | null) {
+  try {
+    const clean = repoUrl.replace(/\/$/, '');
+    await prisma.assignment.updateMany({
+      where: {
+        OR: [
+          { repoUrl: { equals: clean } },
+          { repoUrl: { contains: clean.split('github.com/')[1] || clean } },
+        ],
+      },
+      data: {
+        guardrailsStatus: status,
+        guardrailsError: errorMsg,
+      },
+    });
+  } catch (e) {
+    console.warn('[GUARDRAILS PROVISION DB SYNC] Non-fatal error updating assignment status:', e);
+  }
 }

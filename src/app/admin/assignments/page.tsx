@@ -60,6 +60,9 @@ export default async function AdminAssignmentsPage() {
 
   const activeCount = assignments.filter((a) => a.isActive).length;
   const hiddenCount = assignments.filter((a) => !a.isActive).length;
+  const webhookFailedCount = assignments.filter((a) => a.webhookStatus === 'FAILED').length;
+  const guardrailsFailedCount = assignments.filter((a) => a.guardrailsStatus === 'FAILED').length;
+  const hasIntegrationFailures = webhookFailedCount > 0 || guardrailsFailedCount > 0;
 
   const totalTestsAcrossAll = assignments.reduce((sum, a) => {
     const s = getTestCaseSummary(a);
@@ -78,7 +81,7 @@ export default async function AdminAssignmentsPage() {
             </span>
           </h2>
           <p className="text-xs text-[var(--gh-text-secondary)] mt-0.5">
-            Hide challenges, delete obsolete repos, edit instructions & AI token quotas, and audit test case counts.
+            Auto-enable webhooks &amp; AI guardrails, audit test suites, manage AI token quotas, and resolve failed integrations.
           </p>
         </div>
 
@@ -87,6 +90,23 @@ export default async function AdminAssignmentsPage() {
           <AssignmentEditorModal isNew={true} catalogRepositories={catalogRepositories} />
         </div>
       </div>
+
+      {/* Global Warning Banner if any Webhooks or Guardrails Failed */}
+      {hasIntegrationFailures && (
+        <div className="rounded-xl border border-rose-500/60 bg-rose-500/15 p-4 text-xs font-mono text-rose-300 flex items-start space-x-3 animate-in fade-in duration-200 shadow-sm">
+          <AlertCircle className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h4 className="font-bold text-rose-200 text-sm">
+              Attention Required: {webhookFailedCount + guardrailsFailedCount} Integration Failure(s) Detected
+            </h4>
+            <p className="text-rose-300/90 leading-relaxed text-[11px]">
+              {webhookFailedCount > 0 && `${webhookFailedCount} repository has a failed or disconnected GitHub webhook. `}
+              {guardrailsFailedCount > 0 && `${guardrailsFailedCount} repository is missing AI guardrails (.github/copilot-instructions.md). `}
+              Look for the red marks below and click the red <strong className="text-white underline">Fix Hook</strong> or <strong className="text-white underline">Fix Guardrails</strong> buttons to auto-repair them.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Overview Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

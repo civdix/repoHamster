@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
+import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
 import { isPlatformAdmin, isReviewer } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
@@ -102,15 +103,35 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Auto-create GitHub webhook on repository if GITHUB_TOKEN is configured
-    let webhookStatus: any = null;
-    try {
-      webhookStatus = await autoCreateRepositoryWebhook(assignment.repoUrl);
-    } catch (err: any) {
-      console.warn('[WEBHOOK AUTO-PROVISION] Could not auto-create hook:', err?.message);
-    }
+    // Auto-provision both Webhook and AI Guardrails automatically in the background
+    (async () => {
+      try {
+        const [whRes, grRes] = await Promise.allSettled([
+          autoCreateRepositoryWebhook(assignment.repoUrl),
+          autoInstallAIGuardrails(assignment.repoUrl),
+        ]);
 
-    return NextResponse.json({ success: true, assignment, webhookStatus });
+        const webhookOk = whRes.status === 'fulfilled' && whRes.value.success;
+        const webhookError = whRes.status === 'fulfilled' ? (whRes.value.success ? null : whRes.value.message) : String(whRes.reason);
+
+        const guardrailsOk = grRes.status === 'fulfilled' && grRes.value.success;
+        const guardrailsError = grRes.status === 'fulfilled' ? (grRes.value.success ? null : grRes.value.message) : String(grRes.reason);
+
+        await prisma.assignment.update({
+          where: { id: assignment.id },
+          data: {
+            webhookStatus: webhookOk ? 'ACTIVE' : 'FAILED',
+            webhookError,
+            guardrailsStatus: guardrailsOk ? 'ACTIVE' : 'FAILED',
+            guardrailsError,
+          },
+        });
+      } catch (err: any) {
+        console.warn('[ASSIGNMENT CREATE AUTO-PROVISION] Error:', err?.message);
+      }
+    })();
+
+    return NextResponse.json({ success: true, assignment });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Failed to create assignment' }, { status: 500 });
   }
