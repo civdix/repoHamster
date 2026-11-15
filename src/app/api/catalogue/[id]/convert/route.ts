@@ -6,6 +6,7 @@ import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
 import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
 import { autoInstallTestWorkflow } from '@/lib/github-workflow-provisioner';
 import { isPlatformAdmin, isReviewer, canViewAdmin } from '@/lib/permissions';
+import { softWarmPages } from '@/lib/cache-warmer';
 import fs from 'fs';
 import path from 'path';
 
@@ -196,6 +197,9 @@ Your objective is to identify intentionally introduced defects, fix the root cau
         console.warn('[CATALOGUE CONVERT] Auto-provisioning background error:', autoErr);
       }
     })();
+
+    // Pre-warm Edge CDN with the new challenge
+    softWarmPages(['/', '/leaderboard', `/assignments/${assignment.slug}`]).catch(() => {});
 
     return NextResponse.json({
       success: true,

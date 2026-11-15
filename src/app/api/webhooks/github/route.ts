@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import prisma from '@/lib/db';
 import { evaluateSubmission } from '@/lib/evaluation/engine';
 import { postGitHubEvaluationFeedback } from '@/lib/github-feedback';
+import { softWarmPages } from '@/lib/cache-warmer';
 
 export const dynamic = 'force-dynamic';
 
@@ -155,6 +156,9 @@ export async function POST(req: NextRequest) {
     }).catch((err) => {
       console.warn('[WEBHOOK] Could not post GitHub feedback:', err);
     });
+
+    // Proactively revalidate and soft-warm Vercel Edge CDN cache so leaderboard & profile are fresh before any user visits
+    softWarmPages(['/leaderboard', '/', `/u/${githubUsername}`]).catch(() => {});
 
     return NextResponse.json({
       success: true,

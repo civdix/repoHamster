@@ -20,7 +20,8 @@ import { LandingMNCLogos } from '@/components/landing/LandingMNCLogos';
 import { LandingBentoGrid } from '@/components/landing/LandingBentoGrid';
 import { LandingFaq } from '@/components/landing/LandingFaq';
 
-export const dynamic = 'force-dynamic';
+// ISR: Cached at Vercel Edge CDN; auto-warmed in background on git/webhook/admin events
+export const revalidate = 600; // 10 minutes
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);

@@ -15,7 +15,8 @@ import {
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
-export const dynamic = 'force-dynamic';
+// ISR: Cached at Vercel Edge CDN; auto-warmed in background on PR grading events
+export const revalidate = 600; // 10 minutes
 
 export const metadata = {
   title: 'Global Developer Leaderboard | RepoHamster',

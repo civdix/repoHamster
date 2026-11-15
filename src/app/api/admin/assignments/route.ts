@@ -6,6 +6,7 @@ import { autoCreateRepositoryWebhook } from '@/lib/github-webhook-provisioner';
 import { autoInstallAIGuardrails } from '@/lib/github-guardrails';
 import { autoInstallTestWorkflow } from '@/lib/github-workflow-provisioner';
 import { isPlatformAdmin, isReviewer } from '@/lib/permissions';
+import { softWarmPages } from '@/lib/cache-warmer';
 
 export const dynamic = 'force-dynamic';
 
@@ -138,6 +139,9 @@ export async function POST(req: NextRequest) {
       }
     })();
 
+    // Soft-warm Edge CDN cache with new challenge
+    softWarmPages(['/', '/leaderboard', `/assignments/${assignment.slug}`]).catch(() => {});
+
     return NextResponse.json({ success: true, assignment });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Failed to create assignment' }, { status: 500 });
@@ -192,6 +196,8 @@ export async function PUT(req: NextRequest) {
       data: updateData,
     });
 
+    softWarmPages(['/', '/leaderboard', `/assignments/${updated.slug}`]).catch(() => {});
+
     return NextResponse.json({ success: true, assignment: updated });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Failed to update assignment' }, { status: 500 });
@@ -215,6 +221,8 @@ export async function PATCH(req: NextRequest) {
       where: { id },
       data: { isActive },
     });
+
+    softWarmPages(['/', '/leaderboard', `/assignments/${updated.slug}`]).catch(() => {});
 
     return NextResponse.json({
       success: true,
@@ -268,6 +276,8 @@ export async function DELETE(req: NextRequest) {
     const deleted = await prisma.assignment.delete({
       where: { id },
     });
+
+    softWarmPages(['/', '/leaderboard']).catch(() => {});
 
     return NextResponse.json({
       success: true,

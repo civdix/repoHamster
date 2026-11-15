@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { syncRepositoriesFromOwner } from '@/lib/github-sync';
 import { isPlatformAdmin } from '@/lib/permissions';
+import { softWarmPages } from '@/lib/cache-warmer';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,7 @@ export async function GET(req: NextRequest) {
   const owner = searchParams.get('owner') || undefined;
 
   const result = await syncRepositoriesFromOwner(owner);
+  softWarmPages(['/', '/leaderboard']).catch(() => {});
   return NextResponse.json(result);
 }
 
@@ -47,5 +49,6 @@ export async function POST(req: NextRequest) {
   }
 
   const result = await syncRepositoriesFromOwner(owner);
+  softWarmPages(['/', '/leaderboard']).catch(() => {});
   return NextResponse.json(result);
 }
