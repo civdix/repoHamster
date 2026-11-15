@@ -1,6 +1,7 @@
 import prisma from '../db';
 import type { EvaluationJob } from './types';
 import { executeIsolatedEvaluation } from './runner';
+import { auditPRForCheating } from '../anti-cheat';
 
 export async function evaluateSubmission(job: EvaluationJob) {
   const {
@@ -112,6 +113,12 @@ export async function evaluateSubmission(job: EvaluationJob) {
     },
   });
 
+  // 6.5 Automated Anti-Cheat Audit on PR files
+  let cheatAudit: { isCheated: boolean; reason?: string } = { isCheated: false };
+  if (repoFullName && prNumber) {
+    cheatAudit = await auditPRForCheating(repoFullName, prNumber);
+  }
+
   // 7. Execute Isolated Test Evaluation
   const runnerResult = await executeIsolatedEvaluation({
     assignmentSlug: assignment.slug,
@@ -142,30 +149,61 @@ export async function evaluateSubmission(job: EvaluationJob) {
     });
   }
 
+  const isAllTestsPassed = runnerResult.totalTests > 0 && runnerResult.passedTests === runnerResult.totalTests;
+  const isFinalPassed = !cheatAudit.isCheated && (runnerResult.isPassed || isAllTestsPassed);
+
+  const evalLogs = cheatAudit.isCheated
+    ? `${runnerResult.logs}\n\n[CHEAT_DETECTED]: ${cheatAudit.reason}`
+    : runnerResult.logs;
+
+  const overrideReason = cheatAudit.isCheated
+    ? `Cheated in test by - ${cheatAudit.reason}`
+    : null;
+
   // 10. Update Evaluation Record with Final Scores
   const completedEvaluation = await prisma.evaluation.update({
     where: { id: evaluation.id },
     data: {
-      status: 'COMPLETED',
+      status: cheatAudit.isCheated ? 'FAILED' : 'COMPLETED',
       totalTests: runnerResult.totalTests,
       passedTests: runnerResult.passedTests,
       failedTests: runnerResult.failedTests,
-      scorePercent: runnerResult.scorePercent,
-      isPassed: runnerResult.isPassed,
-      logs: runnerResult.logs,
+      scorePercent: cheatAudit.isCheated ? 0 : runnerResult.scorePercent,
+      isPassed: isFinalPassed,
+      logs: evalLogs,
+      manualOverrideReason: overrideReason,
       executionTimeMs: runnerResult.executionTimeMs,
       evaluatedAt: new Date(),
     },
     include: { testResults: true },
   });
 
-  // 11. Completion Rule: If passed, mark CandidateAssignment COMPLETED
-  if (runnerResult.isPassed) {
+  // 11. Completion Rule:
+  // - If cheated -> mark FAILED
+  // - If all test cases pass & no cheating -> mark COMPLETED
+  // - Otherwise -> mark IN_PROGRESS
+  if (cheatAudit.isCheated) {
+    await prisma.candidateAssignment.update({
+      where: { id: candidateAssignment.id },
+      data: {
+        status: 'FAILED',
+        completedAt: null,
+      },
+    });
+  } else if (isFinalPassed) {
     await prisma.candidateAssignment.update({
       where: { id: candidateAssignment.id },
       data: {
         status: 'COMPLETED',
         completedAt: new Date(),
+      },
+    });
+  } else {
+    await prisma.candidateAssignment.update({
+      where: { id: candidateAssignment.id },
+      data: {
+        status: 'IN_PROGRESS',
+        completedAt: null,
       },
     });
   }
@@ -174,5 +212,7 @@ export async function evaluateSubmission(job: EvaluationJob) {
     submission,
     evaluation: completedEvaluation,
     isDuplicate: false,
+    isCheated: cheatAudit.isCheated,
+    cheatReason: cheatAudit.reason,
   };
 }

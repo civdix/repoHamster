@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, X, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, X, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface ManualOverrideModalProps {
   evaluationId: string;
@@ -21,7 +21,7 @@ export function ManualOverrideModal({
 }: ManualOverrideModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [markAsPassed, setMarkAsPassed] = useState(!currentPassed);
+  const [mode, setMode] = useState<'PASSED' | 'FAILED' | 'CHEATED'>(currentPassed ? 'FAILED' : 'PASSED');
   const [newScore, setNewScore] = useState(currentScore.toString());
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,11 @@ export function ManualOverrideModal({
   const handleOverride = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reason.trim()) {
-      setError('Please provide an administrative audit reason for this override.');
+      setError(
+        mode === 'CHEATED'
+          ? 'Please specify the exact reason for flagging this submission as cheated.'
+          : 'Please provide an administrative audit reason for this override.'
+      );
       return;
     }
 
@@ -38,13 +42,17 @@ export function ManualOverrideModal({
     setError(null);
 
     try {
+      const isCheated = mode === 'CHEATED';
+      const isPassed = mode === 'PASSED';
+
       const res = await fetch('/api/admin/override', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           evaluationId,
-          isPassed: markAsPassed,
-          scorePercent: parseFloat(newScore) || 100,
+          isPassed,
+          isCheated,
+          scorePercent: isCheated ? 0 : parseFloat(newScore) || 0,
           reason: reason.trim(),
         }),
       });
@@ -108,63 +116,87 @@ export function ManualOverrideModal({
                 <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1.5">
                   Override Decision
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     onClick={() => {
-                      setMarkAsPassed(true);
+                      setMode('PASSED');
                       setNewScore('100');
                     }}
                     className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
-                      markAsPassed
+                      mode === 'PASSED'
                         ? 'border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold'
                         : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                     }`}
                   >
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    <span>Mark as PASSED</span>
+                    <span>PASSED</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => {
-                      setMarkAsPassed(false);
+                      setMode('FAILED');
                       setNewScore('50');
                     }}
                     className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
-                      !markAsPassed
+                      mode === 'FAILED'
                         ? 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text)] font-bold'
                         : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-[var(--gh-text)]'
                     }`}
                   >
                     <AlertCircle className="h-3.5 w-3.5" />
-                    <span>Mark as FAILED</span>
+                    <span>FAILED</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('CHEATED');
+                      setNewScore('0');
+                    }}
+                    className={`flex items-center justify-center space-x-1.5 rounded-lg border py-2 text-xs font-semibold transition ${
+                      mode === 'CHEATED'
+                        ? 'border-red-700 bg-red-950/60 text-red-300 font-bold'
+                        : 'border-[var(--gh-border)] bg-[var(--gh-bg)] text-[var(--gh-text-muted)] hover:text-red-400'
+                    }`}
+                  >
+                    <ShieldAlert className="h-3.5 w-3.5 text-red-400" />
+                    <span>CHEATED</span>
                   </button>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
-                  Adjusted Score Percentage (0 - 100)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={newScore}
-                  onChange={(e) => setNewScore(e.target.value)}
-                  className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
-                />
-              </div>
+              {mode !== 'CHEATED' && (
+                <div>
+                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
+                    Adjusted Score Percentage (0 - 100)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={newScore}
+                    onChange={(e) => setNewScore(e.target.value)}
+                    className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs font-mono text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
+                  />
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
-                  Administrative Audit Reason (Required)
+                  {mode === 'CHEATED'
+                    ? 'Cheating Reason (Will display as: Cheated in test by - [reason])'
+                    : 'Administrative Audit Reason (Required)'}
                 </label>
                 <textarea
                   rows={3}
                   required
-                  placeholder="e.g. Solution uses alternative valid locking mechanism that timed out under synthetic test runner; code manually reviewed and verified."
+                  placeholder={
+                    mode === 'CHEATED'
+                      ? 'e.g. Test suite tampering: modified assertions in test/auth.test.ts to force pass'
+                      : 'e.g. Solution uses alternative valid locking mechanism that timed out under synthetic test runner; code manually reviewed and verified.'
+                  }
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   className="w-full rounded-lg border border-[var(--gh-border)] bg-[var(--gh-bg)] p-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:border-[var(--yellow-primary)] focus:outline-none"

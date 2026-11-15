@@ -153,6 +153,8 @@ export async function POST(req: NextRequest) {
       totalTests: evalResult.evaluation.totalTests,
       candidateUsername: githubUsername,
       logs: evalResult.evaluation.logs,
+      isCheated: evalResult.isCheated,
+      cheatReason: evalResult.cheatReason,
     }).catch((err) => {
       console.warn('[WEBHOOK] Could not post GitHub feedback:', err);
     });

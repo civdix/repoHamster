@@ -21,11 +21,13 @@ import {
   Bot,
   User,
   ShieldCheck,
+  ShieldAlert,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
 import { ShareProfileBar } from '@/components/profile/ShareProfileBar';
 import { ChallengeExplorer } from '@/components/assignments/ChallengeExplorer';
+import { computeAssessmentStatus } from '@/lib/anti-cheat';
 
 export const dynamic = 'force-dynamic';
 
@@ -376,6 +378,10 @@ export default async function CandidateDashboardPage() {
               {recentSubmissions.map((sub) => {
                 const isPassed = sub.evaluation?.isPassed;
                 const commitShort = sub.commitSha.slice(0, 7);
+                const subStatus = computeAssessmentStatus({
+                  status: sub.candidateAssignment.status,
+                  evaluation: sub.evaluation,
+                });
 
                 return (
                   <div
@@ -384,12 +390,21 @@ export default async function CandidateDashboardPage() {
                   >
                     <div className="flex items-start space-x-3">
                       <div
-                        className={`mt-1 h-7 w-7 rounded-lg flex items-center justify-center shrink-0 ${isPassed
+                        className={`mt-1 h-7 w-7 rounded-lg flex items-center justify-center shrink-0 ${
+                          subStatus.isCheated
+                            ? 'bg-red-950/60 border border-red-700 text-red-400'
+                            : subStatus.outcome === 'COMPLETED'
                             ? 'bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--yellow-bright)]'
                             : 'bg-[var(--gh-bg-tertiary)] border border-[var(--gh-border)] text-[var(--yellow-primary)]'
-                          }`}
+                        }`}
                       >
-                        {isPassed ? <CheckCircle2 className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+                        {subStatus.isCheated ? (
+                          <ShieldAlert className="h-4 w-4" />
+                        ) : subStatus.outcome === 'COMPLETED' ? (
+                          <CheckCircle2 className="h-4 w-4" />
+                        ) : (
+                          <Clock className="h-4 w-4" />
+                        )}
                       </div>
 
                       <div>
@@ -426,9 +441,19 @@ export default async function CandidateDashboardPage() {
                       <div className="text-right">
                         <div className="text-xs font-mono font-semibold">
                           {sub.evaluation ? (
-                            <span className={isPassed ? 'text-[var(--yellow-bright)]' : 'text-[var(--yellow-primary)]'}>
-                              {sub.evaluation.scorePercent}% ({sub.evaluation.passedTests}/{sub.evaluation.totalTests} tests)
-                            </span>
+                            subStatus.isCheated ? (
+                              <span className="text-red-400 font-bold" title={subStatus.badgeText}>
+                                Cheated in test by - {subStatus.cheatReason}
+                              </span>
+                            ) : subStatus.outcome === 'COMPLETED' ? (
+                              <span className="text-[var(--yellow-bright)] font-bold">
+                                Completed ({sub.evaluation.passedTests}/{sub.evaluation.totalTests})
+                              </span>
+                            ) : (
+                              <span className="text-[var(--yellow-primary)] font-bold">
+                                {sub.evaluation.passedTests}/{sub.evaluation.totalTests} Passed
+                              </span>
+                            )
                           ) : (
                             <span className="text-[var(--yellow-primary)]">Evaluating...</span>
                           )}

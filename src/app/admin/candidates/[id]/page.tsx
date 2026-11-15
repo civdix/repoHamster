@@ -14,9 +14,11 @@ import {
   Terminal,
   Bot,
   Shield,
+  ShieldAlert,
 } from 'lucide-react';
 import { ManualOverrideModal } from '@/components/admin/ManualOverrideModal';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { computeAssessmentStatus } from '@/lib/anti-cheat';
 
 export const dynamic = 'force-dynamic';
 
@@ -131,7 +133,10 @@ export default async function CandidateInspectorPage({ params }: Props) {
             {(candidate.assignments || []).map((ca: any) => {
               const latestSub = ca.submissions?.[0];
               const latestEval = latestSub?.evaluation;
-              const isPassed = ca.status === 'COMPLETED' || latestEval?.isPassed;
+              const statusInfo = computeAssessmentStatus({
+                status: ca.status,
+                evaluation: latestEval,
+              });
 
               return (
                 <div
@@ -151,15 +156,20 @@ export default async function CandidateInspectorPage({ params }: Props) {
                     </div>
 
                     <div className="flex items-center space-x-3">
-                      {isPassed ? (
+                      {statusInfo.isCheated ? (
+                        <span className="inline-flex items-center rounded-full border border-red-700 bg-red-950/60 px-2.5 py-0.5 text-xs font-mono font-bold text-red-300">
+                          <ShieldAlert className="mr-1 h-3.5 w-3.5 text-red-400" />
+                          Cheated in test by - {statusInfo.cheatReason}
+                        </span>
+                      ) : statusInfo.outcome === 'COMPLETED' ? (
                         <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-semibold text-[var(--amber-badge-text)]">
                           <CheckCircle2 className="mr-1 h-3.5 w-3.5" />
-                          COMPLETED
+                          COMPLETED (PASSED)
                         </span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg)] px-2.5 py-0.5 text-xs font-mono font-semibold text-[var(--gh-text-secondary)]">
+                        <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-semibold text-[var(--yellow-bright)]">
                           <Clock className="mr-1 h-3.5 w-3.5" />
-                          IN PROGRESS
+                          {statusInfo.passedTests}/{statusInfo.totalTests} PASSED
                         </span>
                       )}
 
@@ -193,8 +203,12 @@ export default async function CandidateInspectorPage({ params }: Props) {
                             </a>
                           )}
                         </span>
-                        <span className={isPassed ? 'text-[var(--yellow-bright)] font-bold' : 'text-[var(--yellow-primary)] font-bold'}>
-                          Score: {latestEval.scorePercent}% ({latestEval.passedTests}/{latestEval.totalTests} tests)
+                        <span className={statusInfo.outcome === 'COMPLETED' ? 'text-[var(--yellow-bright)] font-bold' : 'text-[var(--yellow-primary)] font-bold'}>
+                          {statusInfo.isCheated ? (
+                            <span className="text-red-400">Cheated in test by - {statusInfo.cheatReason}</span>
+                          ) : (
+                            `Score: ${latestEval.scorePercent}% (${latestEval.passedTests}/${latestEval.totalTests} tests)`
+                          )}
                         </span>
                       </div>
 

@@ -9,9 +9,11 @@ import {
   ArrowRight,
   Layers,
   Sparkles,
+  ShieldAlert,
 } from 'lucide-react';
 import { TechIcon } from '@/components/common/TechIcon';
 import { getTestCaseSummary } from '@/lib/test-case-utils';
+import { computeAssessmentStatus } from '@/lib/anti-cheat';
 
 interface ChallengeCardProps {
   assignment: any;
@@ -20,8 +22,9 @@ interface ChallengeCardProps {
 }
 
 export function ChallengeCard({ assignment, status, evaluation }: ChallengeCardProps) {
-  const isCompleted = status === 'COMPLETED';
-  const isInProgress = status === 'IN_PROGRESS';
+  const statusInfo = computeAssessmentStatus({ status, evaluation });
+  const isCompleted = statusInfo.outcome === 'COMPLETED';
+  const isInProgress = status === 'IN_PROGRESS' || statusInfo.outcome === 'PARTIAL';
   const testSummary = getTestCaseSummary(assignment);
 
   const hasFramework =
@@ -39,10 +42,23 @@ export function ChallengeCard({ assignment, status, evaluation }: ChallengeCardP
           </span>
 
           {/* Status Badge */}
-          {isCompleted ? (
+          {statusInfo.isCheated ? (
+            <span
+              title={`Cheated in test by - ${statusInfo.cheatReason}`}
+              className="inline-flex items-center rounded-full border border-red-700 bg-red-950/60 px-2.5 py-0.5 text-[10px] font-mono font-bold text-red-300 max-w-[210px] truncate"
+            >
+              <ShieldAlert className="mr-1 h-3 w-3 shrink-0 text-red-400" />
+              <span className="truncate">Cheated in test by - {statusInfo.cheatReason}</span>
+            </span>
+          ) : statusInfo.outcome === 'COMPLETED' ? (
             <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[var(--amber-badge-text)]">
               <CheckCircle2 className="mr-1 h-3 w-3" />
-              PASSED
+              Completed (Passed)
+            </span>
+          ) : statusInfo.outcome === 'PARTIAL' ? (
+            <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--yellow-bright)] font-bold">
+              <Clock className="mr-1 h-3 w-3" />
+              {statusInfo.passedTests}/{statusInfo.totalTests} Passed
             </span>
           ) : isInProgress ? (
             <span className="inline-flex items-center rounded-full border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] px-2.5 py-0.5 text-[10px] font-mono text-[var(--yellow-primary)] font-semibold">

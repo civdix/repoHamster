@@ -19,6 +19,7 @@ import { SubmitPRModal } from '@/components/assignments/SubmitPRModal';
 import { AIChatDrawer } from '@/components/ai/AIChatDrawer';
 import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { computeAssessmentStatus } from '@/lib/anti-cheat';
 
 interface GitHubWorkspaceViewProps {
   assignment: {
@@ -68,7 +69,11 @@ export function GitHubWorkspaceView({
   candidateGithubUsername,
 }: GitHubWorkspaceViewProps) {
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('code');
-  const isCompleted = candidateAssignment?.status === 'COMPLETED';
+  const statusInfo = computeAssessmentStatus({
+    status: candidateAssignment?.status,
+    evaluation: latestEvaluation,
+  });
+  const isCompleted = statusInfo.outcome === 'COMPLETED';
 
   return (
     <div className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)]">
@@ -191,13 +196,15 @@ export function GitHubWorkspaceView({
 
                 {latestEvaluation && (
                   <div
-                    className={`rounded-xl px-4 py-1.5 font-mono text-lg font-bold ${
-                      latestEvaluation.isPassed
+                    className={`rounded-xl px-4 py-1.5 font-mono text-xs sm:text-sm font-bold flex items-center space-x-1.5 ${
+                      statusInfo.isCheated
+                        ? 'bg-red-950/70 border border-red-700 text-red-300'
+                        : statusInfo.outcome === 'COMPLETED'
                         ? 'bg-[var(--amber-badge-bg)] border border-[var(--yellow-bright)] text-[var(--yellow-bright)] shadow-[var(--yellow-glow)]'
                         : 'bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--yellow-primary)]'
                     }`}
                   >
-                    {latestEvaluation.scorePercent}%
+                    <span>{statusInfo.isCheated ? 'FLAGGED' : statusInfo.badgeText}</span>
                   </div>
                 )}
               </div>
@@ -220,14 +227,27 @@ export function GitHubWorkspaceView({
                     </div>
                   </div>
 
-                  {/* Mascot Alert based on Pass/Fail */}
-                  {latestEvaluation.isPassed ? (
+                  {/* Mascot Alert based on Pass/Fail/Cheated */}
+                  {statusInfo.isCheated ? (
+                    <div className="rounded-xl border border-red-800 bg-red-950/50 p-4 flex items-center space-x-4 shadow-sm">
+                      <HamsterMascot variant="angry" size={56} />
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <ShieldAlert className="h-5 w-5 text-red-400 shrink-0" />
+                          <h4 className="text-sm font-bold text-red-300">Cheated in test by - {statusInfo.cheatReason}</h4>
+                        </div>
+                        <p className="text-xs text-red-400/90 font-mono leading-relaxed">
+                          Assessment integrity violation: Academic honesty rules were compromised. This submission is rejected.
+                        </p>
+                      </div>
+                    </div>
+                  ) : statusInfo.outcome === 'COMPLETED' ? (
                     <div className="rounded-xl border border-[var(--yellow-primary)]/50 bg-[var(--amber-badge-bg)]/70 p-4 flex items-center space-x-4">
                       <HamsterMascot variant="normal" size={56} />
                       <div>
-                        <h4 className="text-sm font-bold text-[var(--amber-badge-text)]">All Tests Passed! 🎉</h4>
+                        <h4 className="text-sm font-bold text-[var(--amber-badge-text)]">All Tests Passed! Completed 🎉</h4>
                         <p className="text-xs text-[var(--amber-badge-text)] font-mono mt-0.5">
-                          All repository test suite assertions passed with flying colors.
+                          All {statusInfo.passedTests}/{statusInfo.totalTests} repository test suite assertions passed and no cheating was detected.
                         </p>
                       </div>
                     </div>
@@ -235,9 +255,9 @@ export function GitHubWorkspaceView({
                     <div className="rounded-xl border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/70 p-4 flex items-center space-x-4">
                       <HamsterMascot variant="angry" size={56} />
                       <div>
-                        <h4 className="text-sm font-bold text-[var(--yellow-bright)]">Assertions Failed</h4>
+                        <h4 className="text-sm font-bold text-[var(--yellow-bright)]">{statusInfo.passedTests}/{statusInfo.totalTests} Passed</h4>
                         <p className="text-xs text-[var(--amber-badge-text)] font-mono mt-0.5">
-                          The hamster found failing assertions in your patch. Check the test logs below to debug!
+                          Not all test cases passed ({statusInfo.passedTests}/{statusInfo.totalTests} passed). Check the test runner logs below to debug!
                         </p>
                       </div>
                     </div>

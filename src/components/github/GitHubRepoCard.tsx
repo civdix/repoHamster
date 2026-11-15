@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { BookMarked, CheckCircle2, Clock, ExternalLink } from 'lucide-react';
+import { BookMarked, CheckCircle2, Clock, ExternalLink, ShieldAlert } from 'lucide-react';
+import { computeAssessmentStatus } from '@/lib/anti-cheat';
 
 interface GitHubRepoCardProps {
   title: string;
@@ -13,6 +14,7 @@ interface GitHubRepoCardProps {
   status?: string;
   prUrl?: string;
   starsCount?: number;
+  evaluation?: any;
 }
 
 export function GitHubRepoCard({
@@ -25,7 +27,12 @@ export function GitHubRepoCard({
   status = 'COMPLETED',
   prUrl,
   starsCount = 1,
+  evaluation,
 }: GitHubRepoCardProps) {
+  const statusInfo = computeAssessmentStatus({
+    status,
+    evaluation: evaluation || (isPassed ? { isPassed: true } : undefined),
+  });
   return (
     <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] p-4 flex flex-col justify-between hover:border-[var(--yellow-primary)]/60 transition group shadow-sm">
       <div className="space-y-2.5">
@@ -69,10 +76,23 @@ export function GitHubRepoCard({
 
         {/* Status / PR link */}
         <div className="flex items-center space-x-2">
-          {isPassed ? (
+          {statusInfo.isCheated ? (
+            <span
+              title={`Cheated in test by - ${statusInfo.cheatReason}`}
+              className="flex items-center space-x-1 text-red-400 font-bold text-[11px] max-w-[170px] truncate"
+            >
+              <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">Cheated in test by - {statusInfo.cheatReason}</span>
+            </span>
+          ) : statusInfo.outcome === 'COMPLETED' ? (
             <span className="flex items-center space-x-1 text-[var(--yellow-bright)] font-semibold text-[11px]">
               <CheckCircle2 className="h-3.5 w-3.5" />
-              <span>Solved</span>
+              <span>Completed</span>
+            </span>
+          ) : statusInfo.outcome === 'PARTIAL' ? (
+            <span className="flex items-center space-x-1 text-[var(--yellow-bright)] font-semibold text-[11px]">
+              <Clock className="h-3.5 w-3.5" />
+              <span>{statusInfo.passedTests}/{statusInfo.totalTests} Passed</span>
             </span>
           ) : (
             <span className="flex items-center space-x-1 text-[var(--gh-text-muted)] text-[11px]">

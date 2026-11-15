@@ -51,18 +51,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Evaluation not found' }, { status: 404 });
   }
 
+  const isCheatOverride = Boolean(body.isCheated) || /cheat|tamper|plagiarism/i.test(reason);
+  const formattedReason = isCheatOverride
+    ? (reason.toLowerCase().startsWith('cheated in test by') ? reason : `Cheated in test by - ${reason.replace(/^(cheated|tampered|cheat)\s*[:-]?\s*/i, '').trim()}`)
+    : reason;
+
   const adminName = session.user.name || 'Admin';
   const adminId = (session.user as any).id;
-  const auditLog = `\n[ADMIN_AUDIT] Manual Evaluation Override applied by ${adminName} at ${new Date().toISOString()}\nReason: ${reason}`;
+  const auditLog = `\n[ADMIN_AUDIT] Manual Evaluation Override applied by ${adminName} at ${new Date().toISOString()}\nReason: ${formattedReason}`;
 
   const updatedEval = await prisma.evaluation.update({
     where: { id: evaluationId },
     data: {
-      isPassed: Boolean(isPassed),
-      scorePercent: parseFloat(scorePercent) || 100,
-      status: 'MANUAL_OVERRIDE',
+      isPassed: isCheatOverride ? false : Boolean(isPassed),
+      scorePercent: isCheatOverride ? 0 : (parseFloat(scorePercent) || (isPassed ? 100 : 0)),
+      status: isCheatOverride ? 'FAILED' : 'MANUAL_OVERRIDE',
       manualOverrideById: adminId && !adminId.startsWith('mock') ? adminId : undefined,
-      manualOverrideReason: reason,
+      manualOverrideReason: formattedReason,
       logs: (existingEval.logs || '') + auditLog,
     },
   });
@@ -73,8 +78,8 @@ export async function POST(req: NextRequest) {
     await prisma.candidateAssignment.update({
       where: { id: caId },
       data: {
-        status: isPassed ? 'COMPLETED' : 'IN_PROGRESS',
-        completedAt: isPassed ? new Date() : null,
+        status: isCheatOverride ? 'FAILED' : (isPassed ? 'COMPLETED' : 'IN_PROGRESS'),
+        completedAt: !isCheatOverride && isPassed ? new Date() : null,
       },
     });
   }

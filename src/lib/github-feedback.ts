@@ -13,6 +13,8 @@ interface PostFeedbackParams {
   totalTests: number;
   candidateUsername?: string;
   logs?: string | null;
+  isCheated?: boolean;
+  cheatReason?: string | null;
 }
 
 export async function postGitHubEvaluationFeedback(
@@ -33,6 +35,8 @@ export async function postGitHubEvaluationFeedback(
     passedTests,
     totalTests,
     candidateUsername,
+    isCheated,
+    cheatReason,
   } = params;
 
   let statusPosted = false;
@@ -51,12 +55,19 @@ export async function postGitHubEvaluationFeedback(
 
   // 1. Post Commit Status Check (Green checkmark or Red cross on GitHub commit/PR)
   try {
+    let descriptionText = '';
+    if (isCheated) {
+      descriptionText = `RepoHamster: Cheated in test by - ${cheatReason || 'Integrity violation'}`;
+    } else if (isPassed) {
+      descriptionText = `RepoHamster: Completed (Passed ${passedTests}/${totalTests} tests green)`;
+    } else {
+      descriptionText = `RepoHamster: ${passedTests}/${totalTests} tests passed`;
+    }
+
     const statusPayload = {
-      state: isPassed ? 'success' : 'failure',
+      state: isPassed && !isCheated ? 'success' : 'failure',
       target_url: `${baseUrl.replace(/\/$/, '')}/dashboard`,
-      description: isPassed
-        ? `RepoHamster: 100% Passed (${passedTests}/${totalTests} tests green)`
-        : `RepoHamster: Score ${scorePercent}% (${passedTests}/${totalTests} tests passed)`,
+      description: descriptionText.slice(0, 140),
       context: 'repohamster/evaluation',
     };
 
@@ -82,6 +93,12 @@ export async function postGitHubEvaluationFeedback(
   // 2. Post PR Comment (if PR number exists)
   if (prNumber) {
     try {
+      const statusLine = isCheated
+        ? `🚨 **Cheated in test by - ${cheatReason || 'Academic integrity violation'}**`
+        : isPassed
+        ? `✅ **COMPLETED (Passed ${passedTests}/${totalTests})**`
+        : `⚠️ **${passedTests}/${totalTests} Passed**`;
+
       const commentBody = [
         '### 🐹 RepoHamster Automated Evaluation Report',
         '',
@@ -90,18 +107,20 @@ export async function postGitHubEvaluationFeedback(
         '',
         '| Metric | Result |',
         '| :--- | :--- |',
-        `| **Status** | ${isPassed ? '✅ **PASSED (Verified)**' : '❌ **NEEDS REVISION**'} |`,
+        `| **Status** | ${statusLine} |`,
+        `| **Tests Passed** | **${passedTests} / ${totalTests}** |`,
         `| **Score** | **${scorePercent}%** |`,
-        `| **Total Tests Passed** | **${passedTests} / ${totalTests}** |`,
         '',
-        isPassed
-          ? '🎉 **Congratulations!** Your solution successfully resolved the bugs and passed all public & hidden test suites. Your candidate profile and verified badge have been automatically updated.'
-          : '⚠️ **Review Needed:** Some assertions or hidden invariant edge-cases failed. Push new commits to this branch to trigger a fresh evaluation automatically.',
+        isCheated
+          ? `🛑 **INTEGRITY VIOLATION**: Cheated in test by - ${cheatReason || 'Integrity rules violated'}. This submission has been flagged.`
+          : isPassed
+          ? `🎉 **Congratulations!** All ${passedTests}/${totalTests} test cases passed and no cheating was detected. Your candidate profile and verified badge have been automatically updated.`
+          : `⚠️ **Review Needed:** ${passedTests}/${totalTests} test cases passed. Push new commits to your branch to resolve remaining failures.`,
         '',
         `👉 [View Candidate Dashboard & Verified Scorecard](${baseUrl.replace(/\/$/, '')}/dashboard)`,
         '',
         '---',
-        '> 🔒 **Important Admin Notice**: Do not merge this Pull Request into `main`. The base challenge repository stays active in its initial state for other candidates.',
+        '> 🔒 **Important Notice**: Do not merge this Pull Request into `main`. The challenge repository stays active for continuous evaluation.',
       ].join('\n');
 
       const commentRes = await fetch(

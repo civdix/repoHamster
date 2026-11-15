@@ -196,6 +196,7 @@ export function GitHubProfileView({
                         isPassed={latestSub?.evaluation?.isPassed}
                         status={ca.status}
                         prUrl={latestSub?.pullRequest?.prUrl}
+                        evaluation={latestSub?.evaluation}
                       />
                     );
                   })}
@@ -292,6 +293,7 @@ export function GitHubProfileView({
                         isPassed={latestSub?.evaluation?.isPassed}
                         status={ca.status}
                         prUrl={latestSub?.pullRequest?.prUrl}
+                        evaluation={latestSub?.evaluation}
                       />
                     );
                   })}
