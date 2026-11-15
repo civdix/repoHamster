@@ -4,14 +4,12 @@ import prisma from '@/lib/db';
 import {
   Trophy,
   Star,
-  Flame,
   Award,
   CheckCircle2,
   ExternalLink,
   Shield,
   Zap,
   ArrowRight,
-  TrendingUp,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
@@ -37,7 +35,7 @@ interface LeaderboardEntry {
 }
 
 export default async function LeaderboardPage() {
-  // Query top candidates from database (strictly excluding admins, bots, and test users)
+  // Query candidates from database strictly based on actual evaluation submissions
   let users: any[] = [];
   try {
     users = await prisma.user.findMany({
@@ -61,14 +59,14 @@ export default async function LeaderboardPage() {
           },
         },
       },
-      take: 20,
+      take: 50,
     });
   } catch (err) {
     console.error('[LEADERBOARD] Database query failed:', err);
   }
 
-  // Aggregate user stats from database (strictly real candidates who solved repos)
-  const realDbEntries: LeaderboardEntry[] = users
+  // Aggregate stats strictly from real database solvers
+  const leaderboard: LeaderboardEntry[] = users
     .filter((u) => {
       const uName = (u.name || '').toLowerCase();
       const uHandle = (u.username || u.githubUsername || '').toLowerCase();
@@ -83,134 +81,49 @@ export default async function LeaderboardPage() {
         !uEmail.includes('test')
       );
     })
-    .map((u, idx) => {
-      const completedAssignments = u.assignments.filter(
+    .map((u) => {
+      const allSubmissions = (u.assignments || []).flatMap((a: any) => a.submissions || []);
+      const passedSubmissions = allSubmissions.filter((s: any) => s.evaluation?.isPassed);
+      const completedAssignments = (u.assignments || []).filter(
         (ua: any) => ua.status === 'COMPLETED' || ua.submissions?.some((s: any) => s.evaluation?.isPassed)
       );
       const solved = completedAssignments.length;
-      const stars = solved > 0 ? solved * 12 + 10 : 0;
+      if (solved === 0) return null;
+
+      const evaluatedSubmissions = allSubmissions.filter((s: any) => s.evaluation);
+      const passingRate =
+        evaluatedSubmissions.length > 0
+          ? Math.round((passedSubmissions.length / evaluatedSubmissions.length) * 100)
+          : 100;
+      const stars = solved * 25 + passedSubmissions.length * 10;
+
+      const username =
+        u.username || u.githubUsername || u.name?.toLowerCase().replace(/\s+/g, '_') || `dev_${u.id.slice(0, 5)}`;
+
       return {
-        rank: idx + 1,
+        rank: 0,
         id: u.id,
-        username: u.username || u.githubUsername || u.name?.toLowerCase().replace(/\s+/g, '_') || `dev_${u.id.slice(0, 5)}`,
+        username,
         githubUsername: u.githubUsername,
         name: u.name,
         stars,
         solvedCount: solved,
-        passingRate: solved > 0 ? 98 : 0,
-        badge: solved > 5 ? 'Distributed Systems Master' : solved > 3 ? 'Distributed Systems Gold' : 'Systems Explorer',
-        track: (idx % 2 === 0 ? 'AI' : 'Strict') as 'AI' | 'Strict',
+        passingRate,
+        badge: solved >= 5 ? 'Distributed Systems Master' : solved >= 3 ? 'Distributed Systems Gold' : 'Verified Candidate',
+        track: 'Hybrid' as const,
       };
     })
-    // Only rank candidates who have actually solved repo challenges
-    .filter((entry) => entry.solvedCount > 0);
-
-  // Authenticated real software engineer entries to maintain active competitive standings
-  const verifiedEngineers: LeaderboardEntry[] = [
-    {
-      rank: 1,
-      id: 'real-1',
-      username: 'shivam_dixit',
-      githubUsername: 'civdix',
-      name: 'Shivam Dixit',
-      stars: 124,
-      solvedCount: 14,
-      passingRate: 98.5,
-      badge: 'Distributed Systems Master',
-      track: 'Hybrid',
-    },
-    {
-      rank: 2,
-      id: 'real-2',
-      username: 'alex_chen',
-      githubUsername: 'alexchen-dev',
-      name: 'Alex Chen',
-      stars: 96,
-      solvedCount: 11,
-      passingRate: 96.0,
-      badge: 'High Concurrency Guru',
-      track: 'Strict',
-    },
-    {
-      rank: 3,
-      id: 'real-3',
-      username: 'priya_sharma',
-      githubUsername: 'priyacodes',
-      name: 'Priya Sharma',
-      stars: 88,
-      solvedCount: 10,
-      passingRate: 95.2,
-      badge: 'Distributed Systems Gold',
-      track: 'AI',
-    },
-    {
-      rank: 4,
-      id: 'real-4',
-      username: 'marcus_k',
-      githubUsername: 'mk-systems',
-      name: 'Marcus Krause',
-      stars: 76,
-      solvedCount: 8,
-      passingRate: 94.0,
-      badge: 'API Architecture Specialist',
-      track: 'Strict',
-    },
-    {
-      rank: 5,
-      id: 'real-5',
-      username: 'elena_v',
-      githubUsername: 'elenav-algo',
-      name: 'Elena Volkova',
-      stars: 64,
-      solvedCount: 7,
-      passingRate: 91.8,
-      badge: 'Memory Arena Architect',
-      track: 'AI',
-    },
-    {
-      rank: 6,
-      id: 'real-6',
-      username: 'rohan_verma',
-      githubUsername: 'rohan-codes',
-      name: 'Rohan Verma',
-      stars: 52,
-      solvedCount: 5,
-      passingRate: 90.0,
-      badge: 'Systems Specialist',
-      track: 'AI',
-    },
-    {
-      rank: 7,
-      id: 'real-7',
-      username: 'vishakha',
-      githubUsername: 'vishakha-dev',
-      name: 'Vishakha Singh',
-      stars: 48,
-      solvedCount: 4,
-      passingRate: 92.5,
-      badge: 'Concurrency Engineer',
-      track: 'Strict',
-    },
-  ];
-
-  // Merge real database solvers with verified software engineers (no duplicates, no test bots)
-  const existingUsernames = new Set<string>();
-  const mergedList: LeaderboardEntry[] = [];
-
-  for (const entry of [...realDbEntries, ...verifiedEngineers]) {
-    const key = entry.username.toLowerCase();
-    if (!existingUsernames.has(key)) {
-      existingUsernames.add(key);
-      mergedList.push(entry);
-    }
-  }
-
-  const leaderboard = mergedList
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
     .sort((a, b) => b.stars - a.stars)
-    .map((e, idx) => ({ ...e, rank: idx + 1 }));
+    .map((entry, idx) => ({ ...entry, rank: idx + 1 }));
 
   const top3 = leaderboard.slice(0, 3);
-  const rest = leaderboard.slice(3);
+  const totalStarsAwarded = leaderboard.reduce((acc, e) => acc + e.stars, 0);
+  const totalSolvers = leaderboard.length;
+  const overallAvgPassRate =
+    leaderboard.length > 0
+      ? Math.round(leaderboard.reduce((acc, e) => acc + e.passingRate, 0) / leaderboard.length)
+      : 0;
 
   return (
     <div className="min-h-screen bg-[var(--gh-bg)] bg-dev-grid text-[var(--gh-text)] py-10 px-4 sm:px-6 lg:px-8">
@@ -221,7 +134,7 @@ export default async function LeaderboardPage() {
             <Trophy className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
             <span>GLOBAL DEVELOPER LEADERBOARD</span>
             <span className="opacity-40">•</span>
-            <span>WEEKLY RANKINGS</span>
+            <span>REAL EVALUATIONS ONLY</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-sans">
@@ -232,201 +145,186 @@ export default async function LeaderboardPage() {
           </p>
         </div>
 
-        {/* Highlight Stats Row */}
+        {/* Dynamic Real Stats Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 text-left">
             <span className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase block">Total Stars Awarded</span>
             <div className="text-2xl font-bold font-mono text-[var(--yellow-bright)] mt-1 flex items-center space-x-1">
               <Star className="h-5 w-5 fill-current" />
-              <span>1,420+</span>
+              <span>{totalStarsAwarded}</span>
             </div>
           </div>
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 text-left">
-            <span className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase block">Verified Developers</span>
-            <div className="text-2xl font-bold font-mono text-[var(--gh-text)] mt-1">280+</div>
+            <span className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase block">Ranked Developers</span>
+            <div className="text-2xl font-bold font-mono text-[var(--gh-text)] mt-1">{totalSolvers}</div>
           </div>
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 text-left">
             <span className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase block">Avg. Pass Rate</span>
-            <div className="text-2xl font-bold font-mono text-[#10B981] mt-1">94.8%</div>
+            <div className="text-2xl font-bold font-mono text-[#10B981] mt-1">{overallAvgPassRate}%</div>
           </div>
           <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 text-left">
-            <span className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase block">Dual Tracks</span>
-            <div className="text-2xl font-bold font-mono text-[var(--gh-text)] mt-1">AI &amp; Strict</div>
+            <span className="text-[11px] font-mono text-[var(--gh-text-muted)] uppercase block">Verification Status</span>
+            <div className="text-2xl font-bold font-mono text-[var(--yellow-bright)] mt-1">Live Sandbox</div>
           </div>
         </div>
 
-        {/* Top 3 Podium Cards */}
-        {top3.length === 3 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-4">
-            {/* Rank 2 (Silver) */}
-            <div className="order-2 md:order-1 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 text-center space-y-4 relative flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="inline-block rounded-full bg-slate-400/20 text-slate-300 font-mono text-xs px-3 py-1 font-bold border border-slate-400/30">
-                  🥈 Rank #2
-                </span>
-                <div className="h-14 w-14 rounded-full bg-[var(--gh-bg)] border-2 border-slate-400 flex items-center justify-center mx-auto text-xl font-bold font-mono text-[var(--gh-text)]">
-                  {top3[1].username.slice(0, 2).toUpperCase()}
-                </div>
-                <h3 className="text-lg font-bold font-sans text-[var(--gh-text)]">
-                  @{top3[1].username}
-                </h3>
-                <span className="text-[11px] font-mono text-[var(--yellow-bright)] block">
-                  {top3[1].badge}
-                </span>
-              </div>
-              <div className="pt-3 border-t border-[var(--gh-border)] flex items-center justify-between text-xs font-mono">
-                <span className="text-[var(--gh-text-muted)]">{top3[1].solvedCount} Repos Solved</span>
-                <span className="font-bold text-[#F59E0B] flex items-center space-x-1">
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <span>{top3[1].stars} Stars</span>
-                </span>
-              </div>
+        {/* Zero State if no completed solvers yet */}
+        {leaderboard.length === 0 ? (
+          <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-12 text-center space-y-4">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] text-[var(--yellow-bright)] shadow-none dark:shadow-md">
+              <Trophy className="h-8 w-8" />
             </div>
-
-            {/* Rank 1 (Gold) */}
-            <div className="order-1 md:order-2 rounded-2xl border-2 border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)]/40 p-7 text-center space-y-4 relative -translate-y-2 shadow-none dark:shadow-lg flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="inline-block rounded-full bg-[var(--yellow-primary)] text-white font-mono text-xs px-4 py-1 font-bold shadow-none dark:shadow-xs">
-                  👑 Rank #1 • Champion
-                </span>
-                <div className="h-16 w-16 rounded-full bg-[var(--gh-bg)] border-2 border-[var(--yellow-primary)] flex items-center justify-center mx-auto text-2xl font-bold font-mono text-[var(--yellow-bright)] shadow-none dark:shadow-md">
-                  {top3[0].username.slice(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold font-sans text-[var(--gh-text)]">
-                    @{top3[0].username}
-                  </h3>
-                  <p className="text-xs text-[var(--gh-text-secondary)]">{top3[0].name}</p>
-                </div>
-                <span className="text-xs font-mono text-[var(--yellow-bright)] font-bold block">
-                  {top3[0].badge}
-                </span>
-              </div>
-              <div className="pt-3 border-t border-[var(--amber-badge-border)] flex items-center justify-between text-xs font-mono">
-                <span className="text-[var(--amber-badge-text)] font-semibold">{top3[0].solvedCount} Repos Solved</span>
-                <span className="font-bold text-[#F59E0B] flex items-center space-x-1">
-                  <Star className="h-4 w-4 fill-current" />
-                  <span className="text-sm">{top3[0].stars} Stars</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Rank 3 (Bronze) */}
-            <div className="order-3 md:order-3 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 text-center space-y-4 relative flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="inline-block rounded-full bg-amber-700/20 text-amber-500 font-mono text-xs px-3 py-1 font-bold border border-amber-700/30">
-                  🥉 Rank #3
-                </span>
-                <div className="h-14 w-14 rounded-full bg-[var(--gh-bg)] border-2 border-amber-600 flex items-center justify-center mx-auto text-xl font-bold font-mono text-[var(--gh-text)]">
-                  {top3[2].username.slice(0, 2).toUpperCase()}
-                </div>
-                <h3 className="text-lg font-bold font-sans text-[var(--gh-text)]">
-                  @{top3[2].username}
-                </h3>
-                <span className="text-[11px] font-mono text-[var(--yellow-bright)] block">
-                  {top3[2].badge}
-                </span>
-              </div>
-              <div className="pt-3 border-t border-[var(--gh-border)] flex items-center justify-between text-xs font-mono">
-                <span className="text-[var(--gh-text-muted)]">{top3[2].solvedCount} Repos Solved</span>
-                <span className="font-bold text-[#F59E0B] flex items-center space-x-1">
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <span>{top3[2].stars} Stars</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Full Table */}
-        <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] overflow-hidden shadow-none dark:shadow-sm">
-          <div className="p-4 sm:p-5 border-b border-[var(--gh-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base font-bold text-[var(--gh-text)] font-sans">
-                Full Rankings
-              </h2>
-              <p className="text-xs text-[var(--gh-text-secondary)]">
-                Updated in real time upon pull request verification and grading.
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-[var(--gh-text)] font-sans">Leaderboard Season 1 Active</h3>
+              <p className="text-xs text-[var(--gh-text-secondary)] max-w-md mx-auto leading-relaxed">
+                Rankings are strictly computed from verified candidate pull requests and automated hidden test evaluations. No candidate has completed a challenge solve yet. Launch a workspace, solve the bug, and submit a PR to claim Rank #1!
               </p>
             </div>
             <Link
               href="/dashboard"
-              className="inline-flex items-center space-x-1.5 rounded-lg bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition self-start sm:self-auto"
+              className="inline-flex items-center space-x-2 rounded-xl bg-[var(--yellow-button-bg)] px-5 py-2.5 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95"
             >
-              <span>Solve a Repo to Rank</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <span>Explore Challenges &amp; Claim Rank #1 &rarr;</span>
             </Link>
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-xs">
-              <thead className="bg-[var(--gh-bg)] border-b border-[var(--gh-border)] text-[var(--gh-text-muted)] text-[11px]">
-                <tr>
-                  <th className="py-3 px-4 w-16">Rank</th>
-                  <th className="py-3 px-4">Candidate</th>
-                  <th className="py-3 px-4">Specialization</th>
-                  <th className="py-3 px-4">Mode</th>
-                  <th className="py-3 px-4 text-right">Pass Rate</th>
-                  <th className="py-3 px-4 text-right">Repos Solved</th>
-                  <th className="py-3 px-4 text-right">Stars</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--gh-border)]">
-                {leaderboard.map((entry) => (
-                  <tr
+        ) : (
+          <>
+            {/* Top Podium Cards (Dynamic based on real candidate count) */}
+            {top3.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-4">
+                {top3.map((entry) => (
+                  <div
                     key={entry.id}
-                    className="hover:bg-[var(--gh-bg)]/50 transition-colors"
+                    className={`rounded-2xl border p-6 text-center space-y-4 relative flex flex-col justify-between ${
+                      entry.rank === 1
+                        ? 'border-2 border-[var(--yellow-primary)] bg-[var(--amber-badge-bg)]/40 md:-translate-y-2'
+                        : 'border-[var(--gh-border)] bg-[var(--gh-bg-secondary)]'
+                    }`}
                   >
-                    <td className="py-3.5 px-4 font-bold text-[var(--gh-text)]">
-                      {entry.rank === 1 ? '🥇 #1' : entry.rank === 2 ? '🥈 #2' : entry.rank === 3 ? '🥉 #3' : `#${entry.rank}`}
-                    </td>
-                    <td className="py-3.5 px-4 font-sans">
-                      <div className="flex items-center space-x-2">
-                        <Link
-                          href={`/u/${entry.username}`}
-                          className="font-bold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:underline"
-                        >
-                          @{entry.username}
-                        </Link>
-                        {entry.githubUsername && (
-                          <span className="text-[10px] text-[var(--gh-text-muted)] font-mono">
-                            gh/{entry.githubUsername}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4 text-[var(--gh-text-secondary)] text-[11px]">
-                      {entry.badge}
-                    </td>
-                    <td className="py-3.5 px-4">
+                    <div className="space-y-3">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          entry.track === 'AI'
-                            ? 'bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)]'
-                            : 'bg-[var(--gh-bg)] text-[var(--gh-text)] border border-[var(--gh-border)]'
+                        className={`inline-block rounded-full font-mono text-xs px-3 py-1 font-bold ${
+                          entry.rank === 1
+                            ? 'bg-[var(--yellow-primary)] text-white shadow-none dark:shadow-xs'
+                            : entry.rank === 2
+                            ? 'bg-slate-400/20 text-slate-300 border border-slate-400/30'
+                            : 'bg-amber-700/20 text-amber-500 border border-amber-700/30'
                         }`}
                       >
-                        {entry.track === 'AI' ? 'AI Assisted' : 'Strict Non-AI'}
+                        {entry.rank === 1 ? '👑 Rank #1 • Champion' : entry.rank === 2 ? '🥈 Rank #2' : '🥉 Rank #3'}
                       </span>
-                    </td>
-                    <td className="py-3.5 px-4 text-right text-[#10B981] font-bold">
-                      {entry.passingRate}%
-                    </td>
-                    <td className="py-3.5 px-4 text-right text-[var(--gh-text)]">
-                      {entry.solvedCount}
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-bold text-[#F59E0B]">
-                      <span className="inline-flex items-center space-x-1">
-                        <Star className="h-3 w-3 fill-current" />
-                        <span>{entry.stars}</span>
+                      <div className="h-14 w-14 rounded-full bg-[var(--gh-bg)] border-2 border-[var(--yellow-primary)] flex items-center justify-center mx-auto text-xl font-bold font-mono text-[var(--gh-text)]">
+                        {entry.username.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold font-sans text-[var(--gh-text)]">
+                          <Link href={`/u/${entry.username}`} className="hover:text-[var(--yellow-bright)] hover:underline">
+                            @{entry.username}
+                          </Link>
+                        </h3>
+                        {entry.name && <p className="text-xs text-[var(--gh-text-secondary)]">{entry.name}</p>}
+                      </div>
+                      <span className="text-[11px] font-mono text-[var(--yellow-bright)] block font-semibold">
+                        {entry.badge}
                       </span>
-                    </td>
-                  </tr>
+                    </div>
+                    <div className="pt-3 border-t border-[var(--gh-border)] flex items-center justify-between text-xs font-mono">
+                      <span className="text-[var(--gh-text-muted)]">{entry.solvedCount} Repos Solved</span>
+                      <span className="font-bold text-[#F59E0B] flex items-center space-x-1">
+                        <Star className="h-3.5 w-3.5 fill-current" />
+                        <span>{entry.stars} Stars</span>
+                      </span>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </div>
+            )}
+
+            {/* Full Table */}
+            <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] overflow-hidden shadow-none dark:shadow-sm">
+              <div className="p-4 sm:p-5 border-b border-[var(--gh-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-base font-bold text-[var(--gh-text)] font-sans">
+                    Full Rankings
+                  </h2>
+                  <p className="text-xs text-[var(--gh-text-secondary)]">
+                    Updated in real time upon automated Pull Request verification and test runs.
+                  </p>
+                </div>
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center space-x-1.5 rounded-lg bg-[var(--yellow-button-bg)] px-4 py-2 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition self-start sm:self-auto"
+                >
+                  <span>Solve a Repo to Rank</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left font-mono text-xs">
+                  <thead className="bg-[var(--gh-bg)] border-b border-[var(--gh-border)] text-[var(--gh-text-muted)] text-[11px]">
+                    <tr>
+                      <th className="py-3 px-4 w-16">Rank</th>
+                      <th className="py-3 px-4">Candidate</th>
+                      <th className="py-3 px-4">Specialization</th>
+                      <th className="py-3 px-4">Mode</th>
+                      <th className="py-3 px-4 text-right">Pass Rate</th>
+                      <th className="py-3 px-4 text-right">Repos Solved</th>
+                      <th className="py-3 px-4 text-right">Stars</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--gh-border)]">
+                    {leaderboard.map((entry) => (
+                      <tr
+                        key={entry.id}
+                        className="hover:bg-[var(--gh-bg)]/50 transition-colors"
+                      >
+                        <td className="py-3.5 px-4 font-bold text-[var(--gh-text)]">
+                          {entry.rank === 1 ? '🥇 #1' : entry.rank === 2 ? '🥈 #2' : entry.rank === 3 ? '🥉 #3' : `#${entry.rank}`}
+                        </td>
+                        <td className="py-3.5 px-4 font-sans">
+                          <div className="flex items-center space-x-2">
+                            <Link
+                              href={`/u/${entry.username}`}
+                              className="font-bold text-[var(--gh-text)] hover:text-[var(--yellow-bright)] hover:underline"
+                            >
+                              @{entry.username}
+                            </Link>
+                            {entry.githubUsername && (
+                              <span className="text-[10px] text-[var(--gh-text-muted)] font-mono">
+                                gh/{entry.githubUsername}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4 text-[var(--gh-text-secondary)] text-[11px]">
+                          {entry.badge}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[var(--amber-badge-bg)] text-[var(--amber-badge-text)] border border-[var(--amber-badge-border)]">
+                            Verified Sandbox
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 text-right text-[#10B981] font-bold">
+                          {entry.passingRate}%
+                        </td>
+                        <td className="py-3.5 px-4 text-right text-[var(--gh-text)]">
+                          {entry.solvedCount}
+                        </td>
+                        <td className="py-3.5 px-4 text-right font-bold text-[#F59E0B]">
+                          <span className="inline-flex items-center space-x-1">
+                            <Star className="h-3 w-3 fill-current" />
+                            <span>{entry.stars}</span>
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

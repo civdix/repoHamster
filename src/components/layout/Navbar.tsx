@@ -67,14 +67,6 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/leaderboard"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${pathname === '/leaderboard' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-                }`}
-            >
-              Leaderboard
-            </Link>
-
-            <Link
               href="/guide"
               className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
                 }`}
@@ -221,18 +213,6 @@ export function Navbar() {
               <div className="flex items-center space-x-2.5">
                 <Code2 className="h-4 w-4 text-[var(--yellow-bright)]" />
                 <span>Repo Challenges</span>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
-            </Link>
-
-            <Link
-              href="/leaderboard"
-              onClick={closeMenu}
-              className="flex items-center justify-between p-3 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] text-sm font-semibold text-[var(--gh-text)]"
-            >
-              <div className="flex items-center space-x-2.5">
-                <Trophy className="h-4 w-4 text-[var(--yellow-bright)]" />
-                <span>Leaderboard &amp; Stars</span>
               </div>
               <ArrowRight className="h-4 w-4 text-[var(--gh-text-muted)]" />
             </Link>
