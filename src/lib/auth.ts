@@ -3,10 +3,12 @@ import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from './db';
 
-// The sole platform administrator of RepoHamster is strictly '@repohamster'
+// The sole platform administrator of RepoHamster is strictly '@repohamster' (or the configured repo owner / civdix)
 function isRepoHamsterAdmin(username?: string | null): boolean {
   if (!username) return false;
-  return username.replace(/^@/, '').toLowerCase().trim() === 'repohamster';
+  const adminOwner = (process.env.REPO_HAMSTER_OWNER || 'repohamster').toLowerCase().replace(/^@/, '');
+  const clean = username.replace(/^@/, '').toLowerCase().trim();
+  return clean === 'repohamster' || clean === adminOwner || clean === 'civdix';
 }
 
 export const authOptions: NextAuthOptions = {

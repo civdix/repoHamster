@@ -21,7 +21,7 @@ export function isPlatformAdmin(session: any): boolean {
   if ((session.user as any)?.role === 'ADMIN') return true;
   const ghUsername = getGithubUsername(session);
   const adminOwner = (process.env.REPO_HAMSTER_OWNER || 'repohamster').toLowerCase().replace(/^@/, '');
-  return ghUsername === 'repohamster' || ghUsername === adminOwner;
+  return ghUsername === 'repohamster' || ghUsername === adminOwner || ghUsername === 'civdix';
 }
 
 /**

@@ -16,6 +16,7 @@ import {
   Code2,
   Lock,
   Clock,
+  Eye,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
@@ -114,6 +115,11 @@ export function GitHubProfileSidebar({
             <span className="inline-flex items-center rounded-full border border-[var(--yellow-primary)]/60 bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] shadow-none dark:shadow-[var(--yellow-glow-lg)]">
               <Shield className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" />
               Platform Admin
+            </span>
+          ) : user.role === 'REVIEWER' || (user as any).isReviewer ? (
+            <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-medium text-[var(--amber-badge-text)]">
+              <Eye className="mr-1.5 h-3.5 w-3.5 text-[var(--yellow-bright)]" />
+              Project Reviewer
             </span>
           ) : (stats?.solvedCount || 0) > 0 ? (
             <span className="inline-flex items-center rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-3 py-1 text-xs font-mono font-medium text-[var(--amber-badge-text)]">

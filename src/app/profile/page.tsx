@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
+import { isPlatformAdmin, isReviewer } from '@/lib/permissions';
 import {
   Sparkles,
   Bot,
@@ -91,6 +92,25 @@ export default async function UserProfilePage() {
 
   const displayUsername = user.username || user.githubUsername || user.email.split('@')[0];
 
+  const isAdminUser = isPlatformAdmin(session) || user.role === 'ADMIN';
+  const isReviewerUser = isReviewer(session) || (user as any).role === 'REVIEWER';
+
+  // Ensure DB role reflects admin status if authenticated as platform admin
+  if (isAdminUser && user.role !== 'ADMIN') {
+    try {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { role: 'ADMIN' },
+      });
+      user.role = 'ADMIN';
+    } catch {}
+  }
+
+  const profileUser = {
+    ...user,
+    role: isAdminUser ? 'ADMIN' : isReviewerUser ? 'REVIEWER' : user.role,
+  };
+
   return (
     <div className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] py-6 space-y-6">
       {/* 1. Developer Handle & AI Quota Banner with Dedicated Settings Section */}
@@ -107,7 +127,7 @@ export default async function UserProfilePage() {
 
       {/* 2. Full GitHub Experience: Profile View (Sidebar + Tabs + 52-Week Calendar + Pinned Challenge Cards) */}
       <GitHubProfileView
-        user={user}
+        user={profileUser}
         assignments={user.assignments}
         pullRequests={user.pullRequests}
         isOwner={true}
