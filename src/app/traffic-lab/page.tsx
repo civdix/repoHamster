@@ -28,7 +28,7 @@ import {
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 
 export const metadata: Metadata = {
-  title: 'High-Traffic Arena & ScaleLab (Coming Soon) | RepoHamster',
+  title: 'High-Traffic Arena & ScaleLab (Coming Soon)',
   description:
     'Hands-on distributed load simulation arena where engineers optimize code-level and service-level architectures to withstand 100,000+ RPS synthetic traffic spikes.',
 };

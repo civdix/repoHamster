@@ -10,20 +10,129 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Link from 'next/link';
 
+const baseUrl = process.env.NEXTAUTH_URL || 'https://repohamster.com';
+
 export const metadata: Metadata = {
-  title: 'RepoHamster | Break Bugs. Ship Fixes.',
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'RepoHamster | Real Repository Assessments & Debugging Challenges',
+    template: '%s | RepoHamster',
+  },
   description:
-    'RepoHamster is an AI-powered developer debugging and technical assessment platform. Solve real-world bugs in GitHub repositories with Codespaces, controlled AI assistance, and automated hidden test evaluation.',
+    'RepoHamster is the authentic developer debugging and technical assessment platform. Replace artificial LeetCode whiteboard algorithms with real-world multi-file repository challenges in GitHub Codespaces with automated CI test verification.',
+  applicationName: 'RepoHamster',
+  keywords: [
+    'repo online assessment',
+    'repo oa',
+    'repository coding challenge',
+    'leetcode alternative',
+    'github codespaces coding interview',
+    'developer debugging assessment',
+    'technical assessment platform',
+    'socratic ai mentor',
+    'software engineering assessment',
+    'real world coding test',
+    'full stack debugging challenges',
+    'python debugging challenge',
+    'golang repository assessment',
+    'typescript coding interview',
+    'take home coding test',
+    'automated ci evaluation',
+  ],
+  authors: [{ name: 'RepoHamster Team', url: baseUrl }],
+  creator: 'RepoHamster',
+  publisher: 'RepoHamster',
+  category: 'technology',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'RepoHamster | Real Repository Assessments & Debugging Challenges',
+    description:
+      'Replace whiteboard algorithms with real-world multi-file repositories. 1-click GitHub Codespaces, automated CI testing, and Socratic AI mentoring.',
+    url: baseUrl,
+    siteName: 'RepoHamster',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'RepoHamster Platform Preview - Real Repository Assessments',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RepoHamster | Real Repository Assessments',
+    description: 'Break bugs. Ship fixes. Real-world repository OAs with GitHub Codespaces and automated CI testing.',
+    creator: '@repohamster',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
       { url: '/icon.png', type: 'image/png' },
     ],
-    apple: [
-      { url: '/icon.png', type: 'image/png' },
-    ],
+    apple: [{ url: '/icon.png', type: 'image/png' }],
     shortcut: '/favicon.ico',
   },
+};
+
+const jsonLdData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      '@id': `${baseUrl}/#app`,
+      name: 'RepoHamster',
+      url: baseUrl,
+      description:
+        'Developer debugging and technical assessment platform featuring authentic multi-file GitHub repository challenges.',
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'All (Web, Linux, macOS, Windows)',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+      featureList: [
+        'Authentic multi-file GitHub repository challenges',
+        '1-Click GitHub Codespaces integration with zero local setup',
+        'Automated GitHub Actions CI test verification',
+        'Socratic AI engineering guidance and multi-IDE anti-cheat guardrails',
+      ],
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${baseUrl}/#organization`,
+      name: 'RepoHamster',
+      url: baseUrl,
+      logo: `${baseUrl}/icon.png`,
+      sameAs: ['https://github.com/civdix/repoHamster'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${baseUrl}/#website`,
+      url: baseUrl,
+      name: 'RepoHamster',
+      publisher: {
+        '@id': `${baseUrl}/#organization`,
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -34,6 +143,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

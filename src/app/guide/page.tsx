@@ -20,7 +20,7 @@ import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { HamsterMascotCallout } from '@/components/guide/HamsterGraphics';
 
 export const metadata = {
-  title: 'How to Use RepoHamster | Beginner Guide & Visual Walkthrough',
+  title: 'Beginner Guide & Visual Walkthrough',
   description:
     'Complete visual guide on how to pick a challenge, launch GitHub Codespaces, consult the Hamster AI Mentor, and get evaluated on RepoHamster.',
 };

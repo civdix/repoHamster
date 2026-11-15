@@ -3,8 +3,9 @@ import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { ArrowRight, Mail, Building2, GraduationCap, CheckCircle2 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Contact & Enterprise | repoHamster',
-  description: 'Bring repoHamster to your hiring team or university campus for real-world repository debugging assessments.',
+  title: 'Contact & Enterprise Hiring Solutions | RepoHamster',
+  description:
+    'Partner with RepoHamster for engineering hiring, university technical assessments, and authentic repository-based candidate evaluations.',
 };
 
 export default function ContactPage() {

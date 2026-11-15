@@ -1,4 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
+import type { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma, { ensureDatabaseColumns } from '@/lib/db';
@@ -9,6 +10,71 @@ export const dynamic = 'force-dynamic';
 
 interface Props {
   params: { slug: string };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  try {
+    const assignment = await prisma.assignment.findUnique({
+      where: { slug: params.slug },
+      select: {
+        title: true,
+        description: true,
+        language: true,
+        framework: true,
+        difficulty: true,
+        slug: true,
+      },
+    });
+
+    if (!assignment) {
+      return {
+        title: 'Challenge Not Found',
+        description: 'The requested repository assessment challenge was not found.',
+      };
+    }
+
+    const title = `Debug: ${assignment.title} (${assignment.language})`;
+    const description = `${assignment.description} Practice authentic ${assignment.language} debugging on RepoHamster with 1-click GitHub Codespaces and automated CI testing.`;
+
+    return {
+      title,
+      description,
+      keywords: [
+        assignment.language.toLowerCase(),
+        assignment.framework?.toLowerCase(),
+        'debugging challenge',
+        'repository assessment',
+        'repo oa',
+        `${assignment.language.toLowerCase()} coding interview`,
+        'github codespaces',
+      ].filter(Boolean) as string[],
+      openGraph: {
+        title: `${title} | RepoHamster`,
+        description,
+        type: 'article',
+        url: `/assignments/${assignment.slug}`,
+        images: [
+          {
+            url: '/og-image.png',
+            width: 1200,
+            height: 630,
+            alt: `${assignment.title} - Debugging Challenge`,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${title} | RepoHamster`,
+        description,
+        images: ['/og-image.png'],
+      },
+    };
+  } catch {
+    return {
+      title: 'Repository Challenge',
+      description: 'Solve real-world debugging challenges on RepoHamster.',
+    };
+  }
 }
 
 export default async function AssignmentDetailPage({ params }: Props) {
