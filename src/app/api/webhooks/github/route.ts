@@ -4,6 +4,7 @@ import prisma from '@/lib/db';
 import { evaluateSubmission } from '@/lib/evaluation/engine';
 import { postGitHubEvaluationFeedback } from '@/lib/github-feedback';
 import { softWarmPages } from '@/lib/cache-warmer';
+import { auditPRForCheating } from '@/lib/anti-cheat';
 
 export const dynamic = 'force-dynamic';
 
@@ -169,6 +170,75 @@ export async function POST(req: NextRequest) {
       isPassed: evalResult.evaluation.isPassed,
       scorePercent: evalResult.evaluation.scorePercent,
     });
+  }
+
+  // Handle workflow_run events (when GitHub Actions CI completes test execution on Ubuntu runner)
+  if (eventType === 'workflow_run') {
+    const action = payload.action;
+    if (action !== 'completed') {
+      return NextResponse.json({ message: `Ignored workflow_run action ${action}` }, { status: 200 });
+    }
+
+    const run = payload.workflow_run;
+    const conclusion = run?.conclusion; // 'success' | 'failure' | 'timed_out'
+    const commitSha = run?.head_sha;
+    const repoFullName = payload.repository?.full_name;
+    const prNumber = run?.pull_requests?.[0]?.number;
+    const githubUsername = run?.actor?.login || run?.triggering_actor?.login;
+
+    if (!commitSha || !repoFullName) {
+      return NextResponse.json({ error: 'Missing workflow_run commitSha or repoFullName' }, { status: 400 });
+    }
+
+    // Check if submission exists
+    const submission = await prisma.submission.findUnique({
+      where: { commitSha },
+      include: {
+        evaluation: true,
+        candidateAssignment: true,
+      },
+    });
+
+    if (submission && submission.evaluation) {
+      // Run Anti-Cheat check on PR files
+      let cheatInfo: { isCheated: boolean; reason?: string } = { isCheated: false };
+      if (prNumber) {
+        cheatInfo = await auditPRForCheating(repoFullName, prNumber);
+      }
+
+      const isPassed = !cheatInfo.isCheated && conclusion === 'success';
+
+      await prisma.evaluation.update({
+        where: { id: submission.evaluation.id },
+        data: {
+          isPassed,
+          status: cheatInfo.isCheated ? 'FAILED' : 'COMPLETED',
+          scorePercent: isPassed ? 100 : (cheatInfo.isCheated ? 0 : 50),
+          manualOverrideReason: cheatInfo.isCheated ? `Cheated in test by - ${cheatInfo.reason}` : submission.evaluation.manualOverrideReason,
+          logs: `${submission.evaluation.logs || ''}\n\n[GITHUB_ACTIONS_CI] Workflow #${run.run_number} (${run.name}) finished with conclusion: ${conclusion}`,
+        },
+      });
+
+      await prisma.candidateAssignment.update({
+        where: { id: submission.candidateAssignmentId },
+        data: {
+          status: isPassed ? 'COMPLETED' : (cheatInfo.isCheated ? 'FAILED' : 'IN_PROGRESS'),
+          completedAt: isPassed ? new Date() : null,
+        },
+      });
+
+      if (githubUsername) {
+        softWarmPages(['/leaderboard', '/', `/u/${githubUsername}`]).catch(() => {});
+      }
+
+      return NextResponse.json({
+        success: true,
+        workflowConclusion: conclusion,
+        isPassed,
+      });
+    }
+
+    return NextResponse.json({ message: 'Submission not found for workflow_run commit' }, { status: 200 });
   }
 
   // Ping or other events
