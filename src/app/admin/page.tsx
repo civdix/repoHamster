@@ -185,7 +185,15 @@ export default async function AdminOverviewPage({
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-bold text-[var(--gh-text)]">Registered Candidates ({candidates.length})</h2>
+            <h2 className="text-base font-bold text-[var(--gh-text)] flex items-center space-x-2">
+              <span>Registered Candidates ({candidates.length})</span>
+              <Link
+                href="/admin/users"
+                className="text-xs font-mono text-[var(--yellow-bright)] hover:underline font-semibold ml-2"
+              >
+                (View All with 10 / 50 / 500 Pagination &rarr;)
+              </Link>
+            </h2>
             <p className="text-xs text-[var(--gh-text-secondary)]">
               Click a candidate to inspect their submitted PRs, commit SHAs, test results, and AI queries.
             </p>
@@ -266,6 +274,18 @@ export default async function AdminOverviewPage({
               })}
             </tbody>
           </table>
+
+          {/* Link to Full Paginated Users Directory */}
+          <div className="p-3 bg-[var(--gh-bg)] border-t border-[var(--gh-border)] flex items-center justify-between text-xs font-mono">
+            <span className="text-[var(--gh-text-muted)]">Showing latest {candidates.length} registered candidates</span>
+            <Link
+              href="/admin/users"
+              className="flex items-center space-x-1.5 text-[var(--yellow-bright)] hover:underline font-semibold"
+            >
+              <span>Open Users Directory (10, 50, 500 per page)</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </section>
 

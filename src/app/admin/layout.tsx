@@ -27,8 +27,14 @@ export default async function AdminLayout({
   const isReviewerSession = isReviewer(session);
 
   let catalogueCount: number | undefined;
+  let usersCount: number | undefined;
   try {
-    catalogueCount = await prisma.catalogRepository.count();
+    const [cCount, uCount] = await Promise.all([
+      prisma.catalogRepository.count(),
+      prisma.user.count(),
+    ]);
+    catalogueCount = cCount;
+    usersCount = uCount;
   } catch {}
 
   return (
@@ -73,7 +79,7 @@ export default async function AdminLayout({
       </div>
 
       {/* Admin Dynamic Subnav with reactive route highlighting */}
-      <AdminSubnav catalogueCount={catalogueCount} />
+      <AdminSubnav catalogueCount={catalogueCount} usersCount={usersCount} />
 
       {/* Main Content */}
       {isReviewerSession && (
