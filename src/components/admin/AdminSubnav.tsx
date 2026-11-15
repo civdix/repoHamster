@@ -1,0 +1,68 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { LayoutDashboard, FolderGit2, Layers, Settings } from 'lucide-react';
+
+interface AdminSubnavProps {
+  catalogueCount?: number;
+}
+
+export function AdminSubnav({ catalogueCount }: AdminSubnavProps) {
+  const pathname = usePathname();
+
+  const isOverview = pathname === '/admin' || pathname.startsWith('/admin/candidates');
+  const isCatalogue = pathname.startsWith('/admin/catalogue');
+  const isAssignments = pathname.startsWith('/admin/assignments');
+  const isSettings = pathname.startsWith('/admin/settings');
+
+  const navItems = [
+    {
+      href: '/admin',
+      label: 'Dashboard Overview',
+      icon: LayoutDashboard,
+      isActive: isOverview,
+    },
+    {
+      href: '/admin/catalogue',
+      label: catalogueCount !== undefined ? `Repository Catalogue (${catalogueCount})` : 'Repository Catalogue',
+      icon: FolderGit2,
+      isActive: isCatalogue,
+    },
+    {
+      href: '/admin/assignments',
+      label: 'Active Challenges',
+      icon: Layers,
+      isActive: isAssignments,
+    },
+    {
+      href: '/admin/settings',
+      label: 'System & AI Settings',
+      icon: Settings,
+      isActive: isSettings,
+    },
+  ];
+
+  return (
+    <div className="flex items-center space-x-2 overflow-x-auto border-b border-[var(--gh-border)]/60 pb-2">
+      {navItems.map((item) => {
+        const Icon = item.icon;
+        const active = item.isActive;
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold transition whitespace-nowrap ${
+              active
+                ? 'border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] text-[var(--yellow-bright)] font-bold shadow-none dark:shadow-xs'
+                : 'border border-transparent text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] hover:border-[var(--gh-border)]'
+            }`}
+          >
+            <Icon className={`h-3.5 w-3.5 ${active ? 'text-[var(--yellow-bright)]' : 'text-[var(--gh-text-muted)]'}`} />
+            <span>{item.label}</span>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}

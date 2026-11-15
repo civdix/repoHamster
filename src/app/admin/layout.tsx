@@ -2,20 +2,15 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
+import prisma from '@/lib/db';
 import { isPlatformAdmin, isReviewer, canViewAdmin } from '@/lib/permissions';
 import {
-  LayoutDashboard,
-  Users,
-  Layers,
-  Sparkles,
-  Settings,
-  Shield,
   FileSpreadsheet,
   ArrowLeft,
-  FolderGit2,
   Eye,
 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
+import { AdminSubnav } from '@/components/admin/AdminSubnav';
 
 export default async function AdminLayout({
   children,
@@ -30,6 +25,11 @@ export default async function AdminLayout({
 
   const isStaffAdmin = isPlatformAdmin(session);
   const isReviewerSession = isReviewer(session);
+
+  let catalogueCount: number | undefined;
+  try {
+    catalogueCount = await prisma.catalogRepository.count();
+  } catch {}
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
@@ -72,37 +72,8 @@ export default async function AdminLayout({
         </div>
       </div>
 
-      {/* Admin Subnav */}
-      <div className="flex items-center space-x-2 overflow-x-auto border-b border-[var(--gh-border)]/60 pb-2">
-        <Link
-          href="/admin"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text)] border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] hover:border-[var(--gh-border-active)] transition"
-        >
-          <LayoutDashboard className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
-          <span>Dashboard Overview</span>
-        </Link>
-        <Link
-          href="/admin/catalogue"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
-        >
-          <FolderGit2 className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
-          <span>Repository Catalogue (10)</span>
-        </Link>
-        <Link
-          href="/admin/assignments"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
-        >
-          <Layers className="h-3.5 w-3.5 text-[var(--yellow-primary)]" />
-          <span>Active Challenges</span>
-        </Link>
-        <Link
-          href="/admin/settings"
-          className="flex items-center space-x-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-[var(--gh-text-secondary)] hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] border border-transparent hover:border-[var(--gh-border)] transition"
-        >
-          <Settings className="h-3.5 w-3.5 text-[var(--gh-text-muted)]" />
-          <span>System & AI Settings</span>
-        </Link>
-      </div>
+      {/* Admin Dynamic Subnav with reactive route highlighting */}
+      <AdminSubnav catalogueCount={catalogueCount} />
 
       {/* Main Content */}
       {isReviewerSession && (
