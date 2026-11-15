@@ -65,9 +65,15 @@ export default function RootLayout({
 
               <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-5 gap-y-2 text-[11px] font-mono text-[var(--gh-text-secondary)]">
                 <Link href="/dashboard" className="hover:text-[var(--yellow-primary)] transition">Challenges</Link>
+                <Link
+                  href="/traffic-lab"
+                  className="hover:text-[var(--yellow-bright)] transition inline-flex items-center space-x-1.5 text-[var(--yellow-bright)]/90 font-semibold"
+                >
+                  <span className="flex h-1.5 w-1.5 rounded-full bg-[var(--yellow-bright)] animate-pulse" />
+                  <span>Traffic Lab (Coming Soon)</span>
+                </Link>
                 <Link href="/contact" className="hover:text-[var(--yellow-primary)] transition">Enterprise &amp; Campus</Link>
                 <Link href="/admin" className="hover:text-[var(--gh-text)] transition">Admin Console</Link>
-                <span className="hidden sm:inline">Automated OA Engine</span>
                 <span className="text-[var(--gh-text-muted)]">© 2026 repoHamster</span>
               </div>
             </div>
