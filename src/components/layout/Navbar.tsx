@@ -58,29 +58,26 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center space-x-1 text-[13px] font-medium text-[var(--gh-text-secondary)]">
             <Link
               href="/dashboard"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${
-                pathname === '/dashboard' || pathname?.startsWith('/assignments')
-                  ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]'
-                  : ''
-              }`}
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${pathname === '/dashboard' || pathname?.startsWith('/assignments')
+                ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]'
+                : ''
+                }`}
             >
               Challenges
             </Link>
 
             <Link
               href="/leaderboard"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${
-                pathname === '/leaderboard' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-              }`}
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${pathname === '/leaderboard' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+                }`}
             >
               Leaderboard
             </Link>
 
             <Link
               href="/guide"
-              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${
-                pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
-              }`}
+              className={`px-3 py-1.5 rounded-lg transition hover:text-[var(--gh-text)] hover:bg-[var(--gh-bg-secondary)] whitespace-nowrap ${pathname === '/guide' ? 'text-[var(--yellow-bright)] font-semibold bg-[var(--gh-bg-secondary)]' : ''
+                }`}
             >
               How It Works
             </Link>
@@ -88,9 +85,8 @@ export function Navbar() {
             {canSeeAdmin && (
               <Link
                 href="/admin"
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] whitespace-nowrap ${
-                  pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition text-[var(--yellow-bright)] hover:bg-[var(--amber-badge-bg)] whitespace-nowrap ${pathname?.startsWith('/admin') ? 'bg-[var(--amber-badge-bg)] font-bold' : ''
+                  }`}
               >
                 Admin {isReviewer && '(Preview)'}
               </Link>
@@ -156,7 +152,7 @@ export function Navbar() {
                 href="/dashboard"
                 className="inline-flex items-center space-x-1 rounded-full bg-[var(--yellow-button-bg)] px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-none dark:shadow-sm active:scale-95 whitespace-nowrap shrink-0"
               >
-                <span className="sm:hidden">Practice &rarr;</span>
+                {/* <span className="sm:hidden">Practice &rarr;</span> */}
                 <span className="hidden sm:inline">Start Practicing &rarr;</span>
               </Link>
             </div>
