@@ -7,6 +7,7 @@ import { NavigationProgressBar } from '@/components/layout/NavigationProgressBar
 import { ReviewerModeBanner } from '@/components/layout/ReviewerModeBanner';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -73,6 +74,7 @@ export default function RootLayout({
           </footer>
         </SessionProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
