@@ -63,8 +63,21 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  const dailyRequestLimit = assignment.aiRequestLimit || 15;
+  const dailyRequestLimit = assignment.aiRequestLimit !== undefined ? assignment.aiRequestLimit : 15;
   const dailyTokenLimit = assignment.aiTokenLimit || 10000;
+
+  // Strict Non-AI Mode enforcement
+  if (dailyRequestLimit === 0) {
+    return NextResponse.json(
+      {
+        error: 'The AI Mentor has been completely disabled for this assessment by the administrator (Strict Non-AI Track).',
+        isAiDisabled: true,
+        remainingRequests: 0,
+        remainingTokens: 0,
+      },
+      { status: 403 }
+    );
+  }
 
   const usedRequests = recentUsages.length;
   const usedTokens = recentUsages.reduce((sum, u) => sum + u.totalTokens, 0);

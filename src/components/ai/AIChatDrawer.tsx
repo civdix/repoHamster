@@ -95,7 +95,16 @@ export function AIChatDrawer({
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.isUserQuotaExceeded || res.status === 429) {
+        if (data.isAiDisabled) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              content: `🛡️ **Strict Non-AI Track Active**\n\n${data.error || 'The AI Mentor has been completely disabled for this assessment by the administrator.'}`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        } else if (data.isUserQuotaExceeded || res.status === 429) {
           setMessages((prev) => [
             ...prev,
             {

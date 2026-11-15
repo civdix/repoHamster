@@ -10,6 +10,7 @@ import {
   GitPullRequest,
   BookOpen,
   ShieldCheck,
+  ShieldAlert,
   AlertTriangle,
 } from 'lucide-react';
 import { GitHubWorkspaceHeader, WorkspaceTab } from './GitHubWorkspaceHeader';
@@ -35,6 +36,8 @@ interface GitHubWorkspaceViewProps {
     publicTestInfo?: string;
     testCaseCount?: number;
     hiddenTestCaseCount?: number;
+    aiRequestLimit?: number;
+    aiTokenLimit?: number;
   };
   candidateAssignment: any;
   latestSubmission: any;
@@ -90,13 +93,23 @@ export function GitHubWorkspaceView({
           </Link>
 
           <div className="flex items-center space-x-3">
-            {/* AI Chat Drawer Button */}
-            <AIChatDrawer
-              assignmentId={assignment.id}
-              assignmentTitle={assignment.title}
-              initialRemainingRequests={remainingRequests}
-              initialRemainingTokens={remainingTokens}
-            />
+            {/* AI Chat Drawer Button or Disabled Indicator */}
+            {assignment.aiRequestLimit === 0 ? (
+              <div
+                title="AI Mentor is completely disabled for this assessment by administrator policy."
+                className="flex items-center space-x-2 rounded-xl bg-red-950/30 border border-red-900/50 px-3.5 py-1.5 text-xs font-semibold text-red-300 shadow-sm"
+              >
+                <ShieldAlert className="h-4 w-4 text-red-400" />
+                <span>AI Mentor Disabled (Strict Non-AI Track)</span>
+              </div>
+            ) : (
+              <AIChatDrawer
+                assignmentId={assignment.id}
+                assignmentTitle={assignment.title}
+                initialRemainingRequests={remainingRequests}
+                initialRemainingTokens={remainingTokens}
+              />
+            )}
           </div>
         </div>
 

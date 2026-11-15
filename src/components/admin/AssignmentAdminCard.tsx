@@ -605,7 +605,11 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             AI Quota / Candidate
           </span>
           <div className="mt-1 text-[var(--yellow-bright)] font-semibold truncate">
-            {assignment.aiRequestLimit} req / {assignment.aiTokenLimit.toLocaleString()} tok
+            {assignment.aiRequestLimit === 0 ? (
+              <span className="text-red-400 font-bold">0 req (Strict Non-AI Mode)</span>
+            ) : (
+              `${assignment.aiRequestLimit} req / ${assignment.aiTokenLimit?.toLocaleString() || 10000} tok`
+            )}
           </div>
           <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">
             ~{assignment.estimatedTimeMinutes} min duration

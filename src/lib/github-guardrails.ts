@@ -107,10 +107,21 @@ Failure to follow these rules invalidates the candidate's assessment results.
         vscode: {
           settings: {
             'editor.inlineSuggest.enabled': false,
+            'github.copilot.enable': {
+              '*': false,
+              'plaintext': false,
+              'markdown': false,
+              'javascript': false,
+              'typescript': false,
+              'python': false,
+            },
             'github.copilot.inlineSuggest.enable': false,
             'github.copilot.editor.enableCodeActions': false,
+            'github.copilot.chat.editor.enable': false,
+            'github.copilot.chat.welcomeMessage': 'never',
             'github.copilot.advanced': {
               'inlineSuggestCount': 0,
+              'authProvider': 'none',
             },
           },
           extensions: ['dbaeumer.vscode-eslint'],
@@ -124,10 +135,21 @@ Failure to follow these rules invalidates the candidate's assessment results.
   const VSCODE_SETTINGS_JSON = JSON.stringify(
     {
       'editor.inlineSuggest.enabled': false,
+      'github.copilot.enable': {
+        '*': false,
+        'plaintext': false,
+        'markdown': false,
+        'javascript': false,
+        'typescript': false,
+        'python': false,
+      },
       'github.copilot.inlineSuggest.enable': false,
       'github.copilot.editor.enableCodeActions': false,
+      'github.copilot.chat.editor.enable': false,
+      'github.copilot.chat.welcomeMessage': 'never',
       'github.copilot.advanced': {
         'inlineSuggestCount': 0,
+        'authProvider': 'none',
       },
     },
     null,

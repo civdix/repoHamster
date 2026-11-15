@@ -72,7 +72,7 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
     difficulty: assignment?.difficulty || 'INTERMEDIATE',
     estimatedTimeMinutes: assignment?.estimatedTimeMinutes || 45,
     passingThresholdPercent: assignment?.passingThresholdPercent || 100,
-    aiRequestLimit: assignment?.aiRequestLimit || 15,
+    aiRequestLimit: assignment?.aiRequestLimit !== undefined ? assignment.aiRequestLimit : 15,
     aiTokenLimit: assignment?.aiTokenLimit || 10000,
     isActive: assignment ? assignment.isActive : true,
     instructions: assignment?.instructions || '### Problem Description\n\nDetail the bug and instructions here.',
@@ -674,20 +674,31 @@ export function AssignmentEditorModal({ assignment, isNew = false, catalogReposi
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1">
-                    AI Request Limit
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-medium text-[var(--gh-text-secondary)]">
+                      AI Request Limit
+                    </label>
+                    <span className="text-[10px] font-mono text-[var(--yellow-bright)]">
+                      {formData.aiRequestLimit === 0 ? 'Strict Non-AI (Disabled)' : `${formData.aiRequestLimit} requests`}
+                    </span>
+                  </div>
                   <input
                     type="number"
+                    min="0"
                     value={formData.aiRequestLimit}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const val = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
                       setFormData({
                         ...formData,
-                        aiRequestLimit: parseInt(e.target.value, 10) || 15,
-                      })
-                    }
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none"
+                        aiRequestLimit: Number.isNaN(val) ? 0 : Math.max(0, val),
+                      });
+                    }}
+                    placeholder="Set to 0 to disable AI completely"
+                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3 py-2 text-xs text-[var(--gh-text)] focus:border-[var(--yellow-primary)] focus:outline-none font-mono"
                   />
+                  <p className="text-[10px] text-[var(--gh-text-muted)] font-mono mt-1">
+                    Set to <strong className="text-[var(--yellow-bright)]">0</strong> to completely disable the AI Mentor (Strict Non-AI Track).
+                  </p>
                 </div>
               </div>
 
