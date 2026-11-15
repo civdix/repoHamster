@@ -96,6 +96,7 @@ export function CodespacesLaunchModal({
 
   // Check for existing codespaces when modal opens
   const inspectExistingCodespaces = async () => {
+    if (isInspecting) return;
     setIsInspecting(true);
     setGeneralError(null);
     setQuotaError(null);
@@ -129,7 +130,9 @@ export function CodespacesLaunchModal({
 
   const handleOpenModal = () => {
     setIsOpen(true);
-    inspectExistingCodespaces();
+    if (!hasCheckedExisting && !isInspecting) {
+      inspectExistingCodespaces();
+    }
   };
 
   /**
@@ -139,6 +142,7 @@ export function CodespacesLaunchModal({
     action: 'continue' | 'create_keep' | 'create_delete' | 'create',
     targetCodespace?: ExistingCodespace
   ) => {
+    if (executingAction !== null) return;
     setExecutingAction(action);
     setGeneralError(null);
     setQuotaError(null);

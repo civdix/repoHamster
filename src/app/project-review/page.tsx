@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { signIn, useSession, signOut } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -34,12 +34,15 @@ function ProjectReviewForm() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Auto-authenticate if passcode is passed in URL
+  const attemptedPasscodeRef = useRef<string | null>(null);
+
+  // Auto-authenticate once if passcode is passed in URL
   useEffect(() => {
-    if (urlPasscode && !session?.user && !loading) {
+    if (urlPasscode && !session?.user && !loading && attemptedPasscodeRef.current !== urlPasscode) {
+      attemptedPasscodeRef.current = urlPasscode;
       handleAuthenticate(urlPasscode);
     }
-  }, [urlPasscode, session]);
+  }, [urlPasscode, session, loading]);
 
   const handleAuthenticate = async (codeToSubmit?: string) => {
     const finalCode = (codeToSubmit || passcode).trim();

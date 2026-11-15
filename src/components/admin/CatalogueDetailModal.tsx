@@ -88,12 +88,15 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
     filename?: string;
     source?: string;
     loading?: boolean;
-  }>({ present: false, loading: true });
+    fetched?: boolean;
+  }>({ present: false, loading: false, fetched: false });
 
-  // Auto-populate INSTRUCTIONS.md from the repository if present
+  // Auto-populate INSTRUCTIONS.md from the repository if present (only when modal is opened)
   useEffect(() => {
+    if (!isOpen || instructionSource.fetched) return;
     let isMounted = true;
     const fetchRepoInstructions = async () => {
+      setInstructionSource((prev) => ({ ...prev, loading: true }));
       try {
         const res = await fetch(`/api/catalogue/${repo.id}/instructions`);
         const data = await res.json();
@@ -103,6 +106,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
             filename: data.filename,
             source: data.source,
             loading: false,
+            fetched: true,
           });
           if (data.present && data.instructions) {
             setConvertForm((prev) => ({
@@ -110,10 +114,12 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
               instructions: data.instructions,
             }));
           }
+        } else if (isMounted) {
+          setInstructionSource({ present: false, loading: false, fetched: true });
         }
       } catch (err) {
         if (isMounted) {
-          setInstructionSource({ present: false, loading: false });
+          setInstructionSource({ present: false, loading: false, fetched: true });
         }
       }
     };
@@ -122,7 +128,7 @@ export function CatalogueDetailModal({ repo: initialRepo }: CatalogueDetailModal
     return () => {
       isMounted = false;
     };
-  }, [repo.id]);
+  }, [repo.id, isOpen, instructionSource.fetched]);
 
   const handleRunValidation = async () => {
     setIsValidating(true);
