@@ -217,13 +217,14 @@ export function LandingBentoGrid() {
           {/* Right: Authentic OA Screen Display for Selected Language */}
           <div className="lg:w-7/12 rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] overflow-hidden shadow-none dark:shadow-inner text-left flex flex-col">
             <div className="relative aspect-[16/9.2] w-full bg-[var(--gh-bg-code)] overflow-hidden group/canvas">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 key={selectedLang.image}
                 src={`/images/${selectedLang.image}`}
                 alt={`${selectedLang.name} Online Assessment (OA) Challenge Screen`}
-                className="w-full h-full object-cover object-top transition-opacity duration-300 animate-in fade-in"
-                loading="eager"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover object-top transition-opacity duration-300 animate-in fade-in"
               />
             </div>
           </div>

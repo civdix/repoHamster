@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import {
@@ -107,9 +108,11 @@ export function Navbar() {
                 title="View Profile"
               >
                 {session.user.image ? (
-                  <img
+                  <Image
                     src={session.user.image}
                     alt={session.user.name || 'User'}
+                    width={24}
+                    height={24}
                     className="h-6 w-6 rounded-full object-cover border border-[var(--gh-border)]"
                   />
                 ) : (

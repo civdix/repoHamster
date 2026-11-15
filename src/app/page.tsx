@@ -179,12 +179,13 @@ export default async function HomePage() {
 
                 {/* Layered Workstation Screen Preview */}
                 <div className="relative mt-3 rounded-xl overflow-hidden border border-[var(--gh-border)] dark:border-white/10 bg-[var(--gh-bg)] dark:bg-black/40 aspect-[640/440]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src="/images/developer-coding-workspace.png"
                     alt="repoHamster Interactive IDE and Workstation Preview"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                    loading="eager"
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 640px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--gh-bg)]/80 dark:from-black/80 via-transparent to-transparent pointer-events-none" />
 
@@ -344,10 +345,11 @@ export default async function HomePage() {
               &quot;The 1-Click Codespaces setup had the codebase running in 30 seconds with zero runtime hassle. Traced the concurrency race condition with Hamster AI and shipped a passing PR.&quot;
             </p>
             <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={vishakhaAvatar}
                 alt="Vishakha Chaudhary"
+                width={36}
+                height={36}
                 className="h-9 w-9 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
               />
               <div>
@@ -370,10 +372,11 @@ export default async function HomePage() {
               &quot;RepoHamster mirrors actual engineering far better than leetcode puzzles. The hidden test harness catches edge cases, memory leaks, and race conditions that normal tests miss.&quot;
             </p>
             <div className="flex items-center space-x-3 pt-3 border-t border-[var(--gh-border-subtle)]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={civdixAvatar}
                 alt="Shivam Dixit"
+                width={36}
+                height={36}
                 className="h-9 w-9 rounded-full object-cover border border-[var(--yellow-primary)]/50 shadow-sm"
               />
               <div>

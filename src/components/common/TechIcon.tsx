@@ -132,16 +132,15 @@ export function TechIcon({ name, size = 16, className = '', showFallbackText = f
 
   return (
     <span className={`inline-flex items-center justify-center shrink-0 ${className}`} style={{ width: size, height: size }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={iconUrl}
         alt={name}
         width={size}
         height={size}
+        unoptimized={iconUrl.endsWith('.svg') || iconUrl.includes('simpleicons.org')}
         className="object-contain"
         style={{ width: `${size}px`, height: `${size}px` }}
         onError={() => setError(true)}
-        loading="lazy"
       />
     </span>
   );

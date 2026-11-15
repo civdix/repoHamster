@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { Send, X, ShieldCheck, Loader2 } from 'lucide-react';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { MarkdownRenderer } from '@/components/common/MarkdownRenderer';
@@ -261,11 +262,12 @@ export function AIChatDrawer({
                     {msg.image && (
                       <div className="mt-3 overflow-hidden rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-code)] shadow-xl p-2 flex flex-col items-center">
                         <div className="w-full max-w-[320px] overflow-hidden rounded-xl bg-black/50 border border-[var(--gh-border-subtle)]">
-                          <img
+                          <Image
                             src={msg.image}
                             alt={msg.isPlatformQuotaExceeded ? 'Platform AI Quota Overheated' : 'Personal Daily Quota Exhausted'}
+                            width={320}
+                            height={320}
                             className="w-full h-auto max-h-[400px] object-contain rounded-lg block mx-auto"
-                            loading="lazy"
                           />
                         </div>
                         <div className="mt-2 text-center text-[10px] font-mono">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Calendar,
   ExternalLink,
@@ -70,9 +71,12 @@ export function GitHubProfileSidebar({
       <div className="space-y-4">
         <div className="relative inline-block">
           {user.avatarUrl ? (
-            <img
+            <Image
               src={user.avatarUrl}
               alt={displayName}
+              width={224}
+              height={224}
+              priority
               className="h-44 w-44 sm:h-56 sm:w-56 rounded-full border-2 border-[var(--yellow-primary)]/70 object-cover shadow-[var(--yellow-glow-lg)] bg-[var(--gh-bg-secondary)]"
             />
           ) : (

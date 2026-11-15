@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 interface HamsterMascotProps {
   variant?: 'avatar' | 'normal' | 'workstation' | 'detective' | 'celebrating' | 'thinking' | 'empty' | 'angry' | 'mercy';
   className?: string;
@@ -30,11 +32,12 @@ export function HamsterMascot({ variant = 'normal', className = '', size }: Hams
       style={{ width: dim, height: dim }}
       className={`relative inline-flex items-center justify-center shrink-0 select-none ${className}`}
     >
-      <img
+      <Image
         src={imageSrc}
         alt={altText}
+        width={dim}
+        height={dim}
         className="w-full h-full object-contain pointer-events-none drop-shadow"
-        loading="lazy"
       />
     </div>
   );

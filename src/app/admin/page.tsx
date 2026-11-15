@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import prisma from '@/lib/db';
 import {
   Users,
@@ -223,10 +224,12 @@ export default async function AdminOverviewPage({
                   <tr key={candidate.id} className="hover:bg-[var(--gh-bg)]/60 transition">
                     <td className="px-4 py-3.5">
                       <div className="flex items-center space-x-3">
-                        <img
+                        <Image
                           src={candidate.avatarUrl || 'https://avatars.githubusercontent.com/u/9919?v=4'}
                           alt={candidate.name || 'User'}
-                          className="h-7 w-7 rounded-full ring-1 ring-[var(--gh-border)]"
+                          width={28}
+                          height={28}
+                          className="h-7 w-7 rounded-full ring-1 ring-[var(--gh-border)] object-cover"
                         />
                         <div>
                           <p className="font-semibold text-[var(--gh-text)]">{candidate.name || 'Candidate'}</p>

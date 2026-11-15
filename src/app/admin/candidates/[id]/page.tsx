@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import prisma from '@/lib/db';
 import {
   ArrowLeft,
@@ -78,10 +79,12 @@ export default async function CandidateInspectorPage({ params }: Props) {
       <div className="rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center space-x-4">
-            <img
+            <Image
               src={candidate.avatarUrl || 'https://avatars.githubusercontent.com/u/9919?v=4'}
               alt={candidate.name || 'Candidate'}
-              className="h-16 w-16 rounded-2xl ring-2 ring-[var(--yellow-primary)]/40"
+              width={64}
+              height={64}
+              className="h-16 w-16 rounded-2xl ring-2 ring-[var(--yellow-primary)]/40 object-cover"
             />
             <div>
               <div className="flex items-center space-x-2">
