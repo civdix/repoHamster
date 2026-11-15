@@ -12,7 +12,7 @@ export function ReviewerModeBanner() {
   if (!isReviewer) return null;
 
   return (
-    <div className="bg-[var(--amber-badge-bg)] border-b border-[var(--amber-badge-border)] px-4 py-2 text-xs font-mono text-[var(--amber-badge-text)] backdrop-blur sticky top-16 z-30 shadow-md">
+    <div className="bg-[var(--amber-badge-bg)] border-b border-[var(--amber-badge-border)] px-4 py-2 text-xs font-mono text-[var(--amber-badge-text)] backdrop-blur sticky top-[72px] z-30 shadow-md">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center space-x-2.5">
           <span className="flex h-2 w-2 rounded-full bg-[var(--yellow-bright)] animate-pulse shrink-0" />

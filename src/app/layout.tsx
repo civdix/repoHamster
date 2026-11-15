@@ -41,14 +41,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] antialiased selection:bg-[var(--yellow-primary)]/30 selection:text-inherit flex flex-col transition-colors duration-200">
+      <body className="min-h-screen bg-[var(--gh-bg)] text-[var(--gh-text)] antialiased selection:bg-[var(--yellow-primary)]/30 selection:text-inherit flex flex-col transition-colors duration-200 overflow-x-hidden max-w-full">
         <SessionProvider>
           <Suspense fallback={null}>
             <NavigationProgressBar />
           </Suspense>
           <Navbar />
           <ReviewerModeBanner />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 overflow-x-hidden w-full max-w-full">{children}</main>
           <footer className="border-t border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] py-8 text-xs text-[var(--gh-text-muted)] transition-colors">
             <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-3">

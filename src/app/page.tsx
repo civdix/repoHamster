@@ -166,13 +166,15 @@ export default async function HomePage() {
               <div className="relative rounded-2xl border border-[var(--gh-border)] dark:border-white/20 bg-white/90 dark:bg-black/60 backdrop-blur-xl p-3 sm:p-4 shadow-none dark:shadow-2xl overflow-hidden group transition-all duration-300 hover:border-[var(--yellow-primary)]/50">
                 {/* Computer Screen Window Titlebar */}
                 <div className="flex items-center justify-between pb-3 px-2 border-b border-[var(--gh-border)] dark:border-white/10 text-xs font-mono">
-                  <div className="flex items-center space-x-2">
-                    <span className="h-3 w-3 rounded-full bg-[#FF5F56]" />
-                    <span className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
-                    <span className="h-3 w-3 rounded-full bg-[#27C93F]" />
-                    <span className="ml-2 text-[var(--gh-text)] dark:text-white/70 text-[11px] font-semibold">repohamster-workstation — zsh</span>
+                  <div className="flex items-center space-x-1.5 sm:space-x-2 min-w-0">
+                    <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#FF5F56] shrink-0" />
+                    <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#FFBD2E] shrink-0" />
+                    <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#27C93F] shrink-0" />
+                    <span className="ml-1 sm:ml-2 text-[var(--gh-text)] dark:text-white/70 text-[10px] sm:text-[11px] font-semibold truncate max-w-[120px] sm:max-w-none">
+                      repohamster-workstation — zsh
+                    </span>
                   </div>
-                  <div className="flex items-center space-x-1.5 text-[10px] text-[var(--gh-text-muted)] dark:text-white/60">
+                  <div className="flex items-center space-x-1.5 text-[10px] text-[var(--gh-text-muted)] dark:text-white/60 shrink-0">
                     <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
                     <span>Codespace Active</span>
                   </div>
@@ -197,17 +199,12 @@ export default async function HomePage() {
                     <span>Sandbox Ready</span>
                   </div> */}
 
-                  <div className="absolute top-3 right-3 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/95 px-3 py-1 text-xs font-mono font-bold text-[var(--amber-badge-text)] backdrop-blur shadow-none dark:shadow-sm">
+                  <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)]/95 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-mono font-bold text-[var(--amber-badge-text)] backdrop-blur shadow-none dark:shadow-sm whitespace-nowrap">
                     Mode: Dual OA Track
                   </div>
 
-                  {/* <div className="absolute bottom-3 left-3 flex items-center space-x-1.5 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3.5 py-1 text-xs font-mono font-bold text-[#10B981] backdrop-blur shadow-none dark:shadow-sm">
-                    <Check className="h-3.5 w-3.5 stroke-[3]" />
-                    <span>14/14 Edge-Case Tests Passing</span>
-                  </div> */}
-
-                  <div className="absolute bottom-3 right-3 flex items-center space-x-1 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-3 py-1 text-xs font-mono font-bold text-[#F59E0B] backdrop-blur shadow-none dark:shadow-sm">
-                    <Star className="h-3.5 w-3.5 fill-current" />
+                  <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 flex items-center space-x-1 rounded-full border border-[var(--gh-border)] dark:border-white/15 bg-white/95 dark:bg-black/75 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-mono font-bold text-[#F59E0B] backdrop-blur shadow-none dark:shadow-sm whitespace-nowrap">
+                    <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current" />
                     <span>+3 Repo Stars</span>
                   </div>
                 </div>

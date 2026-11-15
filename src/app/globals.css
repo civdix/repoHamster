@@ -197,6 +197,14 @@ body {
   background: radial-gradient(circle at 50% 0%, var(--yellow-glow) 0%, transparent 70%);
 }
 
+/* Viewport safety for mobile devices: prevent unwanted horizontal scrolling/stretching */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
 /* Tactile button active states to ensure every click shows immediate visual feedback */
 button:active:not(:disabled),
 a[role="button"]:active,

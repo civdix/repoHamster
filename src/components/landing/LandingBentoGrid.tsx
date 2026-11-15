@@ -236,12 +236,12 @@ export function LandingBentoGrid() {
           ========================================================================= */}
       <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-none dark:shadow-sm text-left group">
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+            <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)] shrink-0">
               <Zap className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
               <span>INSTANT VERIFICATION</span>
             </span>
-            <span className="text-[10px] font-mono text-[#10B981] font-bold flex items-center space-x-1">
+            <span className="text-[10px] font-mono text-[#10B981] font-bold flex items-center space-x-1 shrink-0">
               <span className="h-2 w-2 rounded-full bg-[#10B981]" />
               <span>Executed in 240 ms</span>
             </span>
@@ -296,12 +296,12 @@ export function LandingBentoGrid() {
           ========================================================================= */}
       <div className="lg:col-span-6 rounded-2xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-5 sm:p-7 flex flex-col justify-between hover:border-[var(--yellow-primary)]/40 transition duration-300 shadow-none dark:shadow-sm text-left group">
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)]">
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+            <span className="inline-flex items-center space-x-1.5 rounded-full border border-[var(--amber-badge-border)] bg-[var(--amber-badge-bg)] px-2.5 py-0.5 text-xs font-mono font-bold text-[var(--amber-badge-text)] shrink-0">
               <Bot className="h-3.5 w-3.5 text-[var(--yellow-bright)]" />
               <span>DUAL OA MODES</span>
             </span>
-            <div className="flex items-center space-x-1 rounded-lg bg-[var(--gh-bg)] border border-[var(--gh-border)] p-0.5">
+            <div className="flex items-center space-x-1 rounded-lg bg-[var(--gh-bg)] border border-[var(--gh-border)] p-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setActiveTrack('ai')}
