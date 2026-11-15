@@ -105,7 +105,7 @@ Failure to follow these rules invalidates the candidate's assessment results.
       image: 'mcr.microsoft.com/devcontainers/javascript-node:20',
       forwardPorts: [3001, 5173],
       postCreateCommand:
-        'npm install && (test -f .env || cp .env.example .env) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md .cursorrules .windsurfrules CLAUDE.md 2>/dev/null || true)',
+        'npm install && (test -f .env || cp .env.example .env) && (sudo chown -R root:root .vscode 2>/dev/null || true) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md .cursorrules .windsurfrules CLAUDE.md 2>/dev/null || true)',
       customizations: {
         vscode: {
           settings: {

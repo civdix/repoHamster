@@ -197,6 +197,73 @@ export async function auditPRForCheating(
         };
       }
     }
+
+    // Step 2: Intermediate Commit History Audit (Catches "Remove and later Revert" trick)
+    try {
+      const commitsRes = await fetch(`https://api.github.com/repos/${repoFullName}/pulls/${prNumber}/commits`, {
+        headers: {
+          Authorization: `Bearer ${effectiveToken}`,
+          Accept: 'application/vnd.github.v3+json',
+          'User-Agent': 'RepoHamster-AntiCheat-Audit/1.0',
+        },
+      });
+
+      if (commitsRes.ok) {
+        const commits: Array<{ sha: string; commit: { message: string } }> = await commitsRes.json();
+
+        // If there are multiple commits, inspect intermediate commits to ensure no guardrails were deleted and reverted
+        if (commits.length > 1) {
+          for (const c of commits.slice(-10)) {
+            const singleCommitRes = await fetch(`https://api.github.com/repos/${repoFullName}/commits/${c.sha}`, {
+              headers: {
+                Authorization: `Bearer ${effectiveToken}`,
+                Accept: 'application/vnd.github.v3+json',
+                'User-Agent': 'RepoHamster-AntiCheat-Audit/1.0',
+              },
+            });
+
+            if (singleCommitRes.ok) {
+              const singleCommitData = await singleCommitRes.json();
+              const commitFiles: Array<{ filename: string; status: string; deletions: number }> =
+                singleCommitData.files || [];
+
+              for (const cf of commitFiles) {
+                const cfn = cf.filename.toLowerCase();
+                if (
+                  (cfn.includes('.vscode/settings.json') ||
+                    cfn.includes('copilot-instructions.md') ||
+                    cfn.includes('.cursorrules') ||
+                    cfn.includes('.windsurfrules') ||
+                    cfn.includes('claude.md')) &&
+                  (cf.status === 'removed' || cf.deletions > 0)
+                ) {
+                  return {
+                    isCheated: true,
+                    reason: `Temporary guardrails removal detected in commit ${c.sha.slice(0, 7)}: altered ${cf.filename} before reverting`,
+                  };
+                }
+
+                if (
+                  (cfn.startsWith('tests/') ||
+                    cfn.startsWith('test/') ||
+                    cfn.includes('__tests__/') ||
+                    cfn.endsWith('.test.ts') ||
+                    cfn.endsWith('.spec.ts')) &&
+                  (cf.status === 'removed' || cf.deletions > 5)
+                ) {
+                  return {
+                    isCheated: true,
+                    reason: `Temporary test tampering detected in commit ${c.sha.slice(0, 7)}: deleted assertions in ${cf.filename} before reverting`,
+                  };
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('[ANTI-CHEAT] Could not audit intermediate commits:', err);
+    }
   } catch (err) {
     console.warn('[ANTI-CHEAT] Could not audit PR files:', err);
   }
