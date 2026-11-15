@@ -590,7 +590,7 @@ export function CodespacesLaunchModal({
 
               {/* PR Submission Instructions */}
               <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-3 text-xs text-[var(--gh-text-secondary)] font-mono">
-                <span className="font-semibold text-[var(--gh-text)]">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-[var(--yellow-bright)] font-mono">{branch}</code>. RepoHamster&apos;s webhook automatically runs public and hidden test suites in an isolated sandbox.
+                <span className="font-semibold text-[var(--gh-text)]">How Evaluation Works:</span> Open a Pull Request targeting <code className="text-[var(--yellow-bright)] font-mono">{branch}</code>. RepoHamster automatically runs the repository test suite via GitHub CI to evaluate your code.
               </div>
             </div>
 

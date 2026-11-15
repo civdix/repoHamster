@@ -568,9 +568,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             </span>
           </div>
           <p className="text-[10px] text-[var(--gh-text-muted)] mt-0.5 truncate" title={testSummary.displayText}>
-            {testSummary.hasTestCases
-              ? `${testSummary.publicCount} Public + ${testSummary.hiddenCount} Hidden`
-              : '0 (Unspecified / 0 tests provided)'}
+            {testSummary.displayText}
           </p>
         </div>
 
@@ -625,7 +623,7 @@ export function AssignmentAdminCard({ assignment, catalogRepositories = [] }: As
             {assignment.passingThresholdPercent}%
           </div>
           <span className="text-[10px] text-[var(--gh-text-muted)] block mt-0.5">
-            Isolated Hidden Runner
+            CI Workflow Evaluation
           </span>
         </div>
 

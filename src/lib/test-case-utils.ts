@@ -36,14 +36,20 @@ export function getTestCaseSummary(assignment: {
 
   const total = publicCount + hiddenCount;
 
+  let displayText = 'Repository Test Suite (npm test)';
+  if (total > 0) {
+    if (hiddenCount > 0) {
+      displayText = `${total} Tests (${publicCount} Public + ${hiddenCount} Hidden)`;
+    } else {
+      displayText = `${total} Tests (Repository Suite)`;
+    }
+  }
+
   return {
     total,
     publicCount,
     hiddenCount,
     hasTestCases: total > 0,
-    displayText:
-      total > 0
-        ? `${total} Tests (${publicCount} Public + ${hiddenCount} Hidden)`
-        : '0 (Unspecified / 0 tests provided)',
+    displayText,
   };
 }

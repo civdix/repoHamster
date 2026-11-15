@@ -192,7 +192,7 @@ export function SubmitPRModal({
                 </div>
                 <div>
                   <h3 className="font-bold text-[var(--gh-text)] text-base">Submit Assessment Solution</h3>
-                  <p className="text-xs text-[var(--gh-text-muted)]">Trigger isolated public and hidden test evaluation</p>
+                  <p className="text-xs text-[var(--gh-text-muted)]">Trigger automated repository test evaluation</p>
                 </div>
               </div>
               <button
@@ -246,7 +246,7 @@ export function SubmitPRModal({
                     )}
                   </div>
                   <p className="text-[11px] text-[var(--amber-badge-text)] leading-relaxed">
-                    RepoHamster will automatically open a Pull Request from your fork on GitHub to the upstream challenge repository and execute the full public and authoritative hidden test suite.
+                    RepoHamster will automatically open a Pull Request from your fork on GitHub to the upstream challenge repository and execute the repository test suite.
                   </p>
                 </div>
 

@@ -227,7 +227,7 @@ export function GitHubWorkspaceView({
                       <div>
                         <h4 className="text-sm font-bold text-[var(--amber-badge-text)]">All Tests Passed! 🎉</h4>
                         <p className="text-xs text-[var(--amber-badge-text)] font-mono mt-0.5">
-                          Both public testcases and isolated hidden harness assertions passed with flying colors.
+                          All repository test suite assertions passed with flying colors.
                         </p>
                       </div>
                     </div>
@@ -243,11 +243,11 @@ export function GitHubWorkspaceView({
                     </div>
                   )}
 
-                  {/* Public Tests Status */}
+                  {/* Repository Test Cases Status */}
                   {publicTestResults && publicTestResults.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--gh-text-muted)]">
-                        Public Test Cases
+                        Repository Test Cases
                       </h4>
                       <div className="space-y-1.5 font-mono text-xs">
                         {publicTestResults.map((t: any) => (
@@ -270,18 +270,20 @@ export function GitHubWorkspaceView({
                     </div>
                   )}
 
-                  {/* Hidden Test Suite Status */}
-                  <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-1">
-                    <div className="flex items-center justify-between font-mono text-xs">
-                      <span className="text-[var(--gh-text)] font-semibold">Hidden Test Suite (Adversarial Edge Cases):</span>
-                      <span className="text-[var(--yellow-bright)] font-bold">
-                        {hiddenPassCount}/{hiddenTotalCount} Passed
-                      </span>
+                  {/* Hidden Test Suite Status (Only shown if assignment explicitly defines hidden tests) */}
+                  {hiddenTotalCount > 0 && (
+                    <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 space-y-1">
+                      <div className="flex items-center justify-between font-mono text-xs">
+                        <span className="text-[var(--gh-text)] font-semibold">Hidden Test Suite:</span>
+                        <span className="text-[var(--yellow-bright)] font-bold">
+                          {hiddenPassCount}/{hiddenTotalCount} Passed
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[var(--gh-text-muted)] font-mono">
+                        Server-side assertions verified on isolated evaluation runner.
+                      </p>
                     </div>
-                    <p className="text-[11px] text-[var(--gh-text-muted)] font-mono">
-                      Hidden assertions verify race conditions, boundary conditions, and memory leaks securely.
-                    </p>
-                  </div>
+                  )}
 
                   {/* Runner Logs */}
                   {latestEvaluation.logs && (
