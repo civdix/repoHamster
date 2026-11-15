@@ -15,7 +15,14 @@ export const metadata: Metadata = {
   description:
     'RepoHamster is an AI-powered developer debugging and technical assessment platform. Solve real-world bugs in GitHub repositories with Codespaces, controlled AI assistance, and automated hidden test evaluation.',
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
   },
 };
 
