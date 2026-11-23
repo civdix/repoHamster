@@ -37,18 +37,49 @@ Failure to follow these rules invalidates the candidate's assessment results.
 
 const DEVCONTAINER_JSON = JSON.stringify(
   {
-    name: 'Still & Form Challenge (RepoHamster)',
-    image: 'mcr.microsoft.com/devcontainers/javascript-node:20',
-    forwardPorts: [3001, 5173],
-    postCreateCommand: 'npm install && (test -f .env || cp .env.example .env)',
+    name: `${repo} Challenge (RepoHamster)`,
+    image: 'mcr.microsoft.com/devcontainers/python:3.12',
+    features: {
+      'ghcr.io/devcontainers/features/node:1': {
+        version: '20',
+      },
+    },
+    forwardPorts: [8000, 5000, 3000, 3001, 5173],
+    containerEnv: {
+      PIP_BREAK_SYSTEM_PACKAGES: '1',
+      PYTHONUNBUFFERED: '1',
+      PYTHONDONTWRITEBYTECODE: '1',
+    },
+    postCreateCommand:
+      "bash -c 'python3 -m pip install --upgrade pip --quiet 2>/dev/null || true && (test -f requirements.txt && pip install -r requirements.txt || true) && (for r in backend/requirements.txt server/requirements.txt api/requirements.txt app/requirements.txt; do test -f \"$r\" && pip install -r \"$r\" || true; done) && (test -f pyproject.toml && (pip install -e . 2>/dev/null || pip install . 2>/dev/null) || true) && pip install pytest pytest-asyncio pytest-cov --quiet 2>/dev/null || true && (test -f package.json && npm install || true) && (test -f frontend/package.json && (cd frontend && npm install) || true) && (test -f client/package.json && (cd client && npm install) || true) && (test -f .env.example && test ! -f .env && cp .env.example .env || true) && (sudo chown -R root:root .vscode 2>/dev/null || true) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md .cursorrules .windsurfrules CLAUDE.md 2>/dev/null || true) && echo \"🚀 [RepoHamster] Workspace ready!\"'",
     customizations: {
       vscode: {
         settings: {
           'editor.inlineSuggest.enabled': false,
+          'chat.agent.enabled': false,
+          'chat.commandCenter.enabled': false,
+          'github.copilot.enable': {
+            '*': false,
+            plaintext: false,
+            markdown: false,
+            javascript: false,
+            typescript: false,
+            python: false,
+          },
           'github.copilot.inlineSuggest.enable': false,
           'github.copilot.editor.enableCodeActions': false,
+          'github.copilot.chat.editor.enable': false,
+          'github.copilot.chat.welcomeMessage': 'never',
+          'python.testing.pytestEnabled': true,
+          'python.testing.unittestEnabled': false,
+          'python.defaultInterpreterPath': '/usr/local/bin/python',
         },
-        extensions: ['dbaeumer.vscode-eslint'],
+        extensions: [
+          'ms-python.python',
+          'ms-python.vscode-pylance',
+          'ms-python.debugpy',
+          'dbaeumer.vscode-eslint',
+        ],
       },
     },
   },

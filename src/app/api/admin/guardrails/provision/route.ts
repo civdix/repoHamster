@@ -27,14 +27,15 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { repoUrl, assignmentId } = await req.json();
+    const { repoUrl, assignmentId, language, framework } = await req.json();
 
     let targetRepoUrl = repoUrl;
-    if (!targetRepoUrl && assignmentId) {
-      const assignment = await prisma.assignment.findUnique({
+    let targetAssignment: any = null;
+    if (assignmentId) {
+      targetAssignment = await prisma.assignment.findUnique({
         where: { id: assignmentId },
       });
-      targetRepoUrl = assignment?.repoUrl;
+      targetRepoUrl = targetAssignment?.repoUrl;
     }
 
     if (!targetRepoUrl) {
@@ -43,7 +44,11 @@ export async function POST(req: NextRequest) {
 
     const sessionToken = (session as any)?.accessToken || (session.user as any)?.accessToken;
     const adminToken = process.env.GITHUB_TOKEN || sessionToken;
-    const result = await autoInstallAIGuardrails(targetRepoUrl, adminToken);
+    const result = await autoInstallAIGuardrails(targetRepoUrl, adminToken, {
+      language: language || targetAssignment?.language,
+      framework: framework || targetAssignment?.framework,
+      assignmentId,
+    });
 
     if (assignmentId) {
       await prisma.assignment.update({

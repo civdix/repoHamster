@@ -169,7 +169,11 @@ Your objective is to identify intentionally introduced defects, fix the root cau
       try {
         const [whRes, grRes, wfRes] = await Promise.allSettled([
           autoCreateRepositoryWebhook(catalogRepo.originalUrl),
-          autoInstallAIGuardrails(catalogRepo.originalUrl),
+          autoInstallAIGuardrails(catalogRepo.originalUrl, undefined, {
+            language: catalogRepo.language,
+            framework: catalogRepo.framework,
+            assignmentId: assignment.id,
+          }),
           autoInstallTestWorkflow(catalogRepo.originalUrl, catalogRepo.language),
         ]);
 

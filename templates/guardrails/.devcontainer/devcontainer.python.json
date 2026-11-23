@@ -1,0 +1,44 @@
+{
+  "name": "Python Assessment Workspace (RepoHamster)",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "forwardPorts": [8000, 5000, 8080],
+  "containerEnv": {
+    "PIP_BREAK_SYSTEM_PACKAGES": "1",
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "postCreateCommand": "bash -c 'python3 -m pip install --upgrade pip --quiet 2>/dev/null || true && (test -f requirements.txt && pip install -r requirements.txt || true) && (for r in backend/requirements.txt server/requirements.txt api/requirements.txt app/requirements.txt requirements-dev.txt; do test -f \"$r\" && pip install -r \"$r\" || true; done) && (test -f pyproject.toml && (pip install -e . 2>/dev/null || pip install . 2>/dev/null) || true) && pip install pytest pytest-asyncio pytest-cov --quiet 2>/dev/null || true && (test -f .env.example && test ! -f .env && cp .env.example .env || true) && (sudo chown -R root:root .vscode 2>/dev/null || true) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md .cursorrules .windsurfrules CLAUDE.md 2>/dev/null || true) && echo \"🐍 [RepoHamster] Python environment & packages are ready!\"'",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.inlineSuggest.enabled": false,
+        "chat.agent.enabled": false,
+        "chat.commandCenter.enabled": false,
+        "github.copilot.enable": {
+          "*": false,
+          "plaintext": false,
+          "markdown": false,
+          "python": false
+        },
+        "github.copilot.inlineSuggest.enable": false,
+        "github.copilot.editor.enableCodeActions": false,
+        "github.copilot.chat.editor.enable": false,
+        "github.copilot.chat.welcomeMessage": "never",
+        "github.copilot.advanced": {
+          "inlineSuggestCount": 0,
+          "authProvider": "none"
+        },
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestArgs": ["."],
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy"
+      ]
+    }
+  }
+}

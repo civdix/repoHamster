@@ -118,6 +118,8 @@ export function GitHubWorkspaceHeader({
               assignmentTitle={assignment.title}
               assignmentId={assignment.id}
               candidateGithubUsername={candidateGithubUsername}
+              language={assignment.language}
+              framework={assignment.framework}
             />
           </div>
         </div>

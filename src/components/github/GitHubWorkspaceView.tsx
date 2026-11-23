@@ -332,6 +332,8 @@ export function GitHubWorkspaceView({
                       assignmentTitle={assignment.title}
                       assignmentId={assignment.id}
                       candidateGithubUsername={candidateGithubUsername}
+                      language={assignment.language}
+                      framework={assignment.framework}
                     />
                   </div>
                 </div>

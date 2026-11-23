@@ -30,6 +30,8 @@ interface CodespacesLaunchModalProps {
   assignmentTitle: string;
   assignmentId?: string;
   candidateGithubUsername?: string;
+  language?: string;
+  framework?: string;
 }
 
 interface ExistingCodespace {
@@ -46,6 +48,8 @@ export function CodespacesLaunchModal({
   assignmentTitle,
   assignmentId,
   candidateGithubUsername,
+  language,
+  framework,
 }: CodespacesLaunchModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -79,14 +83,53 @@ export function CodespacesLaunchModal({
   const defaultCodespacesUrl = `https://codespaces.new/${owner}/${repo}?ref=${branch}`;
   const vscodeUrl = `vscode://vscode.git/clone?url=${encodeURIComponent(cloneUrl)}`;
 
-  const gitCommands = [
+  const langLower = (language || '').toLowerCase();
+  const fwLower = (framework || '').toLowerCase();
+  const isPython = langLower.includes('python') || fwLower.includes('fastapi') || fwLower.includes('django') || fwLower.includes('flask');
+  const isNode = langLower.includes('javascript') || langLower.includes('typescript') || fwLower.includes('react') || fwLower.includes('express');
+  const isFullStack = (isPython && isNode) || langLower.includes('full-stack');
+
+  const gitCommands: string[] = [
     `git clone ${cloneUrl}`,
     subFolder ? `cd ${repo}/${subFolder}` : `cd ${repo}`,
     `git checkout -b fix/solution`,
-    `# Fix the bug, run tests locally`,
-    `git commit -am "fix: resolve bug and satisfy acceptance criteria"`,
-    `git push origin fix/solution`,
   ];
+
+  if (isPython) {
+    gitCommands.push(
+      `# 1. Create and activate Python virtual environment`,
+      `python -m venv .venv`,
+      `source .venv/bin/activate  # (On Windows: .venv\\Scripts\\activate)`,
+      `# 2. Upgrade pip and install all required packages`,
+      `pip install --upgrade pip`,
+      `pip install -r requirements.txt  # (or backend/requirements.txt if present)`,
+      `# 3. Verify public test suite`,
+      `pytest`
+    );
+    if (isFullStack) {
+      gitCommands.push(
+        `# 4. Frontend dependencies (if React/Node component present)`,
+        `npm install  # (or cd frontend && npm install)`
+      );
+    }
+  } else if (isNode) {
+    gitCommands.push(
+      `# 1. Install Node dependencies`,
+      `npm install`,
+      `# 2. Run public test suite`,
+      `npm test`
+    );
+  } else {
+    gitCommands.push(
+      `# Install dependencies and run tests`,
+      `# Fix the bug, run tests locally`
+    );
+  }
+
+  gitCommands.push(
+    `git commit -am "fix: resolve bug and satisfy acceptance criteria"`,
+    `git push origin fix/solution`
+  );
 
   const handleCopy = (text: string, index: number) => {
     navigator.clipboard.writeText(text);
@@ -167,6 +210,8 @@ export function CodespacesLaunchModal({
         body: JSON.stringify({
           repoUrl,
           assignmentId,
+          language,
+          framework,
           action,
           existingCodespaceName: targetCodespace?.name || existingCodespaces[0]?.name,
           existingCodespaceUrl: targetCodespace?.webUrl || existingCodespaces[0]?.webUrl,
@@ -358,6 +403,16 @@ export function CodespacesLaunchModal({
                   </h4>
                   <span className="text-[10px] font-mono text-[var(--amber-badge-text)] bg-[var(--amber-badge-bg)] border border-[var(--amber-badge-border)] px-2 py-0.5 rounded-full font-bold">
                     Recommended
+                  </span>
+                </div>
+
+                {/* Pre-configured Language Environment Notice */}
+                <div className="flex items-center space-x-2 text-[11px] font-mono text-[var(--yellow-bright)] bg-[var(--yellow-primary)]/10 px-3 py-1.5 rounded-lg border border-[var(--yellow-primary)]/20">
+                  <Check className="h-3.5 w-3.5 shrink-0 text-[var(--yellow-bright)]" />
+                  <span>
+                    {isPython
+                      ? 'Pre-configured Python 3.12 workspace: pip packages and requirements.txt install automatically on start.'
+                      : `Pre-configured ${language || 'multi-language'} workspace: runtimes and test suites ready immediately.`}
                   </span>
                 </div>
 

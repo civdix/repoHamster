@@ -1,4 +1,9 @@
 import prisma from '@/lib/db';
+import {
+  generateDevcontainerJson,
+  generateVscodeSettings,
+  detectLanguageStack,
+} from './devcontainer-provisioner';
 
 export interface GuardrailsProvisionResult {
   success: boolean;
@@ -7,9 +12,16 @@ export interface GuardrailsProvisionResult {
   requiresManualCommit?: boolean;
 }
 
+export interface GuardrailsProvisionOptions {
+  language?: string;
+  framework?: string;
+  assignmentId?: string;
+}
+
 export async function autoInstallAIGuardrails(
   repoUrl: string,
-  customToken?: string
+  customToken?: string,
+  options?: GuardrailsProvisionOptions
 ): Promise<GuardrailsProvisionResult> {
   const envToken = process.env.GITHUB_TOKEN
     ? process.env.GITHUB_TOKEN.trim().replace(/^['"]|['"]$/g, '')
@@ -99,69 +111,75 @@ You must only explain concepts up to the exact knowledge boundary defined below:
 Failure to follow these rules invalidates the candidate's assessment results.
 `;
 
-  const DEVCONTAINER_JSON = JSON.stringify(
-    {
-      name: `${repo} Challenge (RepoHamster)`,
-      image: 'mcr.microsoft.com/devcontainers/javascript-node:20',
-      forwardPorts: [3001, 5173],
-      postCreateCommand:
-        'npm install && (test -f .env || cp .env.example .env) && (sudo chown -R root:root .vscode 2>/dev/null || true) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md .cursorrules .windsurfrules CLAUDE.md 2>/dev/null || true)',
-      customizations: {
-        vscode: {
-          settings: {
-            'editor.inlineSuggest.enabled': false,
-            'chat.agent.enabled': false,
-            'chat.commandCenter.enabled': false,
-            'github.copilot.enable': {
-              '*': false,
-              'plaintext': false,
-              'markdown': false,
-              'javascript': false,
-              'typescript': false,
-              'python': false,
-            },
-            'github.copilot.inlineSuggest.enable': false,
-            'github.copilot.editor.enableCodeActions': false,
-            'github.copilot.chat.editor.enable': false,
-            'github.copilot.chat.welcomeMessage': 'never',
-            'github.copilot.advanced': {
-              'inlineSuggestCount': 0,
-              'authProvider': 'none',
-            },
-          },
-          extensions: ['dbaeumer.vscode-eslint'],
-        },
-      },
-    },
-    null,
-    2
-  );
+  // 1. Resolve effective language & framework from options or DB
+  let effectiveLanguage = options?.language;
+  let effectiveFramework = options?.framework;
 
-  const VSCODE_SETTINGS_JSON = JSON.stringify(
-    {
-      'editor.inlineSuggest.enabled': false,
-      'chat.agent.enabled': false,
-      'chat.commandCenter.enabled': false,
-      'github.copilot.enable': {
-        '*': false,
-        'plaintext': false,
-        'markdown': false,
-        'javascript': false,
-        'typescript': false,
-        'python': false,
+  if (!effectiveLanguage) {
+    try {
+      const assignment = await prisma.assignment.findFirst({
+        where: {
+          OR: [
+            { repoUrl: cleanUrl },
+            { repoUrl: { contains: `${owner}/${repo}` } },
+            ...(options?.assignmentId ? [{ id: options.assignmentId }] : []),
+          ],
+        },
+      });
+      if (assignment) {
+        effectiveLanguage = assignment.language;
+        effectiveFramework = assignment.framework || undefined;
+      } else {
+        const catRepo = await prisma.catalogRepository.findFirst({
+          where: {
+            OR: [
+              { originalUrl: cleanUrl },
+              { originalUrl: { contains: `${owner}/${repo}` } },
+            ],
+          },
+        });
+        if (catRepo) {
+          effectiveLanguage = catRepo.language;
+          effectiveFramework = catRepo.framework || undefined;
+        }
+      }
+    } catch (dbErr) {
+      console.warn('[GUARDRAILS] Non-fatal DB lookup error:', dbErr);
+    }
+  }
+
+  // 2. Probe repository root files via GitHub API to detect python/node/requirements.txt
+  const detectedFiles: string[] = [];
+  try {
+    const contentsRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'RepoHamster-AI-Guardrails/1.0',
       },
-      'github.copilot.inlineSuggest.enable': false,
-      'github.copilot.editor.enableCodeActions': false,
-      'github.copilot.chat.editor.enable': false,
-      'github.copilot.chat.welcomeMessage': 'never',
-      'github.copilot.advanced': {
-        'inlineSuggestCount': 0,
-        'authProvider': 'none',
-      },
-    },
-    null,
-    2
-  );
+    });
+    if (contentsRes.ok) {
+      const contentsData = await contentsRes.json();
+      if (Array.isArray(contentsData)) {
+        for (const item of contentsData) {
+          if (item?.name) detectedFiles.push(item.name);
+        }
+      }
+    }
+  } catch (fileErr) {
+    console.warn('[GUARDRAILS] Could not inspect repository contents:', fileErr);
+  }
+
+  // 3. Generate dynamic devcontainer.json & VS Code settings tailored for the language stack
+  const stack = detectLanguageStack(effectiveLanguage, effectiveFramework, detectedFiles);
+  const DEVCONTAINER_JSON = generateDevcontainerJson({
+    repoName: repo,
+    language: effectiveLanguage,
+    framework: effectiveFramework,
+    detectedFiles,
+  });
+
+  const VSCODE_SETTINGS_JSON = JSON.stringify(generateVscodeSettings(stack), null, 2);
 
   const filesToCommit = [
     {
@@ -187,12 +205,12 @@ Failure to follow these rules invalidates the candidate's assessment results.
     {
       path: '.devcontainer/devcontainer.json',
       content: DEVCONTAINER_JSON,
-      message: 'chore(codespaces): configure Node 20 environment with inline autocompletion disabled',
+      message: `chore(codespaces): configure ${stack.primaryLanguage} environment with automated dependency installation and guardrails`,
     },
     {
       path: '.vscode/settings.json',
       content: VSCODE_SETTINGS_JSON,
-      message: 'chore(vscode): disable inline suggestions for assessment integrity',
+      message: `chore(vscode): configure ${stack.primaryLanguage} test harness and disable inline suggestions`,
     },
   ];
 

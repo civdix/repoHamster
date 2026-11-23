@@ -35,11 +35,23 @@ export async function GET(req: NextRequest) {
   const assignmentId = searchParams.get('assignmentId');
 
   let targetRepoUrl: string | null | undefined = repoUrl;
-  if (!targetRepoUrl && assignmentId) {
-    const assignment = await prisma.assignment.findUnique({
+  let targetAssignment: any = null;
+  if (assignmentId) {
+    targetAssignment = await prisma.assignment.findUnique({
       where: { id: assignmentId },
     });
-    targetRepoUrl = assignment?.repoUrl;
+    if (!targetRepoUrl) {
+      targetRepoUrl = targetAssignment?.repoUrl;
+    }
+  } else if (targetRepoUrl) {
+    targetAssignment = await prisma.assignment.findFirst({
+      where: {
+        OR: [
+          { repoUrl: targetRepoUrl },
+          { repoUrl: { contains: targetRepoUrl.replace('https://github.com/', '') } },
+        ],
+      },
+    });
   }
 
   if (!targetRepoUrl) {
@@ -117,11 +129,23 @@ export async function POST(req: NextRequest) {
   } = body;
 
   let targetRepoUrl: string | null | undefined = repoUrl;
-  if (!targetRepoUrl && assignmentId) {
-    const assignment = await prisma.assignment.findUnique({
+  let targetAssignment: any = null;
+  if (assignmentId) {
+    targetAssignment = await prisma.assignment.findUnique({
       where: { id: assignmentId },
     });
-    targetRepoUrl = assignment?.repoUrl;
+    if (!targetRepoUrl) {
+      targetRepoUrl = targetAssignment?.repoUrl;
+    }
+  } else if (targetRepoUrl) {
+    targetAssignment = await prisma.assignment.findFirst({
+      where: {
+        OR: [
+          { repoUrl: targetRepoUrl },
+          { repoUrl: { contains: targetRepoUrl.replace('https://github.com/', '') } },
+        ],
+      },
+    });
   }
 
   if (!targetRepoUrl) {
@@ -177,9 +201,13 @@ export async function POST(req: NextRequest) {
       const forkOwner = forkResult.forkOwner || candidateUsername || parsed.owner;
       const forkRepo = forkResult.forkRepo || parsed.repo;
 
-      // Ensure anti-cheat AI guardrails and Copilot restrictions are installed in the fork
+      // Ensure anti-cheat AI guardrails and language-level devcontainer working environment are installed in the fork
       if (forkResult.forkUrl) {
-        autoInstallAIGuardrails(forkResult.forkUrl, userToken).catch((err) =>
+        autoInstallAIGuardrails(forkResult.forkUrl, userToken, {
+          language: body.language || targetAssignment?.language,
+          framework: body.framework || targetAssignment?.framework,
+          assignmentId: targetAssignment?.id || assignmentId,
+        }).catch((err) =>
           console.warn('[CODESPACE] Non-fatal error applying guardrails to fork:', err)
         );
       }
