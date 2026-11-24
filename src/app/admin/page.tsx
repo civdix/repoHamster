@@ -14,6 +14,7 @@ import {
   Shield,
   Layers,
   Webhook,
+  Mail,
 } from 'lucide-react';
 import { ManualOverrideModal } from '@/components/admin/ManualOverrideModal';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
@@ -34,6 +35,7 @@ export default async function AdminOverviewPage({
   let pendingEvaluations = 0;
   let totalAiTokens = 0;
   let totalAiQueries = 0;
+  let totalInquiries = 0;
   let candidates: any[] = [];
   let recentSubmissions: any[] = [];
   let dbError: string | null = null;
@@ -45,6 +47,7 @@ export default async function AdminOverviewPage({
     completedAssignments = await prisma.candidateAssignment.count({ where: { status: 'COMPLETED' } });
     failedEvaluations = await prisma.evaluation.count({ where: { isPassed: false } });
     pendingEvaluations = await prisma.evaluation.count({ where: { status: 'RUNNING' } });
+    totalInquiries = await prisma.contactSubmission.count();
 
     // AI Usage
     const aiStats = await prisma.aIUsage.aggregate({
@@ -109,8 +112,8 @@ export default async function AdminOverviewPage({
           </div>
         </div>
       )}
-      {/* 5 High-Level Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      {/* 6 High-Level Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4">
           <div className="flex items-center justify-between text-xs font-medium text-[var(--gh-text-secondary)]">
             <span>Registered Candidates</span>
@@ -147,7 +150,21 @@ export default async function AdminOverviewPage({
           <div className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-mono">Curated challenges</div>
         </div>
 
-        <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 col-span-2 md:col-span-1">
+        <Link
+          href="/admin/messages"
+          className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4 hover:border-[var(--yellow-primary)] transition group block"
+        >
+          <div className="flex items-center justify-between text-xs font-medium text-[var(--gh-text-secondary)]">
+            <span className="group-hover:text-[var(--yellow-bright)] transition">Inbound Inquiries</span>
+            <Mail className="h-4 w-4 text-[var(--yellow-bright)]" />
+          </div>
+          <div className="mt-2 text-2xl font-bold text-[var(--yellow-bright)] font-mono">{totalInquiries}</div>
+          <div className="mt-1 text-[11px] text-[var(--gh-text-muted)] font-mono group-hover:underline">
+            View inquiries &rarr;
+          </div>
+        </Link>
+
+        <div className="rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg-secondary)] p-4">
           <div className="flex items-center justify-between text-xs font-medium text-[var(--gh-text-secondary)]">
             <span>AI Credits Consumed</span>
             <Sparkles className="h-4 w-4 text-[var(--yellow-bright)]" />

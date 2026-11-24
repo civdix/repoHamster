@@ -118,6 +118,6 @@
 
 ### Page 5: Contact & Enterprise / Campus Form (`/contact`)
 * **Layout:** Centered 2-column card (`#FFFFFF` on `#FAF7F2` canvas) inspired by the *"Bring one workflow. We’ll map the rest."* footer CTA block.
-* **Left Column:** Direct headline (*"Bring repoHamster to your team or campus."*), brief pitch on custom repo assessments, and direct contact details (`shivam@repohamster.com`).
+* **Left Column:** Direct headline (*"Bring repoHamster to your team or campus."*), brief pitch on custom repo assessments, and direct contact details (`shivdix.work+repohamster@gmail.com`).
 * **Right Column:** Clean, minimal form with `#FAF7F2` input fields (`Name`, `Work/College Email`, `Role / Organization`, `Use Case: Individual Prep / Hiring Team / University`, `Message`) and full-width dark submit button (`Send Message →`).
 1

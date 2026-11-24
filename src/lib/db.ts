@@ -38,6 +38,19 @@ export async function ensureDatabaseColumns(): Promise<void> {
         ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "guardrailsError" TEXT;
         ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "workflowStatus" TEXT DEFAULT 'PENDING';
         ALTER TABLE "Assignment" ADD COLUMN IF NOT EXISTS "workflowError" TEXT;
+
+        CREATE TABLE IF NOT EXISTS "ContactSubmission" (
+          "id" TEXT PRIMARY KEY,
+          "name" TEXT NOT NULL,
+          "email" TEXT NOT NULL,
+          "roleOrOrg" TEXT,
+          "useCase" TEXT,
+          "message" TEXT NOT NULL,
+          "status" TEXT NOT NULL DEFAULT 'NEW',
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS "ContactSubmission_email_idx" ON "ContactSubmission"("email");
+        CREATE INDEX IF NOT EXISTS "ContactSubmission_createdAt_idx" ON "ContactSubmission"("createdAt");
       `);
     } catch (e: any) {
       console.warn('[DB SELF-HEAL] Non-fatal schema column ensure notice:', e?.message || e);

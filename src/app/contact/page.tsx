@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { HamsterMascot } from '@/components/brand/HamsterMascot';
-import { ArrowRight, Mail, Building2, GraduationCap, CheckCircle2 } from 'lucide-react';
+import { Mail, Building2, GraduationCap } from 'lucide-react';
+import { ContactForm } from '@/components/contact/ContactForm';
 
 export const metadata = {
   title: 'Contact & Enterprise Hiring Solutions | RepoHamster',
@@ -9,6 +10,8 @@ export const metadata = {
 };
 
 export default function ContactPage() {
+  const contactEmail = 'shivdix.work+repohamster@gmail.com';
+
   return (
     <div className="min-h-screen bg-[var(--gh-bg)] bg-dev-grid text-[var(--gh-text)] py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
@@ -40,10 +43,10 @@ export default function ContactPage() {
                   <span>
                     Email:{' '}
                     <a
-                      href="mailto:shivam@repohamster.com"
+                      href={`mailto:${contactEmail}`}
                       className="font-bold text-[var(--yellow-primary)] hover:underline"
                     >
-                      shivam@repohamster.com
+                      {contactEmail}
                     </a>
                   </span>
                 </div>
@@ -58,88 +61,9 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Right Column: Clean Form */}
+            {/* Right Column: Clean Interactive Form */}
             <div className="lg:col-span-6">
-              <form
-                action="mailto:shivam@repohamster.com"
-                method="POST"
-                encType="text/plain"
-                className="space-y-3.5 text-left font-sans"
-              >
-                <div>
-                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Shivam Dixit"
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
-                    Work or University Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="shivam@company.com"
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
-                      Role / Title
-                    </label>
-                    <input
-                      type="text"
-                      name="role"
-                      placeholder="Engineering Manager / Professor"
-                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
-                      Use Case
-                    </label>
-                    <select
-                      name="use_case"
-                      className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                    >
-                      <option value="Hiring Assessment">Hiring Team OA</option>
-                      <option value="University Campus">University / Campus</option>
-                      <option value="Individual Prep">Individual Prep</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-[var(--gh-text-secondary)] mb-1 font-mono">
-                    Message
-                  </label>
-                  <textarea
-                    name="message"
-                    rows={4}
-                    required
-                    placeholder="Tell us about your team size, curriculum, or repository requirements..."
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full rounded-full bg-[var(--yellow-button-bg)] py-3 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95 flex items-center justify-center space-x-1.5"
-                >
-                  <span>Send Message</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </button>
-              </form>
+              <ContactForm defaultUseCase="Hiring Assessment" />
             </div>
           </div>
         </div>

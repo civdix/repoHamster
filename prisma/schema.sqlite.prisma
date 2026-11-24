@@ -247,3 +247,17 @@ model WebhookEvent {
   @@index([deliveryId])
   @@index([eventType])
 }
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  roleOrOrg String?
+  useCase   String?
+  message   String
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

@@ -19,6 +19,7 @@ import { HamsterMascot } from '@/components/brand/HamsterMascot';
 import { LandingMNCLogos } from '@/components/landing/LandingMNCLogos';
 import { LandingBentoGrid } from '@/components/landing/LandingBentoGrid';
 import { LandingFaq } from '@/components/landing/LandingFaq';
+import { ContactForm } from '@/components/contact/ContactForm';
 
 // ISR: Cached at Vercel Edge CDN; auto-warmed in background on git/webhook/admin events
 export const revalidate = 600; // 10 minutes
@@ -446,72 +447,17 @@ export default async function HomePage() {
               <div className="pt-2 text-xs font-mono text-[var(--gh-text-secondary)]">
                 Direct Contact:{' '}
                 <a
-                  href="mailto:shivam@repohamster.com"
+                  href="mailto:shivdix.work+repohamster@gmail.com"
                   className="font-bold text-[var(--yellow-primary)] hover:underline"
                 >
-                  shivam@repohamster.com
+                  shivdix.work+repohamster@gmail.com
                 </a>
               </div>
             </div>
 
             {/* Right Column: Clean Minimal Contact Form */}
             <div className="lg:col-span-6">
-              <form
-                action="mailto:shivam@repohamster.com"
-                method="POST"
-                encType="text/plain"
-                className="space-y-3 text-left font-sans"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Your Name"
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Work / College Email"
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    name="organization"
-                    placeholder="Role / Organization"
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                  />
-                  <select
-                    name="use_case"
-                    className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] focus:outline-none focus:border-[var(--yellow-primary)] transition"
-                  >
-                    <option value="Hiring Team Assessment">Use Case: Hiring Team</option>
-                    <option value="University / Campus Prep">Use Case: University / Campus</option>
-                    <option value="Individual Big Tech Prep">Use Case: Individual Prep</option>
-                  </select>
-                </div>
-
-                <textarea
-                  name="message"
-                  rows={3}
-                  required
-                  placeholder="How can repoHamster help your team or campus?"
-                  className="w-full rounded-xl border border-[var(--gh-border)] bg-[var(--gh-bg)] px-3.5 py-2.5 text-xs text-[var(--gh-text)] placeholder-[var(--gh-text-muted)] focus:outline-none focus:border-[var(--yellow-primary)] transition resize-none"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full rounded-full bg-[var(--yellow-button-bg)] py-3 text-xs font-bold text-[var(--yellow-button-text)] hover:bg-[var(--yellow-button-hover)] transition shadow-sm active:scale-95 flex items-center justify-center space-x-1.5"
-                >
-                  <span>Send Message</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </button>
-              </form>
+              <ContactForm compact defaultUseCase="Hiring Team Assessment" />
             </div>
           </div>
         </div>

@@ -2,20 +2,22 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, FolderGit2, Layers, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, FolderGit2, Layers, Settings, Mail } from 'lucide-react';
 
 interface AdminSubnavProps {
   catalogueCount?: number;
   usersCount?: number;
+  messagesCount?: number;
 }
 
-export function AdminSubnav({ catalogueCount, usersCount }: AdminSubnavProps) {
+export function AdminSubnav({ catalogueCount, usersCount, messagesCount }: AdminSubnavProps) {
   const pathname = usePathname();
 
   const isOverview = pathname === '/admin';
   const isUsers = pathname.startsWith('/admin/users') || pathname.startsWith('/admin/candidates');
   const isCatalogue = pathname.startsWith('/admin/catalogue');
   const isAssignments = pathname.startsWith('/admin/assignments');
+  const isMessages = pathname.startsWith('/admin/messages');
   const isSettings = pathname.startsWith('/admin/settings');
 
   const navItems = [
@@ -24,6 +26,12 @@ export function AdminSubnav({ catalogueCount, usersCount }: AdminSubnavProps) {
       label: 'Dashboard Overview',
       icon: LayoutDashboard,
       isActive: isOverview,
+    },
+    {
+      href: '/admin/messages',
+      label: messagesCount !== undefined ? `Inquiries (${messagesCount})` : 'Inquiries & Leads',
+      icon: Mail,
+      isActive: isMessages,
     },
     {
       href: '/admin/users',
