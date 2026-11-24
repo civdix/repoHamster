@@ -86,8 +86,12 @@ export function CodespacesLaunchModal({
   const langLower = (language || '').toLowerCase();
   const fwLower = (framework || '').toLowerCase();
   const isPython = langLower.includes('python') || fwLower.includes('fastapi') || fwLower.includes('django') || fwLower.includes('flask');
-  const isNode = langLower.includes('javascript') || langLower.includes('typescript') || fwLower.includes('react') || fwLower.includes('express');
-  const isFullStack = (isPython && isNode) || langLower.includes('full-stack');
+  const isNode = langLower.includes('javascript') || langLower.includes('typescript') || fwLower.includes('react') || fwLower.includes('express') || fwLower.includes('angular');
+  const isJava = (langLower.includes('java') && !langLower.includes('javascript')) || fwLower.includes('spring') || fwLower.includes('maven') || fwLower.includes('gradle');
+  const isGo = langLower.includes('go') || fwLower.includes('gin') || fwLower.includes('fiber');
+  const isCpp = langLower.includes('c++') || langLower.includes('cpp') || fwLower.includes('cmake');
+  const isRust = langLower.includes('rust') || fwLower.includes('cargo');
+  const isFullStack = ((isPython || isJava || isGo) && isNode) || langLower.includes('full-stack');
 
   const gitCommands: string[] = [
     `git clone ${cloneUrl}`,
@@ -112,6 +116,46 @@ export function CodespacesLaunchModal({
         `npm install  # (or cd frontend && npm install)`
       );
     }
+  } else if (isJava) {
+    gitCommands.push(
+      `# 1. Resolve dependencies and compile`,
+      `./mvnw clean test-compile  # (or mvn clean test-compile, or ./gradlew testClasses)`,
+      `# 2. Run JUnit test suite`,
+      `./mvnw test  # (or mvn test, or ./gradlew test)`
+    );
+    if (isFullStack) {
+      gitCommands.push(
+        `# 3. Frontend dependencies (if React/Node component present)`,
+        `npm install  # (or cd frontend && npm install)`
+      );
+    }
+  } else if (isGo) {
+    gitCommands.push(
+      `# 1. Download and verify Go modules`,
+      `go mod download`,
+      `# 2. Run Go test suite`,
+      `go test -v ./...`
+    );
+    if (isFullStack) {
+      gitCommands.push(
+        `# 3. Frontend dependencies (if React/Node component present)`,
+        `npm install  # (or cd frontend && npm install)`
+      );
+    }
+  } else if (isCpp) {
+    gitCommands.push(
+      `# 1. Configure and build CMake project`,
+      `cmake -B build -S . && cmake --build build`,
+      `# 2. Run CTest test suite`,
+      `ctest --test-dir build --output-on-failure`
+    );
+  } else if (isRust) {
+    gitCommands.push(
+      `# 1. Fetch crates and build`,
+      `cargo build`,
+      `# 2. Run Cargo test suite`,
+      `cargo test`
+    );
   } else if (isNode) {
     gitCommands.push(
       `# 1. Install Node dependencies`,
@@ -412,6 +456,14 @@ export function CodespacesLaunchModal({
                   <span>
                     {isPython
                       ? 'Pre-configured Python 3.12 workspace: pip packages and requirements.txt install automatically on start.'
+                      : isJava
+                      ? 'Pre-configured Java 21 workspace: Maven/Gradle dependencies, OpenJDK, and JUnit test harness ready on start.'
+                      : isGo
+                      ? 'Pre-configured Go 1.22 workspace: Go toolchain, modules downloaded, and go test ready on start.'
+                      : isCpp
+                      ? 'Pre-configured C++ workspace: CMake, GCC/Clang compilers, and ctest harness ready on start.'
+                      : isRust
+                      ? 'Pre-configured Rust workspace: Cargo toolchain, crates, and cargo test ready on start.'
                       : `Pre-configured ${language || 'multi-language'} workspace: runtimes and test suites ready immediately.`}
                   </span>
                 </div>

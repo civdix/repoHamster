@@ -14,6 +14,7 @@ export interface LanguageStack {
   isGo: boolean;
   isCpp: boolean;
   isRust: boolean;
+  isMultiLanguage: boolean;
   isFullStack: boolean;
   primaryLanguage: string;
 }
@@ -96,15 +97,23 @@ export function detectLanguageStack(
   const isCpp = l.includes('c++') || l.includes('cpp') || f.includes('cmake') || hasCppFile;
   const isRust = l.includes('rust') || f.includes('cargo') || hasRustFile;
 
+  const isMultiLanguage =
+    l.includes('multi-language') ||
+    l.includes('multi language') ||
+    l.includes('polyglot') ||
+    [isPython, isJava, isGo, isCpp, isRust].filter(Boolean).length >= 2;
+
   const isFullStack =
     (isPython && isNode) ||
     (isJava && isNode) ||
+    (isGo && isNode) ||
     l.includes('full-stack') ||
     l.includes('full stack') ||
     l.includes('&');
 
   let primaryLanguage = 'JavaScript';
-  if (isPython) primaryLanguage = 'Python';
+  if (isMultiLanguage) primaryLanguage = 'Multi-Language';
+  else if (isPython) primaryLanguage = 'Python';
   else if (isJava) primaryLanguage = 'Java';
   else if (isGo) primaryLanguage = 'Go';
   else if (isRust) primaryLanguage = 'Rust';
@@ -118,21 +127,24 @@ export function detectLanguageStack(
     isGo,
     isCpp,
     isRust,
+    isMultiLanguage,
     isFullStack,
     primaryLanguage,
   };
 }
 
 /**
- * Builds the robust postCreateCommand script that auto-installs Python pip packages,
- * requirements.txt, and Node dependencies so the user gets a working space immediately on boot.
+ * Builds the robust postCreateCommand script that auto-installs dependencies across all
+ * supported languages (Python pip, Node npm, Java Maven/Gradle, Go modules, C++ CMake, Rust Cargo)
+ * so the candidate gets an immediately working space with zero manual setup.
  */
 export function generatePostCreateCommand(stack: LanguageStack): string {
   const parts: string[] = [
     'echo "🐹 [RepoHamster] Initializing language runtime and dependencies..."',
   ];
 
-  if (stack.isPython) {
+  // 1. Python & Pip
+  if (stack.isPython || stack.isMultiLanguage) {
     parts.push(`if command -v python3 >/dev/null 2>&1 || command -v python >/dev/null 2>&1; then
   echo "🐍 [RepoHamster] Configuring Python & upgrading pip..."
   python3 -m pip install --upgrade pip --quiet 2>/dev/null || python -m pip install --upgrade pip --quiet 2>/dev/null || true
@@ -169,7 +181,8 @@ export function generatePostCreateCommand(stack: LanguageStack): string {
 fi`);
   }
 
-  if (stack.isNode) {
+  // 2. Node.js & npm (Full-stack or JavaScript/TypeScript)
+  if (stack.isNode || stack.isMultiLanguage) {
     parts.push(`if command -v npm >/dev/null 2>&1; then
   if [ -f package.json ]; then
     echo "📦 [RepoHamster] Installing Node dependencies from package.json..."
@@ -186,14 +199,69 @@ fi`);
 fi`);
   }
 
-  if (stack.isGo) {
-    parts.push(`if command -v go >/dev/null 2>&1 && [ -f go.mod ]; then
-  echo "🐹 [RepoHamster] Downloading Go modules..."
-  go mod download || true
+  // 3. Java (Maven & Gradle)
+  if (stack.isJava || stack.isMultiLanguage) {
+    parts.push(`if command -v java >/dev/null 2>&1; then
+  echo "☕ [RepoHamster] Configuring Java environment & resolving dependencies..."
+  if [ -f mvnw ]; then
+    chmod +x mvnw && ./mvnw dependency:resolve --batch-mode 2>/dev/null || true
+  elif [ -f pom.xml ] && command -v mvn >/dev/null 2>&1; then
+    mvn dependency:resolve --batch-mode 2>/dev/null || true
+  fi
+  if [ -f backend/mvnw ]; then
+    chmod +x backend/mvnw && (cd backend && ./mvnw dependency:resolve --batch-mode 2>/dev/null) || true
+  elif [ -f backend/pom.xml ] && command -v mvn >/dev/null 2>&1; then
+    (cd backend && mvn dependency:resolve --batch-mode 2>/dev/null) || true
+  fi
+  if [ -f gradlew ]; then
+    chmod +x gradlew && ./gradlew testClasses --quiet 2>/dev/null || true
+  elif [ -f build.gradle ] && command -v gradle >/dev/null 2>&1; then
+    gradle testClasses --quiet 2>/dev/null || true
+  fi
 fi`);
   }
 
-  // Environment file synchronization
+  // 4. Go (Go modules)
+  if (stack.isGo || stack.isMultiLanguage) {
+    parts.push(`if command -v go >/dev/null 2>&1; then
+  echo "🐹 [RepoHamster] Downloading Go modules..."
+  if [ -f go.mod ]; then
+    go mod download || true
+  fi
+  for gomod in backend/go.mod server/go.mod api/go.mod; do
+    if [ -f "$gomod" ]; then
+      (cd "$(dirname "$gomod")" && go mod download) || true
+    fi
+  done
+fi`);
+  }
+
+  // 5. C++ (CMake)
+  if (stack.isCpp || stack.isMultiLanguage) {
+    parts.push(`if command -v cmake >/dev/null 2>&1; then
+  echo "⚙️ [RepoHamster] Configuring C++ CMake build..."
+  if [ -f CMakeLists.txt ]; then
+    cmake -B build -S . 2>/dev/null || true
+  fi
+  for cmakelists in backend/CMakeLists.txt src/CMakeLists.txt; do
+    if [ -f "$cmakelists" ]; then
+      (cd "$(dirname "$cmakelists")" && cmake -B build -S . 2>/dev/null) || true
+    fi
+  done
+fi`);
+  }
+
+  // 6. Rust (Cargo)
+  if (stack.isRust || stack.isMultiLanguage) {
+    parts.push(`if command -v cargo >/dev/null 2>&1; then
+  echo "🦀 [RepoHamster] Fetching Rust crates..."
+  if [ -f Cargo.toml ]; then
+    cargo fetch --quiet 2>/dev/null || true
+  fi
+fi`);
+  }
+
+  // 7. Environment file synchronization (.env)
   parts.push(`for env_src in .env.example backend/.env.example frontend/.env.example server/.env.example client/.env.example; do
   env_dest="\${env_src%.example}"
   if [ -f "$env_src" ] && [ ! -f "$env_dest" ]; then
@@ -202,21 +270,21 @@ fi`);
   fi
 done`);
 
-  // Anti-cheat guardrails permission enforcement
+  // 8. Anti-cheat guardrails permission enforcement
   parts.push(
     '(sudo chown -R root:root .vscode 2>/dev/null || true) && (chmod 444 .vscode/settings.json .github/copilot-instructions.md .cursorrules .windsurfrules CLAUDE.md 2>/dev/null || true)'
   );
 
   parts.push('echo "🚀 [RepoHamster] Workspace is ready! Happy debugging."');
 
-  // Wrap all commands in a single resilient subshell
+  // Wrap all commands in a resilient subshell
   const singleLineScript = parts.join(' && \\\n');
   return `bash -c '${singleLineScript}'`;
 }
 
 /**
  * Builds VS Code settings enforcing assessment integrity while enabling
- * appropriate testing harnesses for the language stack.
+ * appropriate testing harnesses for the detected language stack.
  */
 export function generateVscodeSettings(stack: LanguageStack): Record<string, any> {
   const settings: Record<string, any> = {
@@ -230,6 +298,11 @@ export function generateVscodeSettings(stack: LanguageStack): Record<string, any
       javascript: false,
       typescript: false,
       python: false,
+      go: false,
+      java: false,
+      cpp: false,
+      c: false,
+      rust: false,
     },
     'github.copilot.inlineSuggest.enable': false,
     'github.copilot.editor.enableCodeActions': false,
@@ -241,12 +314,25 @@ export function generateVscodeSettings(stack: LanguageStack): Record<string, any
     },
   };
 
-  if (stack.isPython) {
+  if (stack.isPython || stack.isMultiLanguage) {
     settings['python.testing.pytestEnabled'] = true;
     settings['python.testing.unittestEnabled'] = false;
     settings['python.testing.pytestArgs'] = ['.'];
     settings['python.defaultInterpreterPath'] = '/usr/local/bin/python';
     settings['python.terminal.activateEnvironment'] = true;
+  }
+
+  if (stack.isGo || stack.isMultiLanguage) {
+    settings['go.useLanguageServer'] = true;
+    settings['go.toolsManagement.autoUpdate'] = true;
+  }
+
+  if (stack.isJava || stack.isMultiLanguage) {
+    settings['java.configuration.updateBuildConfiguration'] = 'automatic';
+  }
+
+  if (stack.isRust || stack.isMultiLanguage) {
+    settings['rust-analyzer.checkOnSave.command'] = 'clippy';
   }
 
   return settings;
@@ -258,20 +344,28 @@ export function generateVscodeSettings(stack: LanguageStack): Record<string, any
 export function generateDevcontainerExtensions(stack: LanguageStack): string[] {
   const extensions: string[] = [];
 
-  if (stack.isPython) {
+  if (stack.isPython || stack.isMultiLanguage) {
     extensions.push('ms-python.python', 'ms-python.vscode-pylance', 'ms-python.debugpy');
   }
 
-  if (stack.isNode) {
+  if (stack.isNode || stack.isMultiLanguage) {
     extensions.push('dbaeumer.vscode-eslint');
   }
 
-  if (stack.isGo) {
+  if (stack.isGo || stack.isMultiLanguage) {
     extensions.push('golang.go');
   }
 
-  if (stack.isJava) {
+  if (stack.isJava || stack.isMultiLanguage) {
     extensions.push('vscjava.vscode-java-pack');
+  }
+
+  if (stack.isCpp || stack.isMultiLanguage) {
+    extensions.push('ms-vscode.cpptools', 'ms-vscode.cmake-tools');
+  }
+
+  if (stack.isRust || stack.isMultiLanguage) {
+    extensions.push('rust-lang.rust-analyzer');
   }
 
   return extensions;
@@ -289,7 +383,11 @@ export function generateDevcontainerJson(options: DevcontainerOptions): string {
   const features: Record<string, any> = {};
   const forwardPorts: number[] = [3000, 3001, 5173];
 
-  if (stack.isPython) {
+  if (stack.isMultiLanguage) {
+    // Official GitHub Codespaces Universal image with Python, Node, Go, Java, Rust, C++ all pre-installed
+    image = 'mcr.microsoft.com/devcontainers/universal:2-linux';
+    forwardPorts.push(8000, 5000, 8080);
+  } else if (stack.isPython) {
     image = 'mcr.microsoft.com/devcontainers/python:3.12';
     forwardPorts.push(8000, 5000, 8080);
 
@@ -302,7 +400,7 @@ export function generateDevcontainerJson(options: DevcontainerOptions): string {
   } else if (stack.isJava) {
     image = 'mcr.microsoft.com/devcontainers/java:21';
     forwardPorts.push(8080);
-    if (stack.isNode) {
+    if (stack.isNode || stack.isFullStack) {
       features['ghcr.io/devcontainers/features/node:1'] = {
         version: '20',
       };
@@ -310,6 +408,11 @@ export function generateDevcontainerJson(options: DevcontainerOptions): string {
   } else if (stack.isGo) {
     image = 'mcr.microsoft.com/devcontainers/go:1.22';
     forwardPorts.push(8080);
+    if (stack.isNode || stack.isFullStack) {
+      features['ghcr.io/devcontainers/features/node:1'] = {
+        version: '20',
+      };
+    }
   } else if (stack.isCpp) {
     image = 'mcr.microsoft.com/devcontainers/cpp:latest';
   } else if (stack.isRust) {
